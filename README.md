@@ -1,6 +1,8 @@
 # BookEasy - Reservation Management App
 
-![BookEasy Logo](/public/assets/images/icon-bookEasy.png)
+<div align="center">
+  <img src="public/assets/images/icon-bookEasy.png" alt="BookEasy Logo" width="100"/>
+</div>
 
 **Description:**
 
