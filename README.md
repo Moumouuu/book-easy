@@ -7,3 +7,6 @@
 - Prisma
 - React Ho Form
 - Zustand
+- axios
+- react icons
+- react hot toast
