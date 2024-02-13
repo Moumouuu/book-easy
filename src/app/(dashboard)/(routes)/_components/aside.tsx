@@ -1,18 +1,11 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Sheet,
-  SheetClose,
   SheetContent,
-  SheetDescription,
-  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
 
-import Image from "next/image";
 import { IoMenu } from "react-icons/io5";
 import AsideContent from "./asideContent";
 import AsideTop from "./asideTop";

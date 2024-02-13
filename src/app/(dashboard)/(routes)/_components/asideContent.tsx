@@ -9,8 +9,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
-import AsideUser from "./asideUser";
 import { AsideUserDropdown } from "./asideUserDropdown";
+import { useDashboard } from "@/store/dashboard";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 interface IAsideItem {
   label: string;
@@ -19,7 +20,8 @@ interface IAsideItem {
 }
 
 export default function AsideContent() {
-  const defaultPath = "/dashboard";
+  const { dashboardId } = useDashboard();
+  const defaultPath = `/dashboard/${dashboardId}`;
   const currentPath = usePathname();
 
   const asideItems: IAsideItem[] = [
@@ -36,7 +38,7 @@ export default function AsideContent() {
     {
       label: "Clients",
       icon: <FaAddressBook className="mr-3" size={25} />,
-      href: `${defaultPath}/clients`,
+      href: `${defaultPath}/customers`,
     },
     {
       label: "Équipes",
@@ -46,7 +48,7 @@ export default function AsideContent() {
     {
       label: "Réservations",
       icon: <FaRegCalendarPlus className="mr-3" size={25} />,
-      href: `${defaultPath}/reservations`,
+      href: `${defaultPath}/bookings`,
     },
     {
       label: "Paramètres",
