@@ -76,6 +76,7 @@ export default function UserAuthForm() {
         password: data.password,
       });
       setIsLloading(false);
+      // todo : redirect to dashboard with the good id
       router.push("/dashboard");
     } catch (err) {
       console.log("[LOGIN_ERROR]" + err);
@@ -101,6 +102,7 @@ export default function UserAuthForm() {
           return;
         }
         setIsLloading(false);
+        // todo : redirect to dashboard with the good id
         router.push("/dashboard");
       } catch (err) {
         console.log("[LOGIN_ERROR_AFTER_REGISTER]" + err);
@@ -171,6 +173,7 @@ export default function UserAuthForm() {
             <Button
               variant={"outline"}
               onClick={() => {
+                // todo : redirect to the dashboard with the good id
                 signIn("google", { callbackUrl: "/dashboard" });
               }}
             >

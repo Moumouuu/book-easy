@@ -2,7 +2,7 @@
 ## Dependencies
 - Shadcn
 - Next Auth
-- React Query
+- SWR
 - Zod
 - Prisma
 - React Ho Form

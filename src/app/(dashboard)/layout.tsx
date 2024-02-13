@@ -3,6 +3,7 @@ import Aside from "./(routes)/_components/aside";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import AuthProvider from "@/providers/auth-provider";
+import CompanyProvider from "@/providers/company-provider";
 
 export const metadata: Metadata = {
   title: "BookEasy - DashBoard",
@@ -21,7 +22,7 @@ export default async function DashboardLayout({
     <body className="flex flex-col lg:flex-row">
       <AuthProvider session={session}>
         <Aside />
-        {children}
+        <CompanyProvider>{children}</CompanyProvider>
       </AuthProvider>
     </body>
   );

@@ -10,8 +10,7 @@ import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 import { AsideUserDropdown } from "./asideUserDropdown";
-import { useDashboard } from "@/store/dashboard";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { useCompany } from "@/store/dashboard";
 
 interface IAsideItem {
   label: string;
@@ -20,8 +19,8 @@ interface IAsideItem {
 }
 
 export default function AsideContent() {
-  const { dashboardId } = useDashboard();
-  const defaultPath = `/dashboard/${dashboardId}`;
+  const { companyId } = useCompany();
+  const defaultPath = `/dashboard/${companyId}`;
   const currentPath = usePathname();
 
   const asideItems: IAsideItem[] = [
