@@ -30,7 +30,7 @@ export async function GET(request: NextRequest, { params }: IGet) {
 
   // period
   const period = request.nextUrl.searchParams.get("period");
-  // todo check if period is valid with zod
+  // todo : check if period is valid with zod
   if (!period) return new Response("The period is invalid!", { status: 400 });
 
   // get the company with the given ID & verify that the current user has access to it
@@ -39,7 +39,6 @@ export async function GET(request: NextRequest, { params }: IGet) {
     return new Response("The company does not exist!", { status: 400 });
 
   const data = await getCompanyStats(companyId, period);
-  console.log(data);
   if (!data)
     return new Response("The company stats does not exist!", { status: 400 });
 

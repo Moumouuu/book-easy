@@ -13,7 +13,7 @@ import AsideTop from "./asideTop";
 export default function Aside() {
   return (
     <>
-      <div className="block lg:hidden ">
+      <div className="block lg:hidden">
         <Sheet>
           <SheetTrigger asChild>
             <div className="cursor-pointer p-2">

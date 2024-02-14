@@ -24,33 +24,41 @@ const data = [
   },
 ];
 
-interface IProps {
-  company: Company;
+interface ICompanyStats {
+  label: string;
+  value: number;
+  percentageChange: number;
+  changeType: "positive" | "negative" | "neutral";
 }
 
-export default function KPICards({ company }: IProps) {
+interface IProps {
+  companyStats: ICompanyStats[];
+}
+
+export default function KPICards({ companyStats }: IProps) {
   return (
     <>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {data.map((item) => (
-          <Card key={item.name}>
+        {companyStats.map((companyStat) => (
+          <Card key={companyStat.label}>
             <div className="flex items-center justify-between">
               <p className="text-tremor-default text-tremor-content dark:text-dark-tremor-content font-medium">
-                {item.name}
+                {companyStat.label}
               </p>
               <span
                 className={cn(
-                  item.changeType === "positive"
+                  companyStat.changeType === "positive"
                     ? "bg-emerald-100 text-emerald-800 ring-emerald-600/10 dark:bg-emerald-400/10 dark:text-emerald-500 dark:ring-emerald-400/20"
                     : "bg-red-100 text-red-800 ring-red-600/10 dark:bg-red-400/10 dark:text-red-500 dark:ring-red-400/20",
                   "rounded-tremor-small text-tremor-label inline-flex items-center px-2 py-1 font-medium ring-1 ring-inset",
                 )}
               >
-                {item.change}
+                {companyStat.percentageChange}%{" "}
+                {companyStat.changeType === "positive" ? "↑" : "↓"}
               </span>
             </div>
             <p className="text-tremor-metric text-tremor-content-strong dark:text-dark-tremor-content-strong font-semibold">
-              {item.stat}
+              {companyStat.value}
             </p>
           </Card>
         ))}

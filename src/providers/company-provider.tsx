@@ -1,4 +1,5 @@
 "use client";
+import Loader from "@/components/loader";
 import { defaultFetcherGet } from "@/lib/fetcher";
 import { useCompany } from "@/store/dashboard";
 import { useParams } from "next/navigation";
@@ -34,7 +35,7 @@ export default function CompanyProvider({ children }: CompanyLayoutProps) {
   if (isLoading) {
     // Handle loading state, e.g., display a loading spinner
     // todo loading state
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   // If data is fetched successfully and no error occurred, render children
