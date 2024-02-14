@@ -4,7 +4,7 @@ import { AreaChart, Card, List, ListItem } from "@tremor/react";
 import useSWR from "swr";
 import { useCompany } from "@/store/dashboard";
 import { defaultFetcherGet } from "@/lib/fetcher";
-import { PerformanceAreaSkeleton } from "./performanceAreaSkeleton";
+import { PerformanceAreaSkeleton } from "./skeletons/performanceAreaSkeleton";
 
 const valueFormatter = (number: number) =>
   `${Intl.NumberFormat("us").format(number).toString()}`;

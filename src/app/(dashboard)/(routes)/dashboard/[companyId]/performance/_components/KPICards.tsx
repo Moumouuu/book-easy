@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { useCompany } from "@/store/dashboard";
 import { Card } from "@tremor/react";
 import useSWR from "swr";
-import { PerformanceKpiSkeleton } from "./performanceKpiSkeleton";
+import { PerformanceKpiSkeleton } from "./skeletons/performanceKPISkeleton";
 
 interface ICompanyStats {
   label: string;
