@@ -77,7 +77,7 @@ export default function UserAuthForm() {
       });
       setIsLloading(false);
       // todo : redirect to dashboard with the good id
-      router.push("/dashboard");
+      router.push("/");
     } catch (err) {
       console.log("[LOGIN_ERROR]" + err);
     } finally {
@@ -103,7 +103,7 @@ export default function UserAuthForm() {
         }
         setIsLloading(false);
         // todo : redirect to dashboard with the good id
-        router.push("/dashboard");
+        router.push("/");
       } catch (err) {
         console.log("[LOGIN_ERROR_AFTER_REGISTER]" + err);
       }
@@ -174,7 +174,7 @@ export default function UserAuthForm() {
               variant={"outline"}
               onClick={() => {
                 // todo : redirect to the dashboard with the good id
-                signIn("google", { callbackUrl: "/dashboard" });
+                signIn("google", { callbackUrl: "/" });
               }}
             >
               <AiFillGoogleCircle size={30} />

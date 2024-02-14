@@ -15,5 +15,5 @@ export default async function getUser() {
     },
   });
 
-  return user;
+  return user ?? null;
 }
