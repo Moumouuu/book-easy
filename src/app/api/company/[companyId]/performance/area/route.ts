@@ -1,5 +1,5 @@
 import getCompany from "@/actions/company/getCompany";
-import getCompanyStats from "@/actions/company/getCompanyStats";
+import getCompanyAreaStats from "@/actions/company/statistics/getCompanyAreaStats";
 import getUser from "@/actions/user/getUser";
 import { NextRequest } from "next/server";
 
@@ -28,17 +28,12 @@ export async function GET(request: NextRequest, { params }: IGet) {
       status: 401,
     });
 
-  // period
-  const period = request.nextUrl.searchParams.get("period");
-  // todo : check if period is valid with zod
-  if (!period) return new Response("The period is invalid!", { status: 400 });
-
   // get the company with the given ID & verify that the current user has access to it
   const company = await getCompany(companyId);
   if (!company)
     return new Response("The company does not exist!", { status: 400 });
 
-  const data = await getCompanyStats(companyId, period);
+  const data = await getCompanyAreaStats(companyId);
   if (!data)
     return new Response("The company stats does not exist!", { status: 400 });
 

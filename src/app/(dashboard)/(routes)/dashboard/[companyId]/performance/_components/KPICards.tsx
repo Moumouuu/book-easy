@@ -1,45 +1,47 @@
-// 'use client';
+"use client";
+import { defaultFetcherGet } from "@/lib/fetcher";
 import { cn } from "@/lib/utils";
-import { Company } from "@prisma/client";
+import { useCompany } from "@/store/dashboard";
 import { Card } from "@tremor/react";
-
-const data = [
-  {
-    name: "Daily active users",
-    stat: "3,450",
-    change: "+12.1%",
-    changeType: "positive",
-  },
-  {
-    name: "Weekly sessions",
-    stat: "1,342",
-    change: "-9.8%",
-    changeType: "negative",
-  },
-  {
-    name: "Duration",
-    stat: "5.2min",
-    change: "+7.7%",
-    changeType: "positive",
-  },
-];
+import useSWR from "swr";
+import { PerformanceKpiSkeleton } from "./performanceKpiSkeleton";
 
 interface ICompanyStats {
   label: string;
   value: number;
   percentageChange: number;
   changeType: "positive" | "negative" | "neutral";
+  suffix?: string;
 }
 
 interface IProps {
-  companyStats: ICompanyStats[];
+  period: string;
 }
 
-export default function KPICards({ companyStats }: IProps) {
+export default function KPICards({ period }: IProps) {
+  const { companyId } = useCompany();
+
+  const {
+    data: companyStats,
+    error,
+    isLoading,
+  } = useSWR(
+    `/api/company/${companyId}/performance/kpi?period=${period}`,
+    defaultFetcherGet,
+  );
+
+  if (isLoading) {
+    return <PerformanceKpiSkeleton />;
+  }
+
+  if (error) {
+    return <div>Error</div>;
+  }
+
   return (
     <>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {companyStats.map((companyStat) => (
+        {companyStats.KPI.map((companyStat: ICompanyStats) => (
           <Card key={companyStat.label}>
             <div className="flex items-center justify-between">
               <p className="text-tremor-default text-tremor-content dark:text-dark-tremor-content font-medium">
@@ -58,7 +60,7 @@ export default function KPICards({ companyStats }: IProps) {
               </span>
             </div>
             <p className="text-tremor-metric text-tremor-content-strong dark:text-dark-tremor-content-strong font-semibold">
-              {companyStat.value}
+              {companyStat.value} {companyStat?.suffix}
             </p>
           </Card>
         ))}

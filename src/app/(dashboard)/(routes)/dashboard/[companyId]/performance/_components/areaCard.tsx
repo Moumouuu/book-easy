@@ -1,6 +1,10 @@
-// 'use client';
+"use client";
 import { cn } from "@/lib/utils";
 import { AreaChart, Card, List, ListItem } from "@tremor/react";
+import useSWR from "swr";
+import { useCompany } from "@/store/dashboard";
+import { defaultFetcherGet } from "@/lib/fetcher";
+import { PerformanceAreaSkeleton } from "./performanceAreaSkeleton";
 
 const valueFormatter = (number: number) =>
   `${Intl.NumberFormat("us").format(number).toString()}`;
@@ -16,19 +20,29 @@ interface ICompanyStats {
   revenue: number;
 }
 
-export default function AreaCard({
-  companyStats,
-}: {
-  companyStats: ICompanyStats[];
-}) {
-  const totalRevenue = companyStats.reduce(
-    (acc: number, item: ICompanyStats) => acc + item.revenue,
-    0,
-  );
-  const totalReservations = companyStats.reduce(
-    (acc: number, item: ICompanyStats) => acc + item.reservationCount,
-    0,
-  );
+export default function AreaCard() {
+  const { companyId } = useCompany();
+
+  const {
+    data: companyStats,
+    error,
+    isLoading,
+  } = useSWR(`/api/company/${companyId}/performance/area`, defaultFetcherGet);
+
+  const totalRevenue = companyStats
+    ? companyStats.reduce(
+        (acc: number, item: ICompanyStats) => acc + item.revenue,
+        0,
+      )
+    : 0;
+
+  const totalReservations = companyStats
+    ? companyStats.reduce(
+        (acc: number, item: ICompanyStats) => acc + item.reservationCount,
+        0,
+      )
+    : 0;
+
   const summary = [
     {
       name: "Nombre de Réservations",
@@ -39,6 +53,15 @@ export default function AreaCard({
       value: totalRevenue,
     },
   ];
+
+  if (isLoading) {
+    return <PerformanceAreaSkeleton />;
+  }
+
+  if (error) {
+    return <div>Error</div>;
+  }
+
   return (
     <>
       <Card className="m-5 sm:mx-auto sm:max-w-lg">

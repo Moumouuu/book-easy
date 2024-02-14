@@ -1,6 +1,6 @@
 export enum PeriodEnum {
-  DAY = "day",
-  WEEK = "week",
-  MONTH = "month",
-  YEAR = "year",
+  DAY = "Jour",
+  WEEK = "Semaine",
+  MONTH = "Mois",
+  YEAR = "Année",
 }
