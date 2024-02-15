@@ -1,5 +1,6 @@
 import prismadb from "@/lib/prismadb";
 import getCompany from "../getCompany";
+import { setStartAndEndDates } from "./getCompanyKpiStats";
 
 interface DailyMetrics {
   date: string;
@@ -21,10 +22,13 @@ export default async function getCompanyAreaStats(
   return lastWeekMetrics;
 }
 
+let lastWeekStartDate: Date, lastWeekEndDate: Date;
+
 async function getLastWeekMetrics(companyId: string): Promise<DailyMetrics[]> {
-  const lastWeekStartDate = new Date();
-  lastWeekStartDate.setDate(lastWeekStartDate.getDate() - 7);
-  const lastWeekEndDate = new Date();
+  ({ start: lastWeekStartDate, end: lastWeekEndDate } = setStartAndEndDates(
+    -7,
+    0,
+  ));
 
   const reservationsForLastWeek = await prismadb.book.findMany({
     where: {

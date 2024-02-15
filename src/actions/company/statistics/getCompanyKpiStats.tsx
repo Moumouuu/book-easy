@@ -20,6 +20,19 @@ const getChangeType = (change: number): string => {
   return "neutral";
 };
 
+// Set the start and end date for the period
+export function setStartAndEndDates(startOffset: number, endOffset: number) {
+  const start = new Date();
+  start.setHours(0, 0, 0, 0); // Set start time to beginning of the day (midnight)
+  start.setDate(start.getDate() + startOffset);
+
+  const end = new Date();
+  end.setHours(23, 59, 59, 999); // Set end time to end of the day (just before midnight)
+  end.setDate(end.getDate() + endOffset);
+
+  return { start, end };
+}
+
 export default async function getCompanyKpiStats(
   companyId: string,
   period: string,
@@ -31,27 +44,20 @@ export default async function getCompanyKpiStats(
 
   let startDate: Date, endDate: Date;
 
-  // Set the start and end date for the period
   switch (period) {
     case PeriodEnum.DAY:
-      startDate = new Date();
-      startDate.setDate(startDate.getDate() - 1);
-      endDate = new Date();
+      ({ start: startDate, end: endDate } = setStartAndEndDates(0, 0));
       break;
     case PeriodEnum.WEEK:
-      startDate = new Date();
-      startDate.setDate(startDate.getDate() - 7);
-      endDate = new Date();
+      ({ start: startDate, end: endDate } = setStartAndEndDates(-7, 0));
       break;
     case PeriodEnum.MONTH:
-      startDate = new Date();
+      ({ start: startDate, end: endDate } = setStartAndEndDates(0, 0));
       startDate.setMonth(startDate.getMonth() - 1);
-      endDate = new Date();
       break;
     case PeriodEnum.YEAR:
-      startDate = new Date();
+      ({ start: startDate, end: endDate } = setStartAndEndDates(0, 0));
       startDate.setFullYear(startDate.getFullYear() - 1);
-      endDate = new Date();
       break;
     default:
       throw new Error("Invalid period");
@@ -71,8 +77,28 @@ export default async function getCompanyKpiStats(
   // Get the number of reservations for the previous period
   const previousStartDate = new Date(startDate);
   const previousEndDate = new Date(endDate);
-  previousStartDate.setDate(previousStartDate.getDate() - 1);
-  previousEndDate.setDate(previousEndDate.getDate() - 1);
+
+  // Adjusting previous period based on period type
+  switch (period) {
+    case PeriodEnum.DAY:
+      previousStartDate.setDate(previousStartDate.getDate() - 1);
+      previousEndDate.setDate(previousEndDate.getDate() - 1);
+      break;
+    case PeriodEnum.WEEK:
+      previousStartDate.setDate(previousStartDate.getDate() - 7);
+      previousEndDate.setDate(previousEndDate.getDate() - 7);
+      break;
+    case PeriodEnum.MONTH:
+      previousStartDate.setMonth(previousStartDate.getMonth() - 1);
+      previousEndDate.setMonth(previousEndDate.getMonth() - 1);
+      break;
+    case PeriodEnum.YEAR:
+      previousStartDate.setFullYear(previousStartDate.getFullYear() - 1);
+      previousEndDate.setFullYear(previousEndDate.getFullYear() - 1);
+      break;
+    default:
+      throw new Error("Invalid period");
+  }
 
   const numberOfReservationForPreviousPeriod = await prismadb.book.count({
     where: {
@@ -86,11 +112,9 @@ export default async function getCompanyKpiStats(
 
   // Calculate the percentage change
   const percentageChange =
-    numberOfReservationForPreviousPeriod !== 0
-      ? ((numberOfReservationForPeriod - numberOfReservationForPreviousPeriod) /
-          numberOfReservationForPreviousPeriod) *
-        100
-      : 0;
+    ((numberOfReservationForPeriod - numberOfReservationForPreviousPeriod) /
+      Math.max(numberOfReservationForPreviousPeriod, 1)) *
+    100;
 
   // Get the total price of all reservations for the period
   const totalPriceForPeriod = await prismadb.book.aggregate({
@@ -125,12 +149,11 @@ export default async function getCompanyKpiStats(
   const totalPriceForPreviousPeriodPrice =
     totalPriceForPreviousPeriod._sum.price ?? 0;
 
+  // Calculate the percentage change
   const percentageChangeInTotalPrice =
-    totalPriceForPreviousPeriodPrice !== 0
-      ? ((totalPriceForPeriodPrice - totalPriceForPreviousPeriodPrice) /
-          totalPriceForPreviousPeriodPrice) *
-        100
-      : 0;
+    ((totalPriceForPeriodPrice - totalPriceForPreviousPeriodPrice) /
+      Math.max(totalPriceForPreviousPeriodPrice, 1)) *
+    100;
 
   return {
     KPI: [
