@@ -9,7 +9,7 @@ export default function () {
   const [period, setPeriod] = useState<string>(PeriodEnum.DAY);
 
   return (
-    <div className="flex flex-col rounded border p-4 ">
+    <div className="my-5 flex flex-col rounded border p-4">
       <div className="mb-3">
         <SelectPeriod period={period} setPeriod={setPeriod} />
       </div>

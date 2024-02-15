@@ -64,7 +64,7 @@ export default function AreaCard() {
 
   return (
     <>
-      <Card className="m-5 sm:mx-auto sm:max-w-lg">
+      <Card className="m-3 ">
         <h3 className="text-tremor-content-strong dark:text-dark-tremor-content-strong font-medium">
           Nombres de Réservations / Revenus des 7 derniers jours
         </h3>
@@ -72,7 +72,7 @@ export default function AreaCard() {
           data={companyStats}
           index="date"
           categories={["reservationCount", "revenue"]}
-          colors={["blue", "violet"]}
+          colors={["blue", "green"]}
           valueFormatter={valueFormatter}
           showLegend={false}
           showYAxis={false}

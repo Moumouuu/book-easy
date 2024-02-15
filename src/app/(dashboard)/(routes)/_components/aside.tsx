@@ -30,7 +30,7 @@ export default function Aside() {
           </SheetContent>
         </Sheet>
       </div>
-      <div className="hidden h-screen border-r p-5 lg:block">
+      <div className="sticky left-0 top-0 hidden h-screen border-r p-5 lg:block">
         <AsideTop />
         <AsideContent />
       </div>
