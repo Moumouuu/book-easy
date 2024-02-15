@@ -27,7 +27,7 @@ import toast from "react-hot-toast";
 import { Separator } from "@/components/ui/separator";
 
 export default function UserAuthForm() {
-  const [isLoading, setIsLloading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const schemaLogin = z.object({
@@ -39,14 +39,40 @@ export default function UserAuthForm() {
       .min(8, "Le mot de passe doit contenir au moins 8 caractères."),
   });
 
-  const schemaRegister = z.object({
-    email: z
-      .string()
-      .email("L'adresse e-mail n'est pas valide. Veuillez réessayer."),
-    password: z
-      .string()
-      .min(8, "Le mot de passe doit contenir au moins 8 caractères."),
-  });
+  const schemaRegister = z
+    .object({
+      email: z
+        .string()
+        .email("L'adresse e-mail n'est pas valide. Veuillez réessayer."),
+      password: z
+        .string()
+        .min(8, "Le mot de passe doit contenir au moins 8 caractères."),
+      confirmPassword: z
+        .string()
+        .min(8, "Le mot de passe doit contenir au moins 8 caractères."),
+      firstname: z
+        .string()
+        .min(2, "Le prénom n'est pas valide. Veuillez réessayer."),
+      lastname: z
+        .string()
+        .min(2, "Le nom n'est pas valide. Veuillez réessayer."),
+      phoneNumber: z
+        .string()
+        .min(10, "Le numéro de téléphone n'est pas valide. Veuillez réessayer.")
+        .max(
+          10,
+          "Le numéro de téléphone n'est pas valide. Veuillez réessayer.",
+        ),
+    })
+    .refine(
+      (values) => {
+        return values.password === values.confirmPassword;
+      },
+      {
+        message: "Les mots de passe ne correspondent pas. Veuillez réessayer.",
+        path: ["confirmPassword"],
+      },
+    );
 
   type FormValuesLogin = z.infer<typeof schemaLogin>;
   type FormValuesRegister = z.infer<typeof schemaRegister>;
@@ -68,26 +94,26 @@ export default function UserAuthForm() {
   });
 
   const onSubmitLogin = async (data: FormValuesLogin) => {
-    setIsLloading(true);
+    setIsLoading(true);
     try {
       await signIn("credentials", {
         redirect: false,
         email: data.email,
         password: data.password,
       });
-      setIsLloading(false);
-      // todo : redirect to dashboard with the good id
+      setIsLoading(false);
       router.push("/");
     } catch (err) {
       console.log("[LOGIN_ERROR]" + err);
     } finally {
-      setIsLloading(false);
+      setIsLoading(false);
     }
   };
 
   const onSubmitRegister = async (data: FormValuesRegister) => {
-    setIsLloading(true);
+    setIsLoading(true);
     try {
+      console.log(data);
       await axios.post("/api/auth", data);
       try {
         const res = await signIn("credentials", {
@@ -101,8 +127,7 @@ export default function UserAuthForm() {
           console.log("[LOGIN_ERROR_AFTER_REGISTER]" + res.error);
           return;
         }
-        setIsLloading(false);
-        // todo : redirect to dashboard with the good id
+        setIsLoading(false);
         router.push("/");
       } catch (err) {
         console.log("[LOGIN_ERROR_AFTER_REGISTER]" + err);
@@ -110,7 +135,7 @@ export default function UserAuthForm() {
     } catch (err) {
       console.log("[REGISTER_ERROR]" + err);
     } finally {
-      setIsLloading(false);
+      setIsLoading(false);
     }
   };
 
@@ -173,7 +198,6 @@ export default function UserAuthForm() {
             <Button
               variant={"outline"}
               onClick={() => {
-                // todo : redirect to the dashboard with the good id
                 signIn("google", { callbackUrl: "/" });
               }}
             >
@@ -194,7 +218,7 @@ export default function UserAuthForm() {
           <CardContent className="space-y-2">
             <form onSubmit={handleSubmitRegister(onSubmitRegister)}>
               <div className="space-y-1">
-                <Label htmlFor="email">E-mail</Label>
+                <Label htmlFor="email">E-mail*</Label>
                 <Input
                   id="email"
                   type="email"
@@ -207,8 +231,54 @@ export default function UserAuthForm() {
                   </span>
                 )}
               </div>
+
               <div className="mt-3 space-y-1">
-                <Label htmlFor="passwordRegister">Mot de passe</Label>
+                <Label htmlFor="firstname">Prénom*</Label>
+                <Input
+                  id="firstname"
+                  type="text"
+                  placeholder="John"
+                  {...registerRegister("firstname")}
+                />
+                {errorsRegister.firstname && (
+                  <span className="text-sm text-red-500">
+                    {errorsRegister.firstname.message}
+                  </span>
+                )}
+              </div>
+
+              <div className="mt-3 space-y-1">
+                <Label htmlFor="lastname">Nom*</Label>
+                <Input
+                  id="lastname"
+                  type="text"
+                  placeholder="Doe"
+                  {...registerRegister("lastname")}
+                />
+                {errorsRegister.lastname && (
+                  <span className="text-sm text-red-500">
+                    {errorsRegister.lastname.message}
+                  </span>
+                )}
+              </div>
+
+              <div className="mt-3 space-y-1">
+                <Label htmlFor="phoneNumber">Numéro*</Label>
+                <Input
+                  id="phoneNumber"
+                  type="tel"
+                  placeholder="0102030405"
+                  {...registerRegister("phoneNumber")}
+                />
+                {errorsRegister.phoneNumber && (
+                  <span className="text-sm text-red-500">
+                    {errorsRegister.phoneNumber.message}
+                  </span>
+                )}
+              </div>
+
+              <div className="mt-3 space-y-1">
+                <Label htmlFor="passwordRegister">Mot de passe*</Label>
                 <Input
                   id="passwordRegister"
                   type="password"
@@ -221,6 +291,24 @@ export default function UserAuthForm() {
                   </span>
                 )}
               </div>
+
+              <div className="mt-3 space-y-1">
+                <Label htmlFor="confirmPasswordRegister">
+                  Confirmer Mot de passe*
+                </Label>
+                <Input
+                  id="confirmPasswordRegister"
+                  type="password"
+                  placeholder="Mot de passe..."
+                  {...registerRegister("confirmPassword")}
+                />
+                {errorsRegister.confirmPassword && (
+                  <span className="text-sm text-red-500">
+                    {errorsRegister.confirmPassword.message}
+                  </span>
+                )}
+              </div>
+
               <Button
                 disabled={isLoading}
                 className={cn("mt-4 w-full", isLoading && "opacity-50")}

@@ -6,12 +6,14 @@ import prismadb from "@/lib/prismadb";
 import { getServerSession } from "next-auth";
 
 export async function POST(req: NextRequest) {
-  const { email, password } = await req.json();
-
+  const { email, password, firstname, lastname, phoneNumber } =
+    await req.json();
+  console.log(email, password, firstname, lastname, phoneNumber);
   if (!email || !password) {
     return new NextResponse("Missing email or password", { status: 400 });
   }
 
+  // check if user already exist
   const userAlreadyExist = await prismadb.user.findUnique({
     where: {
       email: email,
@@ -24,10 +26,14 @@ export async function POST(req: NextRequest) {
     });
   }
 
+  // create user
   const newUser = await prismadb.user.create({
     data: {
       email: email,
       password: bcrypt.hashSync(password, 10),
+      firstName: firstname,
+      lastName: lastname,
+      phone_number: phoneNumber,
     },
   });
 
@@ -40,6 +46,7 @@ export async function POST(req: NextRequest) {
   });
 }
 
+// this route is used to get the user data from the client side
 export async function GET(req: NextRequest) {
   const session = await getServerSession(authOptions);
   const email = session?.user?.email;

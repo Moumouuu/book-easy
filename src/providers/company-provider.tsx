@@ -27,14 +27,11 @@ export default function CompanyProvider({ children }: CompanyLayoutProps) {
   );
 
   if (error) {
-    // Handle error state, e.g., display an error message
-    // todo : error message
+    // todo : error components
     return <div>Error: {error.message}</div>;
   }
 
   if (isLoading) {
-    // Handle loading state, e.g., display a loading spinner
-    // todo loading state
     return <Loader />;
   }
 

@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import AsideUser from "./asideUser";
 import { signOut } from "next-auth/react";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export function AsideUserDropdown() {
   return (

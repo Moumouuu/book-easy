@@ -16,15 +16,17 @@ model User {
   firstName              String?
   lastName               String?
   password               String?
+  image                  String?
   recover_password_token String   @default(uuid())
   phone_number           String?
   createdAt              DateTime @default(now())
   updatedAt              DateTime @updatedAt
 
   // Define the relation to Book model
-  books     Book[]
+  books       Book[]
   // Define the relation to Company model
-  companies UserCompanyRole[]
+  companies   UserCompanyRole[]
+  PremiumUser PremiumUser[]
 }
 
 model Book {
@@ -41,14 +43,12 @@ model Book {
   // Define the relation to Company model
   company     Company @relation(fields: [companyId], references: [id])
   companyId   String
-
 }
 
 model Company {
   id                    String   @id @default(uuid())
   name                  String
   description           String?
-  icons                 String?
   number_days_to_return Int      @default(1)
   created_at            DateTime @default(now())
   updated_at            DateTime @updatedAt
@@ -70,6 +70,18 @@ model UserCompanyRole {
   // Define the relation to Company model
   company   Company @relation(fields: [companyId], references: [id])
   companyId String
+}
+
+model PremiumUser {
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  // Define the relation to User model
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  // TODO : Define the relation to Payment model
 }
 
 enum Role {

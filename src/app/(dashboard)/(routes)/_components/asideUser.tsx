@@ -1,24 +1,35 @@
 "use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useSession } from "next-auth/react";
+import { User } from "@prisma/client";
+import { UserSectionSkeleton } from "../calendar/[companyId]/performance/_components/skeletons/userSectionSkeleton";
+import useUser from "@/hooks/useUser";
+
+interface UserSession {
+  user: User | null;
+  isLoading: boolean;
+  error?: any;
+}
 
 export default function AsideUser() {
-  const { data: userSession } = useSession();
+  const { user: userSession, isLoading }: UserSession = useUser();
+
+  if (isLoading) {
+    return <UserSectionSkeleton />;
+  }
+
   return (
-    <div className="flex items-center ">
+    <div className="flex items-center">
       <Avatar>
         <AvatarImage
-          src={userSession?.user?.image ?? ""}
-          alt={userSession?.user?.name ?? "User avatar"}
+          src={userSession?.image ?? ""}
+          alt={userSession?.firstName ?? "User avatar"}
         />
         <AvatarFallback>
-          {userSession?.user?.name?.slice(0, 2).toUpperCase() ??
-            userSession?.user?.email?.slice(0, 2).toUpperCase()}
+          {userSession?.firstName?.slice(0, 2).toUpperCase()}
         </AvatarFallback>
       </Avatar>
       <span className="ml-3 text-lg">
-        {userSession?.user?.name ??
-          userSession?.user?.email?.split("@")[0].slice(0, 10)}
+        {userSession?.firstName} {userSession?.lastName}
       </span>
     </div>
   );

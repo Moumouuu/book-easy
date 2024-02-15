@@ -6,18 +6,17 @@ import useSWR from "swr";
 import { PerformanceAreaSkeleton } from "./skeletons/performanceAreaSkeleton";
 import { useCompany } from "@/store/dashboard";
 
-function valueFormatter(number: number) {
+export function valueFormatter(number: number) {
   const formatter = new Intl.NumberFormat("en-US", {
     maximumFractionDigits: 0,
     notation: "compact",
     compactDisplay: "short",
-    style: "currency",
     currency: "EUR",
+    style: "currency",
   });
 
   return formatter.format(number);
 }
-
 export default function SalesCard() {
   const { companyId } = useCompany();
   const [showComparison, setShowComparison] = useState(false);
@@ -36,7 +35,7 @@ export default function SalesCard() {
 
   return (
     <>
-      <Card className="m-3">
+      <Card className="m-3 sm:mx-auto sm:max-w-lg">
         <h3 className="text-tremor-content-strong dark:text-dark-tremor-content-strong  mr-1 font-semibold">
           Aperçu des ventes
         </h3>
@@ -47,7 +46,7 @@ export default function SalesCard() {
           data={data}
           index="date"
           categories={
-            showComparison ? ["Last Year", "This Year"] : ["This Year"]
+            showComparison ? ["Last Month", "This Month"] : ["This Month"]
           }
           colors={showComparison ? ["cyan", "blue"] : ["blue"]}
           valueFormatter={valueFormatter}
@@ -58,7 +57,7 @@ export default function SalesCard() {
           data={data}
           index="date"
           categories={
-            showComparison ? ["Last Year", "This Year"] : ["This Year"]
+            showComparison ? ["Last Month", "This Month"] : ["This Month"]
           }
           colors={showComparison ? ["cyan", "blue"] : ["blue"]}
           valueFormatter={valueFormatter}

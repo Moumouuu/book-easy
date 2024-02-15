@@ -10,3 +10,4 @@
 - axios
 - react icons
 - react hot toast
+- faker

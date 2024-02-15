@@ -1,7 +1,7 @@
 import prismadb from "@/lib/prismadb";
 import getCompany from "../getCompany";
 
-export default async function getCompanySalesStats(companyId: string) {
+export default async function getCompanyReservationsStats(companyId: string) {
   const company = await getCompany(companyId);
   if (!company) {
     throw new Error("Company not found");
@@ -45,16 +45,13 @@ async function fetchDataForMonth(
   startDate: Date,
   endDate: Date,
 ) {
-  const totalPriceForPeriodPromise = prismadb.book.aggregate({
+  const totalPriceForPeriodPromise = prismadb.book.count({
     where: {
       companyId,
       start_at: {
         lte: endDate,
         gte: startDate,
       },
-    },
-    _sum: {
-      price: true,
     },
   });
 
@@ -64,16 +61,13 @@ async function fetchDataForMonth(
   const startDateLastYear = new Date(startDate);
   startDateLastYear.setFullYear(startDate.getFullYear() - 1);
 
-  const totalPriceForLastPeriodPromise = prismadb.book.aggregate({
+  const totalPriceForLastPeriodPromise = prismadb.book.count({
     where: {
       companyId,
       start_at: {
         lte: endDateLastYear,
         gte: startDateLastYear,
       },
-    },
-    _sum: {
-      price: true,
     },
   });
 
@@ -83,7 +77,7 @@ async function fetchDataForMonth(
   ]);
 
   return {
-    thisYear: totalPriceForPeriod._sum.price ?? 0,
-    lastYear: totalPriceForLastPeriod._sum.price ?? 0,
+    thisYear: totalPriceForPeriod ?? 0,
+    lastYear: totalPriceForLastPeriod ?? 0,
   };
 }

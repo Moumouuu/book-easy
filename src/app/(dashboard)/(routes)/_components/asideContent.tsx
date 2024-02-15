@@ -2,8 +2,7 @@
 import { AiFillDashboard } from "react-icons/ai";
 import { FaRegCalendarPlus } from "react-icons/fa";
 import { FaAddressBook, FaPeopleGroup } from "react-icons/fa6";
-import { IoSettings } from "react-icons/io5";
-import { MdSpaceDashboard } from "react-icons/md";
+import { IoCalendarNumberSharp, IoSettings } from "react-icons/io5";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -11,6 +10,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { AsideUserDropdown } from "./asideUserDropdown";
 import { useCompany } from "@/store/dashboard";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 interface IAsideItem {
   label: string;
@@ -20,13 +20,13 @@ interface IAsideItem {
 
 export default function AsideContent() {
   const { companyId } = useCompany();
-  const defaultPath = `/dashboard/${companyId}`;
+  const defaultPath = `/calendar/${companyId}`;
   const currentPath = usePathname();
 
   const asideItems: IAsideItem[] = [
     {
-      label: "Dashboard",
-      icon: <MdSpaceDashboard className="mr-3" size={25} />,
+      label: "Calendar",
+      icon: <IoCalendarNumberSharp className="mr-3" size={25} />,
       href: defaultPath,
     },
     {

@@ -14,6 +14,10 @@ export default function () {
         <SelectPeriod period={period} setPeriod={setPeriod} />
       </div>
       <KPICards period={period} />
+      <p className="text-gretext-tremor-default text-tremor-content dark:text-dark-tremor-content ml-1 mt-2 font-medium">
+        L&apos;évolution est par rapport à la période précédente de la même
+        durée.
+      </p>
     </div>
   );
 }

@@ -9,6 +9,7 @@ import {
 import { IoMenu } from "react-icons/io5";
 import AsideContent from "./asideContent";
 import AsideTop from "./asideTop";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export default function Aside() {
   return (
@@ -16,7 +17,7 @@ export default function Aside() {
       <div className="block lg:hidden">
         <Sheet>
           <SheetTrigger asChild>
-            <div className="cursor-pointer p-2">
+            <div className="cursor-pointer p-3">
               <IoMenu size={30} />
             </div>
           </SheetTrigger>
@@ -30,7 +31,7 @@ export default function Aside() {
           </SheetContent>
         </Sheet>
       </div>
-      <div className="sticky left-0 top-0 hidden h-screen border-r p-5 lg:block">
+      <div className="sticky left-0 top-0 hidden h-screen w-[300px] border-r p-5 lg:block">
         <AsideTop />
         <AsideContent />
       </div>

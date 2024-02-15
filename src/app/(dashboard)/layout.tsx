@@ -1,8 +1,5 @@
 import { Metadata } from "next";
 import Aside from "./(routes)/_components/aside";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
-import AuthProvider from "@/providers/auth-provider";
 import CompanyProvider from "@/providers/company-provider";
 
 export const metadata: Metadata = {
@@ -16,14 +13,10 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession(authOptions);
-
   return (
     <body className="flex flex-col lg:flex-row">
-      <AuthProvider session={session}>
-        <Aside />
-        <CompanyProvider>{children}</CompanyProvider>
-      </AuthProvider>
+      <Aside />
+      <CompanyProvider>{children}</CompanyProvider>
     </body>
   );
 }
