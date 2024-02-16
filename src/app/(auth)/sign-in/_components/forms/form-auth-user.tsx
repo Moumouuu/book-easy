@@ -114,7 +114,6 @@ export default function UserAuthForm() {
   const onSubmitRegister = async (data: FormValuesRegister) => {
     setIsLoading(true);
     try {
-      console.log(data);
       await axios.post("/api/auth", data);
       try {
         const res = await signIn("credentials", {

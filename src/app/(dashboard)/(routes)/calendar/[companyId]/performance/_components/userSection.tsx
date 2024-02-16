@@ -30,13 +30,9 @@ export default function UserSection() {
   }
 
   return (
-    <div className="flex w-full flex-col  justify-between lg:flex-row">
-      <div className="mb-2 flex lg:mb-0">
+    <div className="flex w-full flex-row items-center justify-between px-2 py-2 lg:px-10 lg:py-5">
+      <div className="flex lg:mb-0">
         <Avatar>
-          <AvatarImage
-            src={userSession?.image ?? ""}
-            alt={userSession?.firstName ?? "User avatar"}
-          />
           <AvatarFallback>
             {userSession?.firstName?.slice(0, 2).toUpperCase()}
           </AvatarFallback>

@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 
 import prismadb from "@/lib/prismadb";
 import { getServerSession } from "next-auth";
+import getCompany from "@/actions/company/getCompany";
 
 export async function POST(req: NextRequest) {
   const { email, password, firstname, lastname, phoneNumber } =
@@ -44,25 +45,4 @@ export async function POST(req: NextRequest) {
   return new NextResponse("User created", {
     status: 200,
   });
-}
-
-// this route is used to get the user data from the client side
-export async function GET(req: NextRequest) {
-  const session = await getServerSession(authOptions);
-  const email = session?.user?.email;
-
-  if (!email) {
-    return new NextResponse("Missing id", { status: 400 });
-  }
-
-  const user = await prismadb.user.findUnique({
-    where: {
-      email: String(email),
-    },
-  });
-  if (!user) {
-    return new NextResponse("User not found", { status: 404 });
-  }
-
-  return new NextResponse(JSON.stringify(user));
 }

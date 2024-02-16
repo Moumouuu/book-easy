@@ -10,8 +10,6 @@ import FutureReservationsCard from "./_components/futureReservationsCard";
 export default function Performance() {
   return (
     <div className="flex w-full flex-col p-4">
-      <UserSection />
-
       <KPISection />
       <div className="my-5 flex flex-col justify-center rounded border p-4 lg:flex-row ">
         <AreaCard />

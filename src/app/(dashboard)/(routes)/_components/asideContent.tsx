@@ -42,7 +42,7 @@ export default function AsideContent() {
     {
       label: "Équipes",
       icon: <FaPeopleGroup className="mr-3" size={25} />,
-      href: `${defaultPath}/teams`,
+      href: `${defaultPath}/team`,
     },
     {
       label: "Réservations",

@@ -20,10 +20,6 @@ export default function AsideUser() {
   return (
     <div className="flex items-center">
       <Avatar>
-        <AvatarImage
-          src={userSession?.image ?? ""}
-          alt={userSession?.firstName ?? "User avatar"}
-        />
         <AvatarFallback>
           {userSession?.firstName?.slice(0, 2).toUpperCase()}
         </AvatarFallback>

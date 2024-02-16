@@ -22,10 +22,10 @@ model User {
   updatedAt              DateTime @updatedAt
 
   // Define the relation to Book model
-  books       Book[]
+  books         Book[]
   // Define the relation to Company model
-  companies   UserCompanyRole[]
-  PremiumUser PremiumUser[]
+  companies     UserCompanyRole[]
+  premiumUserId String?
 }
 
 model Book {
@@ -77,7 +77,6 @@ model PremiumUser {
   updated_at DateTime @updatedAt
 
   // Define the relation to User model
-  user   User   @relation(fields: [userId], references: [id])
   userId String
 
   // TODO : Define the relation to Payment model

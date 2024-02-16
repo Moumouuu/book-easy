@@ -18,6 +18,24 @@ export default async function getCompany(companyId: string) {
         },
       },
     },
+    select: {
+      id: true,
+      name: true,
+      created_at: true,
+      description: true,
+      number_days_to_return: true,
+      updated_at: true,
+      userRoles: {
+        select: {
+          role: true,
+          user: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      },
+    },
   });
 
   return company ?? null;

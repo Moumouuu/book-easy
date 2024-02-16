@@ -41,18 +41,18 @@ export default function GeneralCompanyStats() {
   return (
     <>
       <div className="rounded border p-3">
-        <div className="flex items-center justify-between">
+        <div className="mb-3 flex flex-col items-start justify-between lg:flex-row lg:items-center">
           <span className="text-tremor-metric text-tremor-content-strong dark:text-dark-tremor-content-strong my-3 ml-3 font-semibold">
             Vous êtes sur le plan Gratuit
           </span>
           <PremiumButton />
         </div>
 
-        <div className="flex">
+        <div className="flex flex-col lg:flex-row">
           {data.map((item: IItems) => (
             <div
               key={item.key}
-              className="dark:bg-dark-tremor-background-muted text-tremor-default text-tremor-content dark:text-dark-tremor-content m-2 flex flex-1 flex-col rounded border p-3 font-medium"
+              className="dark:bg-dark-tremor-background-muted text-tremor-default text-tremor-content dark:text-dark-tremor-content m-2 m-2 flex flex-1 flex-col rounded border p-3 font-medium"
             >
               <p className="">{item.label}</p>
               <span
