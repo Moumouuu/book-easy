@@ -40,7 +40,8 @@ export default function SalesCard() {
           Aperçu des ventes
         </h3>
         <p className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">
-          Comparaison des ventes de cette année avec celles de l'année dernière
+          Comparaison des ventes de cette année avec celles de l&apos;année
+          dernière
         </p>
         <BarChart
           data={data}
@@ -74,7 +75,7 @@ export default function SalesCard() {
             htmlFor="comparison"
             className="text-tremor-default text-tremor-content dark:text-dark-tremor-content"
           >
-            Comparaison avec l'année dernière
+            Comparaison avec l&apos;année dernière
           </label>
         </div>
       </Card>

@@ -8,8 +8,8 @@ export function PerformanceKpiSkeleton({
   return (
     <div className="flex w-full flex-col items-center">
       <div className="my-1 flex w-full items-center">
-        {[...Array(numberOfCards)].map(() => (
-          <Skeleton className="mx-4 h-[125px] w-1/3 rounded-xl" />
+        {[...Array(numberOfCards)].map((index: number) => (
+          <Skeleton key={index} className="mx-4 h-[125px] w-1/3 rounded-xl" />
         ))}
       </div>
     </div>

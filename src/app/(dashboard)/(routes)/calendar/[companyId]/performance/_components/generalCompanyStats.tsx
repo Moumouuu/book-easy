@@ -42,7 +42,10 @@ export default function GeneralCompanyStats() {
 
         <div className="flex">
           {data.map((item: IItems) => (
-            <div className="dark:bg-dark-tremor-background-muted text-tremor-default text-tremor-content dark:text-dark-tremor-content m-2 flex flex-1 flex-col rounded border p-3 font-medium">
+            <div
+              key={item.key}
+              className="dark:bg-dark-tremor-background-muted text-tremor-default text-tremor-content dark:text-dark-tremor-content m-2 flex flex-1 flex-col rounded border p-3 font-medium"
+            >
               <p className="">{item.label}</p>
               <span
                 className={

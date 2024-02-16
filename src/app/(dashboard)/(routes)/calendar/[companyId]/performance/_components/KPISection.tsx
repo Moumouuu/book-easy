@@ -5,7 +5,7 @@ import { useState } from "react";
 import { SelectPeriod } from "./selectPeriod";
 import KPICards from "./KPICards";
 
-export default function () {
+export default function KPISection() {
   const [period, setPeriod] = useState<string>(PeriodEnum.DAY);
 
   return (

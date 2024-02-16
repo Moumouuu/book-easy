@@ -39,8 +39,8 @@ export default function ReservationsCard() {
           Aperçu des réservations
         </h3>
         <p className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">
-          Comparaison des réservations de cette année avec celles de l'année
-          dernière
+          Comparaison des réservations de cette année avec celles de
+          l&apos;année dernière
         </p>
         <BarChart
           data={data}
@@ -74,7 +74,7 @@ export default function ReservationsCard() {
             htmlFor="comparison"
             className="text-tremor-default text-tremor-content dark:text-dark-tremor-content"
           >
-            Comparaison avec l'année dernière
+            Comparaison avec l&apos;année dernière
           </label>
         </div>
       </Card>
