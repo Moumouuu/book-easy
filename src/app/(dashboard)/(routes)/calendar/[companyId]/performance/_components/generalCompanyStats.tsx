@@ -9,6 +9,7 @@ import { MaximumFreeFeaturesEnum } from "@/enum/maximumFreeFeatures";
 import { Button } from "@/components/ui/button";
 import { GiPartyPopper } from "react-icons/gi";
 import PremiumButton from "@/components/premiumButton";
+import DefaultError from "@/components/defaultError";
 
 interface IItems {
   label: string;
@@ -23,7 +24,14 @@ export default function GeneralCompanyStats() {
     defaultFetcherGet,
   );
 
-  if (error) return <div>error</div>;
+  if (error) {
+    return (
+      <DefaultError
+        title="Un problème est survenue lors de la récupération de l'information."
+        message={error.message}
+      />
+    );
+  }
   if (isLoading) return <PerformanceKpiSkeleton />;
 
   const renderPourcentage = (value: number, total: number) => {

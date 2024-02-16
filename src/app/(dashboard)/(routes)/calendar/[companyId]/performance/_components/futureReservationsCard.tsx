@@ -21,14 +21,17 @@ interface ICompanyStats {
   revenue: number;
 }
 
-export default function AreaCard() {
+export default function FutureReservationsCard() {
   const { companyId } = useCompany();
 
   const {
     data: companyStats,
     error,
     isLoading,
-  } = useSWR(`/api/company/${companyId}/performance/area`, defaultFetcherGet);
+  } = useSWR(
+    `/api/company/${companyId}/performance/reservations/future`,
+    defaultFetcherGet,
+  );
 
   const totalRevenue = companyStats
     ? companyStats.reduce(
@@ -72,7 +75,7 @@ export default function AreaCard() {
     <>
       <Card className="m-3 ">
         <h3 className="text-tremor-content-strong dark:text-dark-tremor-content-strong font-medium">
-          Nombres de Réservations / Revenus des 7 derniers jours
+          Nombres de Réservations / Revenus des 7 prochains jours
         </h3>
         <AreaChart
           data={companyStats}

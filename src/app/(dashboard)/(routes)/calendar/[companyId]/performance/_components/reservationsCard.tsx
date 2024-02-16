@@ -5,6 +5,7 @@ import { useState } from "react";
 import useSWR from "swr";
 import { PerformanceAreaSkeleton } from "./skeletons/performanceAreaSkeleton";
 import { useCompany } from "@/store/dashboard";
+import DefaultError from "@/components/defaultError";
 
 function valueFormatter(number: number) {
   const formatter = new Intl.NumberFormat("en-US", {
@@ -29,14 +30,19 @@ export default function ReservationsCard() {
   }
 
   if (error) {
-    return <div>Failed to load</div>;
+    return (
+      <DefaultError
+        title="Un problème est survenue lors de la récupération de l'information."
+        message={error.message}
+      />
+    );
   }
 
   return (
     <>
       <Card className="m-3">
         <h3 className="text-tremor-content-strong dark:text-dark-tremor-content-strong  mr-1 font-semibold">
-          Aperçu des réservations
+          Aperçu des précédentes réservations
         </h3>
         <p className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">
           Comparaison des réservations de cette année avec celles de

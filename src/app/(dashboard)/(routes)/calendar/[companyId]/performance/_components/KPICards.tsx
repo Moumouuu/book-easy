@@ -5,6 +5,7 @@ import { useCompany } from "@/store/dashboard";
 import { Card } from "@tremor/react";
 import useSWR from "swr";
 import { PerformanceKpiSkeleton } from "./skeletons/performanceKPISkeleton";
+import DefaultError from "@/components/defaultError";
 
 interface ICompanyStats {
   label: string;
@@ -35,7 +36,12 @@ export default function KPICards({ period }: IProps) {
   }
 
   if (error) {
-    return <div>Error</div>;
+    return (
+      <DefaultError
+        title="Un problème est survenue lors de la récupération de l'information."
+        message={error.message}
+      />
+    );
   }
 
   return (

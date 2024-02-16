@@ -41,8 +41,8 @@ async function main() {
   for (let i = 0; i < 200; i++) {
     const book = await prisma.book.create({
       data: {
-        start_at: faker.date.past(),
-        end_at: faker.date.soon(),
+        start_at: faker.date.soon(),
+        end_at: faker.date.future(),
         price: faker.number.int({ min: 0, max: 200 }),
         // Generate more fake data for other fields as needed
         created_by: {

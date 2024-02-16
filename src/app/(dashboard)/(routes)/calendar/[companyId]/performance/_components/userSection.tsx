@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import useUser from "@/hooks/useUser";
 import { User } from "@prisma/client";
 import { UserSectionSkeleton } from "./skeletons/userSectionSkeleton";
+import DefaultError from "@/components/defaultError";
 
 interface UserSession {
   user: User | null;
@@ -13,10 +14,19 @@ interface UserSession {
 }
 
 export default function UserSection() {
-  const { user: userSession, isLoading }: UserSession = useUser();
+  const { user: userSession, isLoading, error }: UserSession = useUser();
 
   if (isLoading) {
     return <UserSectionSkeleton />;
+  }
+
+  if (error) {
+    return (
+      <DefaultError
+        title="Un problème est survenue lors de la récupération de l'utilisateur"
+        message={error.message}
+      />
+    );
   }
 
   return (

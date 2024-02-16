@@ -1,4 +1,5 @@
 "use client";
+import DefaultError from "@/components/defaultError";
 import Loader from "@/components/loader";
 import { defaultFetcherGet } from "@/lib/fetcher";
 import { useCompany } from "@/store/dashboard";
@@ -27,8 +28,12 @@ export default function CompanyProvider({ children }: CompanyLayoutProps) {
   );
 
   if (error) {
-    // todo : error components
-    return <div>Error: {error.message}</div>;
+    return (
+      <DefaultError
+        title="L'entreprise que vous cherchez n'existe pas"
+        message={error.message}
+      />
+    );
   }
 
   if (isLoading) {

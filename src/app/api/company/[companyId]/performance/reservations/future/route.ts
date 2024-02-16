@@ -1,5 +1,5 @@
 import getCompany from "@/actions/company/getCompany";
-import getCompanyAreaStats from "@/actions/company/statistics/getCompanyAreaStats";
+import getCompanyFutureReservationsStats from "@/actions/company/statistics/getFutureReservationsStats";
 import getUser from "@/actions/user/getUser";
 import { NextRequest } from "next/server";
 
@@ -28,7 +28,7 @@ export async function GET(request: NextRequest, { params }: IGet) {
   if (!company)
     return new Response("The company does not exist!", { status: 400 });
 
-  const data = await getCompanyAreaStats(companyId);
+  const data = await getCompanyFutureReservationsStats(companyId);
   if (!data)
     return new Response("The company stats does not exist!", { status: 400 });
 
