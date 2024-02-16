@@ -9,11 +9,12 @@ export default async function getUser() {
     return null;
   }
 
-  const user = prismadb.user.findUnique({
+  const user = await prismadb.user.findUnique({
     where: {
       email: currentUser?.user?.email,
     },
   });
 
+  // if not user in database that means user is logged in with google
   return user ?? null;
 }

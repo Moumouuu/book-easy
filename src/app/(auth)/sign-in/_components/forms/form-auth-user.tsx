@@ -191,20 +191,6 @@ export default function UserAuthForm() {
               </Button>
             </form>
           </CardContent>
-
-          <Separator />
-
-          <div className="my-5 flex w-full justify-center">
-            <Button
-              variant={"outline"}
-              onClick={() => {
-                signIn("google", { callbackUrl: "/" });
-              }}
-            >
-              <AiFillGoogleCircle size={30} />
-              <span className="ml-2">Sign-in with Google</span>
-            </Button>
-          </div>
         </Card>
       </TabsContent>
       <TabsContent value="register">
