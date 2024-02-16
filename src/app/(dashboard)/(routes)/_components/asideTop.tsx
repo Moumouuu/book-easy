@@ -11,7 +11,7 @@ export default function AsideTop() {
         height={60}
         className="mr-2"
       />
-      <h1 className="bg-gradient-to-r from-blue-200 to-blue-600 bg-clip-text text-2xl font-semibold text-transparent">
+      <h1 className="bg-gradient-to-r from-blue-200 to-blue-600 bg-clip-text text-3xl font-semibold text-transparent">
         {appTitle}
       </h1>
     </div>

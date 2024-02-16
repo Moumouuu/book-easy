@@ -16,7 +16,6 @@ model User {
   firstName              String?
   lastName               String?
   password               String?
-  image                  String?
   recover_password_token String   @default(uuid())
   phone_number           String?
   createdAt              DateTime @default(now())

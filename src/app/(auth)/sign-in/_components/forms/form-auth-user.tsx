@@ -24,7 +24,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { Separator } from "@/components/ui/separator";
+import AsideTop from "@/app/(dashboard)/(routes)/_components/asideTop";
+import Image from "next/image";
 
 export default function UserAuthForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -140,7 +141,7 @@ export default function UserAuthForm() {
   };
 
   return (
-    <Tabs defaultValue="sign-in" className="w-[400px]">
+    <Tabs defaultValue="sign-in" className="w-[500px] ">
       <TabsList className="grid w-full grid-cols-2">
         <TabsTrigger value="sign-in">Sign-in</TabsTrigger>
         <TabsTrigger value="register">Register</TabsTrigger>
@@ -148,6 +149,15 @@ export default function UserAuthForm() {
       <TabsContent value="sign-in">
         <Card>
           <CardHeader>
+            <div className="mb-5">
+              <Image
+                src="/assets/images/icon-bookEasy.png"
+                alt="BookEasy"
+                width={60}
+                height={60}
+                className="mr-2"
+              />
+            </div>
             <CardTitle>Connexion</CardTitle>
             <CardDescription>
               Connectez-vous pour accéder à l&apos;application.
@@ -196,103 +206,119 @@ export default function UserAuthForm() {
       <TabsContent value="register">
         <Card>
           <CardHeader>
+            <div className="mb-5">
+              <Image
+                src="/assets/images/icon-bookEasy.png"
+                alt="BookEasy"
+                width={60}
+                height={60}
+                className="mr-2"
+              />
+            </div>
             <CardTitle>Inscription</CardTitle>
             <CardDescription>
               Créer un compte pour accéder à l&apos;application.
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-2">
-            <form onSubmit={handleSubmitRegister(onSubmitRegister)}>
-              <div className="space-y-1">
-                <Label htmlFor="email">E-mail*</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="johndoe@gmail.com"
-                  {...registerRegister("email")}
-                />
-                {errorsRegister.email && (
-                  <span className="text-sm text-red-500">
-                    {errorsRegister.email.message}
-                  </span>
-                )}
-              </div>
+          <CardContent className="flex items-center justify-center space-y-2">
+            <form
+              className="w-full"
+              onSubmit={handleSubmitRegister(onSubmitRegister)}
+            >
+              <div className="flex justify-around">
+                <div className="mt-3 space-y-1">
+                  <Label htmlFor="email">E-mail*</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="johndoe@gmail.com"
+                    {...registerRegister("email")}
+                  />
+                  {errorsRegister.email && (
+                    <span className="text-sm text-red-500">
+                      {errorsRegister.email.message}
+                    </span>
+                  )}
+                </div>
 
-              <div className="mt-3 space-y-1">
-                <Label htmlFor="firstname">Prénom*</Label>
-                <Input
-                  id="firstname"
-                  type="text"
-                  placeholder="John"
-                  {...registerRegister("firstname")}
-                />
-                {errorsRegister.firstname && (
-                  <span className="text-sm text-red-500">
-                    {errorsRegister.firstname.message}
-                  </span>
-                )}
+                <div className="mt-3 space-y-1">
+                  <Label htmlFor="firstname">Prénom*</Label>
+                  <Input
+                    id="firstname"
+                    type="text"
+                    placeholder="John"
+                    {...registerRegister("firstname")}
+                  />
+                  {errorsRegister.firstname && (
+                    <span className="text-sm text-red-500">
+                      {errorsRegister.firstname.message}
+                    </span>
+                  )}
+                </div>
               </div>
+              <div className="flex  justify-around">
+                <div className="mt-3 space-y-1">
+                  <Label htmlFor="lastname">Nom*</Label>
+                  <Input
+                    id="lastname"
+                    type="text"
+                    placeholder="Doe"
+                    {...registerRegister("lastname")}
+                  />
+                  {errorsRegister.lastname && (
+                    <span className="text-sm text-red-500">
+                      {errorsRegister.lastname.message}
+                    </span>
+                  )}
+                </div>
 
-              <div className="mt-3 space-y-1">
-                <Label htmlFor="lastname">Nom*</Label>
-                <Input
-                  id="lastname"
-                  type="text"
-                  placeholder="Doe"
-                  {...registerRegister("lastname")}
-                />
-                {errorsRegister.lastname && (
-                  <span className="text-sm text-red-500">
-                    {errorsRegister.lastname.message}
-                  </span>
-                )}
+                <div className="mt-3 space-y-1">
+                  <Label htmlFor="phoneNumber">Numéro*</Label>
+                  <Input
+                    id="phoneNumber"
+                    type="tel"
+                    placeholder="0102030405"
+                    {...registerRegister("phoneNumber")}
+                  />
+                  {errorsRegister.phoneNumber && (
+                    <span className="text-sm text-red-500">
+                      {errorsRegister.phoneNumber.message}
+                    </span>
+                  )}
+                </div>
               </div>
+              <div className="flex  justify-around">
+                <div className="mt-3 space-y-1">
+                  <Label htmlFor="passwordRegister">Mot de passe*</Label>
+                  <Input
+                    id="passwordRegister"
+                    type="password"
+                    placeholder="Mot de passe..."
+                    {...registerRegister("password")}
+                  />
+                  {errorsRegister.password && (
+                    <span className="text-sm text-red-500">
+                      {errorsRegister.password.message}
+                    </span>
+                  )}
+                </div>
 
-              <div className="mt-3 space-y-1">
-                <Label htmlFor="phoneNumber">Numéro*</Label>
-                <Input
-                  id="phoneNumber"
-                  type="tel"
-                  placeholder="0102030405"
-                  {...registerRegister("phoneNumber")}
-                />
-                {errorsRegister.phoneNumber && (
-                  <span className="text-sm text-red-500">
-                    {errorsRegister.phoneNumber.message}
-                  </span>
-                )}
-              </div>
-
-              <div className="mt-3 space-y-1">
-                <Label htmlFor="passwordRegister">Mot de passe*</Label>
-                <Input
-                  id="passwordRegister"
-                  type="password"
-                  placeholder="Mot de passe..."
-                  {...registerRegister("password")}
-                />
-                {errorsRegister.password && (
-                  <span className="text-sm text-red-500">
-                    {errorsRegister.password.message}
-                  </span>
-                )}
-              </div>
-
-              <div className="mt-3 space-y-1">
-                <Label htmlFor="confirmPasswordRegister">
-                  Confirmer Mot de passe*
-                </Label>
-                <Input
-                  id="confirmPasswordRegister"
-                  type="password"
-                  placeholder="Mot de passe..."
-                  {...registerRegister("confirmPassword")}
-                />
-                {errorsRegister.confirmPassword && (
-                  <span className="text-sm text-red-500">
-                    {errorsRegister.confirmPassword.message}
-                  </span>
-                )}
+                <div className="mt-3 space-y-1">
+                  <Label htmlFor="confirmPasswordRegister">
+                    Confirmer Mot de passe*
+                  </Label>
+                  <Input
+                    id="confirmPasswordRegister"
+                    type="password"
+                    placeholder="Mot de passe..."
+                    {...registerRegister("confirmPassword")}
+                  />
+                  {errorsRegister.confirmPassword && (
+                    <span className="text-sm text-red-500">
+                      {errorsRegister.confirmPassword.message}
+                    </span>
+                  )}
+                </div>
               </div>
 
               <Button
