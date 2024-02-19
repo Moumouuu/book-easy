@@ -38,7 +38,7 @@ import { useCompany } from "@/store/dashboard";
 import { useSWRConfig } from "swr";
 import useUser from "@/hooks/useUser";
 
-export const columns: ColumnDef<IUserDataTableProps>[] = [
+export const Columns: ColumnDef<IUserDataTableProps>[] = [
   {
     id: "select",
     header: ({ table }) => (
