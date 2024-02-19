@@ -149,43 +149,47 @@ export const Columns: ColumnDef<IUserDataTableProps>[] = [
     id: "actions",
     cell: ({ row }) => {
       const teamate = row.original;
-      const user = useUser();
-      return (
-        <Dialog>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(teamate.email)}
-              >
-                Copier l&apos;Email
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DialogTrigger asChild>
-                <DropdownMenuItem
-                  disabled={
-                    teamate.role === RoleEnum.ADMIN &&
-                    user.user.id === teamate.id
-                  }
-                  onClick={() => navigator.clipboard.writeText(teamate.email)}
-                >
-                  Modifier le rôle
-                </DropdownMenuItem>
-              </DialogTrigger>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <SheetUpdateRole teamate={teamate} />
-        </Dialog>
-      );
+      // todo bug : use must be called in function started by uppercase
+      return <DialogContainer teamate={teamate} />;
     },
   },
 ];
+
+export function DialogContainer({ teamate }: { teamate: any }) {
+  const user = useUser();
+  return (
+    <Dialog>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" className="h-8 w-8 p-0">
+            <span className="sr-only">Open menu</span>
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+          <DropdownMenuItem
+            onClick={() => navigator.clipboard.writeText(teamate.email)}
+          >
+            Copier l&apos;Email
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DialogTrigger asChild>
+            <DropdownMenuItem
+              disabled={
+                teamate.role === RoleEnum.ADMIN && user.user.id === teamate.id
+              }
+              onClick={() => navigator.clipboard.writeText(teamate.email)}
+            >
+              Modifier le rôle
+            </DropdownMenuItem>
+          </DialogTrigger>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <SheetUpdateRole teamate={teamate} />
+    </Dialog>
+  );
+}
 
 export function SheetUpdateRole({ teamate }: { teamate: IUserDataTableProps }) {
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
