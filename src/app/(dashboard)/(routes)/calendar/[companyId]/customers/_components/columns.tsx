@@ -116,7 +116,7 @@ export const columns: ColumnDef<IUserDataTableProps>[] = [
               Copier l&apos;Email
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            {redirectButton({ id: customer.id })}
+            <RedirectButton id={customer.id} />
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -124,7 +124,7 @@ export const columns: ColumnDef<IUserDataTableProps>[] = [
   },
 ];
 
-export function redirectButton({ id }: { id: string }) {
+export function RedirectButton({ id }: { id: string }) {
   const router = useRouter();
   const { companyId } = useCompany();
   const baseUrl = `/calendar/${companyId}/bookings?userId=${id}`;
