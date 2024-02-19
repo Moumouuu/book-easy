@@ -1,6 +1,6 @@
 "use client";
 import useSWR from "swr";
-import { columns } from "./_components/columns";
+import { Columns } from "./_components/columns";
 import { DataTable } from "./_components/data-table";
 import { defaultFetcherGet } from "@/lib/fetcher";
 import { useCompany } from "@/store/dashboard";
@@ -34,8 +34,8 @@ export default function TeamPage() {
     );
 
   return (
-    <div className="container justify-center flex p-4">
-      <DataTable columns={columns} data={formattedUsers} />
+    <div className="container flex justify-center p-4">
+      <DataTable columns={Columns} data={formattedUsers} />
     </div>
   );
 }
