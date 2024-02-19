@@ -127,7 +127,7 @@ export const columns: ColumnDef<IUserDataTableProps>[] = [
 export function RedirectButton({ id }: { id: string }) {
   const router = useRouter();
   const { companyId } = useCompany();
-  const baseUrl = `/calendar/${companyId}/bookings?userId=${id}`;
+  const baseUrl = `/company/${companyId}/bookings?userId=${id}`;
 
   return (
     <DropdownMenuItem

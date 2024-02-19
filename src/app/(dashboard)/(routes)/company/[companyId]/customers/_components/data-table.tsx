@@ -29,14 +29,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useState } from "react";
-import useUser from "@/hooks/useUser";
-import { RoleEnum } from "@/enum/roles";
-import { $Enums } from "@prisma/client";
 import axios from "axios";
 import { useCompany } from "@/store/dashboard";
-import { useRouter } from "next/navigation";
-import { revalidatePath } from "next/cache";
 import { useSWRConfig } from "swr";
+import useIsAdmin from "@/hooks/useIsAdmin";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -47,8 +43,7 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<any, TValue>) {
-  const { user: userData } = useUser();
-  const router = useRouter();
+  const userIsAdmin = useIsAdmin();
   const { companyId } = useCompany();
   const { mutate } = useSWRConfig();
 
@@ -76,8 +71,6 @@ export function DataTable<TData, TValue>({
       columnFilters,
     },
   });
-
-  const userIsAdmin = userData?.companies[0]?.role === RoleEnum.ADMIN;
 
   const getDataFromSelectedRow = () => {
     const customersDatatableIds = Object.keys(rowSelection).map(

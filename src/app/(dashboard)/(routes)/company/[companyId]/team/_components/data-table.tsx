@@ -29,6 +29,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useState } from "react";
+import useIsAdmin from "@/hooks/useIsAdmin";
+import axios from "axios";
+import { useCompany } from "@/store/dashboard";
+import { useSWRConfig } from "swr";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -38,8 +42,12 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({
   columns,
   data,
-}: DataTableProps<TData, TValue>) {
-  console.log(data);
+}: DataTableProps<any, TValue>) {
+  const userIsAdmin = useIsAdmin();
+  const { companyId } = useCompany();
+  const { mutate } = useSWRConfig();
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -63,9 +71,35 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  const getDataFromSelectedRow = () => {
+    const teamateDatatableIds = Object.keys(rowSelection).map((id: string) => {
+      return parseInt(id);
+    });
+    const teamateIds = teamateDatatableIds.map((id: number) => {
+      return data[id].id;
+    });
+    return teamateIds;
+  };
+
+  const onClickDeleteCustomers = async () => {
+    if (!userIsAdmin) return;
+    setIsLoading(true);
+
+    const teamateIds = getDataFromSelectedRow();
+    await axios.delete(`/api/company/${companyId}/team`, {
+      data: teamateIds,
+    });
+
+    // tell all SWRs with this key to revalidate
+    mutate(`/api/company/${companyId}/team`);
+    // remove the selected rows
+    setRowSelection({});
+    setIsLoading(false);
+  };
+
   return (
     <div>
-      <div className="flex items-center py-4">
+      <div className="flex items-center justify-between py-4">
         <Input
           placeholder="Filter emails..."
           value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
@@ -74,32 +108,49 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columns
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div>
+          <Button
+            disabled={
+              isLoading ||
+              !userIsAdmin ||
+              Object.entries(rowSelection).length === 0
+            }
+            isLoading={isLoading}
+            className="mr-2"
+            variant={"destructive"}
+            onClick={onClickDeleteCustomers}
+          >
+            {userIsAdmin
+              ? "Supprimer le collaborateur"
+              : "Autorisation requise pour supprimer un collaborateur"}
+          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="ml-auto">
+                Columns
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {table
+                .getAllColumns()
+                .filter((column) => column.getCanHide())
+                .map((column) => {
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={column.getIsVisible()}
+                      onCheckedChange={(value) =>
+                        column.toggleVisibility(!!value)
+                      }
+                    >
+                      {column.id}
+                    </DropdownMenuCheckboxItem>
+                  );
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
       <div className="rounded-md border">
         <Table>

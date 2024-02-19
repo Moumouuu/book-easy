@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import Aside from "./(routes)/_components/aside";
 import CompanyProvider from "@/providers/company-provider";
-import UserSection from "./(routes)/calendar/[companyId]/performance/_components/userSection";
+import UserSection from "./(routes)/company/[companyId]/performance/_components/userSection";
 
 export const metadata: Metadata = {
   title: "BookEasy - DashBoard",

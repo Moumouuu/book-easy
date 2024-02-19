@@ -69,6 +69,8 @@ model UserCompanyRole {
   // Define the relation to Company model
   company   Company @relation(fields: [companyId], references: [id])
   companyId String
+
+  @@unique([userId, companyId])
 }
 
 model PremiumUser {

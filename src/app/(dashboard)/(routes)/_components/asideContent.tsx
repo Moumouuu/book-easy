@@ -20,7 +20,7 @@ interface IAsideItem {
 
 export default function AsideContent() {
   const { companyId } = useCompany();
-  const defaultPath = `/calendar/${companyId}`;
+  const defaultPath = `/company/${companyId}`;
   const currentPath = usePathname();
 
   const asideItems: IAsideItem[] = [

@@ -1,7 +1,7 @@
 "use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User } from "@prisma/client";
-import { UserSectionSkeleton } from "../calendar/[companyId]/performance/_components/skeletons/userSectionSkeleton";
+import { UserSectionSkeleton } from "../company/[companyId]/performance/_components/skeletons/userSectionSkeleton";
 import useUser from "@/hooks/useUser";
 
 interface UserSession {

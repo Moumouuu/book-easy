@@ -6,6 +6,9 @@ import useUser from "@/hooks/useUser";
 import { User } from "@prisma/client";
 import { UserSectionSkeleton } from "./skeletons/userSectionSkeleton";
 import DefaultError from "@/components/defaultError";
+import useIsAdmin from "@/hooks/useIsAdmin";
+import { Badge } from "@/components/ui/badge";
+import { RoleEnum } from "@/enum/roles";
 
 interface UserSession {
   user: User | null;
@@ -15,6 +18,7 @@ interface UserSession {
 
 export default function UserSection() {
   const { user: userSession, isLoading, error }: UserSession = useUser();
+  const isAdmin = useIsAdmin();
 
   if (isLoading) {
     return <UserSectionSkeleton />;
@@ -38,8 +42,11 @@ export default function UserSection() {
           </AvatarFallback>
         </Avatar>
         <div className="ml-2">
-          <p className="text-xl font-medium text-black dark:text-white">
+          <p className="flex items-center text-xl font-medium text-black dark:text-white">
             {userSession?.firstName} {userSession?.lastName}
+            <Badge className="ml-3 ">
+              {isAdmin ? RoleEnum.ADMIN : RoleEnum.USER}
+            </Badge>
           </p>
           <p className="text-xs font-light text-gray-500">
             {userSession?.email}
