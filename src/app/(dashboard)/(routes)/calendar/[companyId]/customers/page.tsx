@@ -6,7 +6,6 @@ import { defaultFetcherGet } from "@/lib/fetcher";
 import { useCompany } from "@/store/dashboard";
 import DefaultError from "@/components/defaultError";
 import DatatableSkeleton from "@/components/datatable/datatableSkeleton";
-import { $Enums } from "@prisma/client";
 
 export interface IUserDataTableProps {
   id: string;
@@ -14,20 +13,16 @@ export interface IUserDataTableProps {
   firstName: string | null;
   lastName: string | null;
   phone_number: string | null;
-  createdAt: Date;
-  role: $Enums.Role;
 }
 
-export default function TeamPage() {
+export default function CustomerPage() {
   const { companyId } = useCompany();
   const { data, isLoading, error } = useSWR(
-    `/api/company/${companyId}/team`,
+    `/api/company/${companyId}/customers`,
     defaultFetcherGet,
   );
 
   if (isLoading) return <DatatableSkeleton />;
-
-  const formattedUsers = formatUser(data);
 
   if (error)
     return (
@@ -35,23 +30,8 @@ export default function TeamPage() {
     );
 
   return (
-    <div className="container justify-center flex p-4">
-      <DataTable columns={columns} data={formattedUsers} />
+    <div className="container flex justify-center p-4">
+      <DataTable columns={columns} data={data} />
     </div>
   );
 }
-
-const formatUser = (users: any[]) => {
-  const userObjects = users.map((user: any) => {
-    // Extracting roles from user object
-    const role = user.user.companies[0].role;
-
-    // Adding roles as attributes to the user object
-    const newUser = { ...user }; // Create a shallow copy of the user object
-    newUser.user.role = role; // Add the role attribute to the user object
-
-    return newUser.user;
-  });
-
-  return userObjects;
-};

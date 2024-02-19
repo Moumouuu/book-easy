@@ -16,7 +16,6 @@ export async function getCustomers(companyId: string) {
       firstName: true,
       lastName: true,
       phone_number: true,
-      createdAt: true,
     },
     orderBy: {
       createdAt: "desc",

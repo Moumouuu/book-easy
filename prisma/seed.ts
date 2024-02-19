@@ -19,7 +19,7 @@ async function main() {
     console.log("Company created successfully : " + company.id);
   }
   // user does not exist then create 10
-  if (existingUsers.length <= 20) {
+  if (existingUsers.length <= 50) {
     for (let i = 0; i < 50; i++) {
       const user = await prisma.user.create({
         data: {
@@ -38,7 +38,7 @@ async function main() {
 
   // Generate fake books using existing users and companies
   const books = [];
-  for (let i = 0; i < 200; i++) {
+  for (let i = 0; i < 500; i++) {
     const book = await prisma.book.create({
       data: {
         start_at: faker.date.recent(),

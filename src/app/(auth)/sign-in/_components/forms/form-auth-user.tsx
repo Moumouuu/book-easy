@@ -57,13 +57,7 @@ export default function UserAuthForm() {
       lastname: z
         .string()
         .min(2, "Le nom n'est pas valide. Veuillez réessayer."),
-      phoneNumber: z
-        .string()
-        .min(10, "Le numéro de téléphone n'est pas valide. Veuillez réessayer.")
-        .max(
-          10,
-          "Le numéro de téléphone n'est pas valide. Veuillez réessayer.",
-        ),
+      phoneNumber: z.string(),
     })
     .refine(
       (values) => {
@@ -272,7 +266,7 @@ export default function UserAuthForm() {
                 </div>
 
                 <div className="mt-3 space-y-1">
-                  <Label htmlFor="phoneNumber">Numéro*</Label>
+                  <Label htmlFor="phoneNumber">Numéro</Label>
                   <Input
                     id="phoneNumber"
                     type="tel"
@@ -286,7 +280,7 @@ export default function UserAuthForm() {
                   )}
                 </div>
               </div>
-              <div className="flex  justify-around">
+              <div className="flex justify-around">
                 <div className="mt-3 space-y-1">
                   <Label htmlFor="passwordRegister">Mot de passe*</Label>
                   <Input
