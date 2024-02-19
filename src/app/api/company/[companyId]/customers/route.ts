@@ -3,7 +3,6 @@ import { getCustomers } from "@/actions/company/getCustomers";
 import getUser from "@/actions/user/getUser";
 import { RoleEnum } from "@/enum/roles";
 import prismadb from "@/lib/prismadb";
-import { GiAmberMosquito } from "react-icons/gi";
 
 interface IGet {
   params: {

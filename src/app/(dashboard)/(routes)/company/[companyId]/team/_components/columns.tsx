@@ -47,7 +47,7 @@ export const Columns: ColumnDef<IUserDataTableProps>[] = [
           table.getIsAllPageRowsSelected() ||
           (table.getIsSomePageRowsSelected() && "indeterminate")
         }
-        onCheckedChange={(value: any) => {
+        onCheckedChange={() => {
           // Get all rows
           const allRows = table.getFilteredRowModel().rows;
           // Filter out admin rows
@@ -149,7 +149,6 @@ export const Columns: ColumnDef<IUserDataTableProps>[] = [
     id: "actions",
     cell: ({ row }) => {
       const teamate = row.original;
-      // todo bug : use must be called in function started by uppercase
       return <DialogContainer teamate={teamate} />;
     },
   },
