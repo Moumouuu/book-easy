@@ -85,16 +85,24 @@ export function DataTable<TData, TValue>({
     if (!userIsAdmin) return;
     setIsLoading(true);
 
-    const teamateIds = getDataFromSelectedRow();
-    await axios.delete(`/api/company/${companyId}/team`, {
-      data: teamateIds,
-    });
+    try {
+      const teamateIds = getDataFromSelectedRow();
 
-    // tell all SWRs with this key to revalidate
-    mutate(`/api/company/${companyId}/team`);
-    // remove the selected rows
-    setRowSelection({});
-    setIsLoading(false);
+      // Delete customers
+      await axios.delete(`/api/company/${companyId}/team`, {
+        data: teamateIds,
+      });
+
+      // Tell all SWRs with this key to revalidate
+      mutate(`/api/company/${companyId}/team`);
+
+      // Remove the selected rows
+      setRowSelection({});
+    } catch (error) {
+      console.error("An error occurred while deleting customers:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

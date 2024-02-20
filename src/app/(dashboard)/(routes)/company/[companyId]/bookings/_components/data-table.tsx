@@ -87,20 +87,27 @@ export function DataTable<TData, TValue>({
     setIsLoading(true);
 
     const bookIds = getDataFromSelectedRow();
-    await axios.delete(`/api/company/${companyId}/bookings`, {
-      data: bookIds,
-    });
+    try {
+      // Delete bookings
+      await axios.delete(`/api/company/${companyId}/bookings`, {
+        data: bookIds,
+      });
 
-    // tell all SWRs with this key to revalidate
-    mutate(`/api/company/${companyId}/bookings`);
-    // remove the selected rows
-    setRowSelection({});
-    setIsLoading(false);
+      // Send email to inform the client that their booking has been deleted
+      await axios.post(`/api/send/${companyId}/deleteBooks`, {
+        data: bookIds,
+      });
 
-    // todo : send email to the client to inform him that his booking has been deleted
-    await axios.post(`/api/send/deleteBook`, {
-      data: { bookIds },
-    });
+      // Tell all SWRs with this key to revalidate
+      mutate(`/api/company/${companyId}/bookings`);
+
+      // Remove the selected rows
+      setRowSelection({});
+    } catch (error) {
+      console.error("An error occurred while deleting bookings:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

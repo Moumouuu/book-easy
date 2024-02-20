@@ -155,19 +155,25 @@ export function SheetUpdateBook({ book }: { book: IUserDataTableProps }) {
   const onSubmit = async () => {
     setIsLoading(true);
 
-    await axios.put(`/api/company/${companyId}/bookings`, {
-      data: { newBook },
-    });
-
-    // Invalidate SWR cache
-    mutate(`/api/company/${companyId}/bookings`);
-    setIsLoading(false);
-
-    // send email only if the checkbox is checked
-    if (isSendEmail) {
-      await axios.post(`/api/send/updateBook`, {
-        data: { ...newBook },
+    try {
+      // Update bookings
+      await axios.put(`/api/company/${companyId}/bookings`, {
+        data: { newBook },
       });
+
+      // Send email only if the checkbox is checked
+      if (isSendEmail) {
+        await axios.post(`/api/send/${companyId}/updateBook`, {
+          data: { ...newBook },
+        });
+      }
+
+      // Invalidate SWR cache
+      mutate(`/api/company/${companyId}/bookings`);
+    } catch (error) {
+      console.error("An error occurred while submitting:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 

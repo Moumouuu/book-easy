@@ -20,13 +20,12 @@ import * as React from "react";
 import { format, parseISO } from "date-fns";
 import { fr } from "date-fns/locale";
 
-interface BookeasyUpdateBookUserEmailProps {
+interface BookeasyDeleteBookUserEmailProps {
   companyName?: string;
-  username?: string;
   reservationLink?: string;
-  price?: number;
   start_at?: string;
   end_at?: string;
+  username?: string;
 }
 
 const formatDate = (date: Date): string => {
@@ -37,14 +36,13 @@ const formatDate = (date: Date): string => {
 
 const baseUrl = process.env.BOOKEASY_URL;
 
-export const UpdateBookMail = ({
+export const DeleteBookMail = ({
   companyName,
-  username,
   reservationLink,
-  price,
+  username,
   end_at,
   start_at,
-}: BookeasyUpdateBookUserEmailProps) => {
+}: BookeasyDeleteBookUserEmailProps) => {
   const previewText = `Rejoignez ${appTitle}`;
 
   return (
@@ -71,19 +69,16 @@ export const UpdateBookMail = ({
               Bonjour {username},
             </Text>
             <Text className="text-[14px] leading-[24px] text-black">
-              Votre réservation a été modifiée. Vous trouverez ci-dessous les
+              Votre réservation a été supprimée. Vous trouverez ci-dessous les
               détails de votre réservation.
             </Text>
             <Text>
-              {price && `Le montant de votre réservation est de ${price}€.`}
-            </Text>
-            <Text>
               {start_at &&
-                `Votre réservation commence le ${formatDate(new Date(start_at))}.`}
+                `Votre réservation commençait le ${formatDate(new Date(start_at))}.`}
             </Text>
             <Text>
               {end_at &&
-                `Votre réservation se termine le ${formatDate(new Date(end_at))}.`}
+                `Votre réservation se terminait le ${formatDate(new Date(end_at))}.`}
             </Text>
             <Section>
               <Row>
@@ -139,4 +134,4 @@ export const UpdateBookMail = ({
   );
 };
 
-export default UpdateBookMail;
+export default DeleteBookMail;

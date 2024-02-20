@@ -1,15 +1,36 @@
+import getCompany from "@/actions/company/getCompany";
+import getUser from "@/actions/user/getUser";
 import { UpdateBookMail } from "@/components/email-templates/updateBookMail";
+import { RoleEnum } from "@/enum/roles";
 import prismadb from "@/lib/prismadb";
 import { NextRequest } from "next/server";
 import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export async function POST(request: NextRequest) {
+interface IGet {
+  params: {
+    companyId: string;
+  };
+}
+
+export async function POST(request: NextRequest, { params }: IGet) {
   const { data: bookData } = await request.json();
   const { id, price, start_at, end_at } = bookData;
+  const { companyId } = params;
 
-  // check if the book exists
+  // Get company and current user
+  const [company, currentUser] = await Promise.all([
+    getCompany(companyId),
+    getUser(),
+  ]);
+
+  // Check if current user exists
+  if (!currentUser || !company) {
+    return new Response("User or company not found", { status: 404 });
+  }
+
+  // Fetch the book details
   const book = await prismadb.book.findUniqueOrThrow({
     where: { id },
     select: {
@@ -30,13 +51,12 @@ export async function POST(request: NextRequest) {
     },
   });
 
-  const username = `${book.created_by.firstName} ${book.created_by.lastName}`;
+  const { firstName, lastName } = book.created_by;
+  const username = `${firstName} ${lastName}`;
   const companyName = book.company.name;
-  // todo change the link to the real one
   const reservationLink = `${process.env.BOOKEASY_URL}/book/${id}`;
-  const userImage =
-    "https://api.dicebear.com/7.x/lorelei/svg?backgroundColor=b6e3f4,c0aede,d1d4f9";
 
+  // Send email
   const data = await resend.emails.send({
     from: "Acme <onboarding@resend.dev>",
     to: ["delivered@resend.dev"],
@@ -44,7 +64,6 @@ export async function POST(request: NextRequest) {
     react: UpdateBookMail({
       companyName,
       reservationLink,
-      userImage,
       username,
       price,
       start_at,

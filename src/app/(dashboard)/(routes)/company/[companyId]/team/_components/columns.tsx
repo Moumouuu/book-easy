@@ -199,13 +199,19 @@ export function SheetUpdateRole({ teamate }: { teamate: IUserDataTableProps }) {
   const onSubmit = async () => {
     setIsLoading(true);
 
-    await axios.put(`/api/company/${companyId}/team`, {
-      data: { selectedRole, teamateId: teamate.id },
-    });
+    try {
+      // Update team
+      await axios.put(`/api/company/${companyId}/team`, {
+        data: { selectedRole, teamateId: teamate.id },
+      });
 
-    // Invalidate SWR cache
-    mutate(`/api/company/${companyId}/team`);
-    setIsLoading(false);
+      // Invalidate SWR cache
+      mutate(`/api/company/${companyId}/team`);
+    } catch (error) {
+      console.error("An error occurred while submitting:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
