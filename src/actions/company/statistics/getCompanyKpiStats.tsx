@@ -1,6 +1,7 @@
 import prismadb from "@/lib/prismadb";
 import { PeriodEnum } from "@/enum/period";
 import getCompany from "../getCompany";
+import { Book } from "@prisma/client";
 
 interface ReservationMetrics {
   label: string;
@@ -90,6 +91,39 @@ const getAggregateForPeriod = async (
   return result._sum.price ?? 0;
 };
 
+const getNumbersNewCustomersForPeriod = async (
+  companyId: string,
+  startDate: Date,
+  endDate: Date,
+): Promise<any> => {
+  // a new customer is a customer that has made a reservation for the first time in the period
+  const reservations = await prismadb.book.findMany({
+    where: {
+      companyId,
+      start_at: { lte: endDate, gte: startDate },
+    },
+    select: {
+      createdById: true,
+    },
+  });
+
+  // count the number of reservations made by each customer
+  const reservationCountsByCustomer = reservations.reduce(
+    (acc: any, reservation: any) => {
+      acc[reservation.createdById] = (acc[reservation.createdById] || 0) + 1;
+      return acc;
+    },
+    {},
+  );
+
+  // count the number of customers that have made only one reservation
+  const newCustomersCount = Object.values(reservationCountsByCustomer).filter(
+    (count) => count === 1,
+  ).length;
+
+  return newCustomersCount;
+};
+
 export default async function getCompanyKpiStats(
   companyId: string,
   period: string,
@@ -136,6 +170,21 @@ export default async function getCompanyKpiStats(
       Math.max(totalPriceForPreviousPeriod, 1)) *
     100;
 
+  const newCustomers = await getNumbersNewCustomersForPeriod(
+    companyId,
+    startDate,
+    endDate,
+  );
+  const previousNewCustomers = await getNumbersNewCustomersForPeriod(
+    companyId,
+    previousStartDate,
+    previousEndDate,
+  );
+  const percentageChangeInNewCustomers =
+    ((newCustomers - previousNewCustomers) /
+      Math.max(previousNewCustomers, 1)) *
+    100;
+
   return {
     KPI: [
       {
@@ -152,10 +201,10 @@ export default async function getCompanyKpiStats(
         suffix: "€",
       },
       {
-        label: "Réservation annulée",
-        value: 10, // todo: get data in db and remove this mock
-        percentageChange: "0",
-        changeType: getChangeType(0),
+        label: "Nouveaux clients",
+        value: newCustomers,
+        percentageChange: percentageChangeInNewCustomers.toFixed(2),
+        changeType: getChangeType(percentageChangeInNewCustomers),
       },
     ],
   };
