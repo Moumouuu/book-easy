@@ -48,7 +48,7 @@ async function getLastWeekMetrics(companyId: string): Promise<DailyMetrics[]> {
 
   // Calculate daily revenue and reservation counts
   reservationsForLastWeek.forEach((reservation) => {
-    const reservationDate = reservation.start_at.toISOString().split("T")[0];
+    const reservationDate = reservation.start_at?.toISOString().split("T")[0];
     if (!dailyMetrics[reservationDate]) {
       dailyMetrics[reservationDate] = {
         date: reservationDate,
