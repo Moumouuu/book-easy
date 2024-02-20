@@ -72,7 +72,7 @@ export async function POST(request: NextRequest, { params }: IPost) {
         reservationLink,
         username,
         start_at: book.start_at.toString(),
-        end_at: book.end_at?.toString() ?? null,
+        end_at: book.end_at?.toString(),
       }) as React.ReactElement,
     });
 
