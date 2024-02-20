@@ -37,6 +37,7 @@ import axios from "axios";
 import { useCompany } from "@/store/dashboard";
 import { useSWRConfig } from "swr";
 import useUser from "@/hooks/useUser";
+import { toast } from "sonner";
 
 export const Columns: ColumnDef<IUserDataTableProps>[] = [
   {
@@ -209,6 +210,10 @@ export function SheetUpdateRole({ teamate }: { teamate: IUserDataTableProps }) {
       mutate(`/api/company/${companyId}/team`);
     } catch (error) {
       console.error("An error occurred while submitting:", error);
+      toast("Une erreur est survenue", {
+        description:
+          "Si le problème persiste veuillez contacter un administrateur",
+      });
     } finally {
       setIsLoading(false);
     }

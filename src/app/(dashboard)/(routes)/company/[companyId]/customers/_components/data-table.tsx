@@ -33,6 +33,7 @@ import axios from "axios";
 import { useCompany } from "@/store/dashboard";
 import { useSWRConfig } from "swr";
 import useIsAdmin from "@/hooks/useIsAdmin";
+import { toast } from "sonner";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -103,6 +104,10 @@ export function DataTable<TData, TValue>({
       setRowSelection({});
     } catch (error) {
       console.error("An error occurred while deleting customers:", error);
+      toast("Une erreur est survenue", {
+        description:
+          "Si le problème persiste veuillez contacter un administrateur",
+      });
     } finally {
       setIsLoading(false);
     }

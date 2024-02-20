@@ -30,6 +30,7 @@ import { Label } from "@/components/ui/label";
 import axios from "axios";
 import { useState } from "react";
 import { useSWRConfig } from "swr";
+import { toast } from "sonner";
 export const columns: ColumnDef<IUserDataTableProps>[] = [
   {
     id: "select",
@@ -172,6 +173,10 @@ export function SheetUpdateBook({ book }: { book: IUserDataTableProps }) {
       mutate(`/api/company/${companyId}/bookings`);
     } catch (error) {
       console.error("An error occurred while submitting:", error);
+      toast("Une erreur est survenue", {
+        description:
+          "Si le problème persiste veuillez contacter un administrateur",
+      });
     } finally {
       setIsLoading(false);
     }
