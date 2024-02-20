@@ -63,9 +63,9 @@ export async function DELETE(request: Request, { params }: IGet) {
 export async function PUT(request: Request, { params }: IGet) {
   const { companyId } = params;
   const { data } = await request.json();
-  const { bookId, newBook } = data;
+  const { newBook } = data;
 
-  if (!bookId || !newBook)
+  if (!newBook)
     return new Response("selectedRole and teamateId are required", {
       status: 400,
     });
@@ -92,7 +92,7 @@ export async function PUT(request: Request, { params }: IGet) {
   // change role of the teamate in the company
   const updatedBooks = await prismadb.book.update({
     where: {
-      id: bookId,
+      id: newBook.id,
     },
     data: {
       ...newBook,

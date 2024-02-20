@@ -96,6 +96,11 @@ export function DataTable<TData, TValue>({
     // remove the selected rows
     setRowSelection({});
     setIsLoading(false);
+
+    // todo : send email to the client to inform him that his booking has been deleted
+    await axios.post(`/api/send/deleteBook`, {
+      data: { bookIds },
+    });
   };
 
   return (
@@ -103,9 +108,14 @@ export function DataTable<TData, TValue>({
       <div className="flex items-center justify-between py-4">
         <Input
           placeholder="Filtrer par Email ..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+          value={
+            (table.getColumn("created_by_email")?.getFilterValue() as string) ??
+            ""
+          }
           onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
+            table
+              .getColumn("created_by_email")
+              ?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />

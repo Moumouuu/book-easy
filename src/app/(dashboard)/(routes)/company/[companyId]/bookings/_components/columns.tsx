@@ -1,8 +1,8 @@
 "use client";
 
+import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-import { Checkbox } from "@/components/ui/checkbox";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -13,8 +13,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { IUserDataTableProps } from "../page";
 import { useCompany } from "@/store/dashboard";
+import { IUserDataTableProps } from "../page";
 
 import {
   Dialog,
@@ -25,11 +25,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import axios from "axios";
 import { useState } from "react";
 import { useSWRConfig } from "swr";
-import axios from "axios";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 export const columns: ColumnDef<IUserDataTableProps>[] = [
   {
     id: "select",
@@ -146,6 +146,8 @@ export const columns: ColumnDef<IUserDataTableProps>[] = [
 
 export function SheetUpdateBook({ book }: { book: IUserDataTableProps }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isSendEmail, setIsSendEmail] = useState<boolean>(true);
+
   const { companyId } = useCompany();
   const { mutate } = useSWRConfig();
   const [newBook, setNewBook] = useState<IUserDataTableProps>(book);
@@ -154,15 +156,23 @@ export function SheetUpdateBook({ book }: { book: IUserDataTableProps }) {
     setIsLoading(true);
 
     await axios.put(`/api/company/${companyId}/bookings`, {
-      data: { bookId: book.id, newBook },
+      data: { newBook },
     });
 
     // Invalidate SWR cache
     mutate(`/api/company/${companyId}/bookings`);
     setIsLoading(false);
+
+    // send email only if the checkbox is checked
+    if (isSendEmail) {
+      await axios.post(`/api/send/updateBook`, {
+        data: { ...newBook },
+      });
+    }
   };
 
-  const formattedDate = book.start_at.toString().slice(0, 16);
+  const formattedStart_at = book.start_at.toString().slice(0, 16);
+  const formattedEnd_at = book.end_at.toString().slice(0, 16);
 
   return (
     <DialogContent className="sm:max-w-[425px]">
@@ -182,7 +192,7 @@ export function SheetUpdateBook({ book }: { book: IUserDataTableProps }) {
           id="start_at"
           type="datetime-local"
           className="mt-2"
-          defaultValue={formattedDate}
+          defaultValue={formattedStart_at}
         />
       </div>
 
@@ -195,7 +205,7 @@ export function SheetUpdateBook({ book }: { book: IUserDataTableProps }) {
           id="end_at"
           type="datetime-local"
           className="mt-2"
-          defaultValue={formattedDate}
+          defaultValue={formattedEnd_at}
         />
       </div>
 
@@ -210,6 +220,20 @@ export function SheetUpdateBook({ book }: { book: IUserDataTableProps }) {
           className="mt-2"
           defaultValue={book.price}
         />
+      </div>
+
+      <div className="flex items-center space-x-2">
+        <Checkbox
+          id="terms"
+          defaultChecked
+          onCheckedChange={(e) => setIsSendEmail(!!e)}
+        />
+        <label
+          htmlFor="terms"
+          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        >
+          Envoyer un email d&apos;information au client
+        </label>
       </div>
 
       <DialogFooter>
