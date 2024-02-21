@@ -8,8 +8,6 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
-import { AiFillGoogleCircle } from "react-icons/ai";
-
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -22,12 +20,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
-import AsideTop from "@/app/(dashboard)/(routes)/_components/asideTop";
 import Image from "next/image";
+import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 
 export default function UserAuthForm() {
+  const searchParams = useSearchParams();
+  // it's use when user is invited to a company -> but need to register first
+  const userEmailFromInvite = searchParams.get("email");
+  const userTokenFromInvite = searchParams.get("token");
+  const userCompanyFromInvite = searchParams.get("company");
+
+  const isUserFromInvite =
+    userEmailFromInvite && userTokenFromInvite && userCompanyFromInvite;
+
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
@@ -57,7 +63,10 @@ export default function UserAuthForm() {
       lastname: z
         .string()
         .min(2, "Le nom n'est pas valide. Veuillez réessayer."),
-      phoneNumber: z.string(),
+      phoneNumber: z
+        .string()
+        .min(10, "Le numéro de téléphone doit avoir 10 chiffres")
+        .max(10, "Le numéro de téléphone doit avoir 10 chiffres"),
     })
     .refine(
       (values) => {
@@ -91,15 +100,10 @@ export default function UserAuthForm() {
   const onSubmitLogin = async (data: FormValuesLogin) => {
     setIsLoading(true);
     try {
-      await signIn("credentials", {
-        redirect: false,
-        email: data.email,
-        password: data.password,
-      });
-      setIsLoading(false);
-      router.push("/");
-    } catch (err) {
-      console.log("[LOGIN_ERROR]" + err);
+      await signInUser(data);
+    } catch (error) {
+      console.error("[LOGIN_ERROR]", error);
+      displayErrorMessage(error);
     } finally {
       setIsLoading(false);
     }
@@ -108,33 +112,68 @@ export default function UserAuthForm() {
   const onSubmitRegister = async (data: FormValuesRegister) => {
     setIsLoading(true);
     try {
-      await axios.post("/api/auth", data);
-      try {
-        const res = await signIn("credentials", {
-          redirect: false,
-          email: data.email,
-          password: data.password,
-        });
-        if (res?.error) {
-          // user already exists
-          toast.error("Cet utilisateur existe déjà.");
-          console.log("[LOGIN_ERROR_AFTER_REGISTER]" + res.error);
-          return;
-        }
-        setIsLoading(false);
-        router.push("/");
-      } catch (err) {
-        console.log("[LOGIN_ERROR_AFTER_REGISTER]" + err);
-      }
-    } catch (err) {
-      console.log("[REGISTER_ERROR]" + err);
+      await createUserAccount(data);
+      await signInUser(data);
+      redirectToDestination();
+    } catch (error) {
+      console.error("[REGISTER_ERROR]", error);
+      displayErrorMessage(error);
     } finally {
       setIsLoading(false);
     }
   };
 
+  const createUserAccount = async (data: FormValuesRegister) => {
+    const requestData = {
+      ...data,
+      fromInvite: {
+        email: userEmailFromInvite,
+        token: userTokenFromInvite,
+        company: userCompanyFromInvite,
+      },
+    };
+    await axios.post("/api/auth", requestData);
+  };
+
+  type FormValues = FormValuesLogin | FormValuesRegister;
+
+  const signInUser = async (data: FormValues) => {
+    try {
+      const response = await signIn("credentials", {
+        redirect: false,
+        email: data.email,
+        password: data.password,
+      });
+      if (response?.ok) {
+        redirectToDestination();
+      } else {
+        console.log(response?.error);
+        displayErrorMessage(response?.error);
+      }
+    } catch (error) {
+      console.error("[LOGIN_ERROR]", error);
+      displayErrorMessage(error);
+    }
+  };
+
+  const redirectToDestination = () => {
+    const destination = isUserFromInvite
+      ? `/company/${userCompanyFromInvite}`
+      : "/";
+    router.push(destination);
+  };
+
+  const displayErrorMessage = (error: any) => {
+    const errorMessage =
+      error.response?.data?.message || "Une erreur est survenue.";
+    toast("Erreur", { description: errorMessage });
+  };
+
   return (
-    <Tabs defaultValue="sign-in" className="w-[500px] ">
+    <Tabs
+      defaultValue={isUserFromInvite ? "register" : "sign-in"}
+      className="w-[500px] "
+    >
       <TabsList className="grid w-full grid-cols-2">
         <TabsTrigger value="sign-in">Sign-in</TabsTrigger>
         <TabsTrigger value="register">Register</TabsTrigger>
@@ -188,7 +227,8 @@ export default function UserAuthForm() {
               </div>
               <Button
                 disabled={isLoading}
-                className={cn("mt-4 w-full", isLoading && "opacity-50")}
+                isLoading={isLoading}
+                className={"mt-4 w-full"}
               >
                 Connexion
               </Button>
@@ -224,6 +264,7 @@ export default function UserAuthForm() {
                   <Input
                     id="email"
                     type="email"
+                    defaultValue={isUserFromInvite ? userEmailFromInvite : ""}
                     placeholder="johndoe@gmail.com"
                     {...registerRegister("email")}
                   />
@@ -316,7 +357,8 @@ export default function UserAuthForm() {
 
               <Button
                 disabled={isLoading}
-                className={cn("mt-4 w-full", isLoading && "opacity-50")}
+                isLoading={isLoading}
+                className={"mt-4 w-full"}
               >
                 Inscription
               </Button>

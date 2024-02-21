@@ -5,9 +5,9 @@
 - SWR
 - Zod
 - Prisma
-- React Ho Form
+- React Hook Form
 - Zustand
-- axios
-- react icons
-- react hot toast
-- faker
+- Axios
+- React icons
+- React hot toast
+- Faker

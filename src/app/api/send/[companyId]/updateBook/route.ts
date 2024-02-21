@@ -1,7 +1,6 @@
 import getCompany from "@/actions/company/getCompany";
 import getUser from "@/actions/user/getUser";
 import { UpdateBookMail } from "@/components/email-templates/updateBookMail";
-import { RoleEnum } from "@/enum/roles";
 import prismadb from "@/lib/prismadb";
 import { NextRequest } from "next/server";
 import { Resend } from "resend";

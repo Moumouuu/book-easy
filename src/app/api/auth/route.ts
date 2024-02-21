@@ -1,15 +1,31 @@
-import { NextRequest, NextResponse } from "next/server";
-import { authOptions } from "@/lib/auth";
 import bcrypt from "bcrypt";
+import { NextRequest, NextResponse } from "next/server";
 
 import prismadb from "@/lib/prismadb";
-import { getServerSession } from "next-auth";
-import getCompany from "@/actions/company/getCompany";
+
+interface RequestData {
+  email: string;
+  password: string;
+  firstname: string;
+  lastname: string;
+  phoneNumber: string;
+  fromInvite: {
+    email: string;
+    token: string;
+    company: string;
+  };
+}
 
 export async function POST(req: NextRequest) {
-  const { email, password, firstname, lastname, phoneNumber } =
-    await req.json();
-  console.log(email, password, firstname, lastname, phoneNumber);
+  const {
+    email,
+    password,
+    firstname,
+    lastname,
+    phoneNumber,
+    fromInvite,
+  }: RequestData = await req.json();
+
   if (!email || !password) {
     return new NextResponse("Missing email or password", { status: 400 });
   }
@@ -27,6 +43,31 @@ export async function POST(req: NextRequest) {
     });
   }
 
+  if (fromInvite.email) {
+    // check if token is valid
+    await prismadb.user.findUniqueOrThrow({
+      where: {
+        id: fromInvite.token,
+      },
+    });
+    // check if user is already in company
+    await prismadb.company.findFirstOrThrow({
+      where: {
+        userRoles: {
+          some: {
+            userId: fromInvite.token,
+          },
+        },
+      },
+    });
+    // check if company exist
+    await prismadb.company.findFirstOrThrow({
+      where: {
+        id: fromInvite.company,
+      },
+    });
+  }
+
   // create user
   const newUser = await prismadb.user.create({
     data: {
@@ -37,6 +78,28 @@ export async function POST(req: NextRequest) {
       phone_number: phoneNumber,
     },
   });
+
+  // create userRole if fromInvite and add user to company
+  if (fromInvite.email && newUser) {
+    const userRole = await prismadb.userCompanyRole.create({
+      data: {
+        role: "USER",
+        company: {
+          connect: {
+            id: fromInvite.company,
+          },
+        },
+        user: {
+          connect: {
+            id: newUser.id,
+          },
+        },
+      },
+    });
+    if (!userRole) {
+      return new NextResponse("Error creating user role", { status: 500 });
+    }
+  }
 
   if (!newUser) {
     return new NextResponse("Error creating user", { status: 500 });

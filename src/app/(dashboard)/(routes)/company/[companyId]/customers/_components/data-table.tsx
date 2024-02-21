@@ -114,8 +114,8 @@ export function DataTable<TData, TValue>({
   };
 
   return (
-    <div>
-      <div className="flex items-center justify-between py-4">
+    <div className="w-full">
+      <div className="flex flex-col items-center justify-between py-4 lg:flex-row">
         <Input
           placeholder="Filtrer par Email ..."
           value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
@@ -124,7 +124,7 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
-        <div>
+        <div className="mt-3 lg:m-0">
           <Button
             disabled={
               isLoading ||

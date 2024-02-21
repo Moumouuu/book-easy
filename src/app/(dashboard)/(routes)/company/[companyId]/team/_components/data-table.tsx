@@ -34,6 +34,7 @@ import axios from "axios";
 import { useCompany } from "@/store/dashboard";
 import { useSWRConfig } from "swr";
 import { toast } from "sonner";
+import { NewTeamateDialog } from "./newTeamateDialog";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -48,7 +49,9 @@ export function DataTable<TData, TValue>({
   const { companyId } = useCompany();
   const { mutate } = useSWRConfig();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoadingDeleteTeamate, setisLoadingDeleteTeamate] =
+    useState<boolean>(false);
+
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -82,9 +85,9 @@ export function DataTable<TData, TValue>({
     return teamateIds;
   };
 
-  const onClickDeleteCustomers = async () => {
+  const onClickDeleteTeamate = async () => {
     if (!userIsAdmin) return;
-    setIsLoading(true);
+    setisLoadingDeleteTeamate(true);
 
     try {
       const teamateIds = getDataFromSelectedRow();
@@ -106,13 +109,13 @@ export function DataTable<TData, TValue>({
           "Si le problème persiste veuillez contacter un administrateur",
       });
     } finally {
-      setIsLoading(false);
+      setisLoadingDeleteTeamate(false);
     }
   };
 
   return (
-    <div>
-      <div className="flex items-center justify-between py-4">
+    <div className="w-full">
+      <div className="flex flex-col items-center justify-between py-4 lg:flex-row">
         <Input
           placeholder="Filtrer par Emails..."
           value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
@@ -121,17 +124,18 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
-        <div>
+        <div className="mt-3 flex items-center lg:m-0">
+          <NewTeamateDialog isOpen />
           <Button
             disabled={
-              isLoading ||
+              isLoadingDeleteTeamate ||
               !userIsAdmin ||
               Object.entries(rowSelection).length === 0
             }
-            isLoading={isLoading}
-            className="mr-2"
+            isLoading={isLoadingDeleteTeamate}
+            className="mx-2"
             variant={"destructive"}
-            onClick={onClickDeleteCustomers}
+            onClick={onClickDeleteTeamate}
           >
             {userIsAdmin
               ? "Supprimer le collaborateur"

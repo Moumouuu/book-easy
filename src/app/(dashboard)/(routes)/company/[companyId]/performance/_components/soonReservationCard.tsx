@@ -44,7 +44,7 @@ export function SoonReservationCard() {
   );
 
   return (
-    <div className="flex w-full flex-col">
+    <div className="m-3 flex w-full flex-col">
       <span className="text-tremor-content-strong dark:text-dark-tremor-content-strong ml-3 mr-1 font-semibold">
         Vos trois prochaines réservations
       </span>

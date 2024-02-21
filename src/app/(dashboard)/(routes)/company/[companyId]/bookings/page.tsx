@@ -46,7 +46,7 @@ const formatDateBookings = (data: IUserDataTableProps[]) => {
     return {
       ...booking,
       start_at: formatDateWithTime(booking.start_at.toString()),
-      end_at: formatDateWithTime(booking.end_at.toString()),
+      end_at: formatDateWithTime(booking.end_at?.toString()),
     };
   });
 };
