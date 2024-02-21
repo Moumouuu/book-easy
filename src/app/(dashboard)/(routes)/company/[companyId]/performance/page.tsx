@@ -22,7 +22,7 @@ export default function Performance() {
       </div>
       <div className="my-5 flex flex-col justify-center rounded border p-4 lg:flex-row">
         <SoonReservationCard />
-        {/* todo : horizontal chesse chart & recheck mail */}
+        {/* todo : horizontal chesse chart & recheck resend  */}
       </div>
     </div>
   );

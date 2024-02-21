@@ -6,6 +6,7 @@ import { defaultFetcherGet } from "@/lib/fetcher";
 import { useCompany } from "@/store/dashboard";
 import DefaultError from "@/components/defaultError";
 import DatatableSkeleton from "@/components/datatable/datatableSkeleton";
+import { formatDateWithTime } from "@/utils";
 
 export interface IUserDataTableProps {
   id: string;
@@ -31,9 +32,21 @@ export default function BookingsPage() {
       <DefaultError title="Une erreur est survenue" message={error.message} />
     );
 
+  const bookingsFormated = formatDateBookings(data);
+
   return (
     <div className="container flex justify-center p-4">
-      <DataTable columns={columns} data={data} />
+      <DataTable columns={columns} data={bookingsFormated} />
     </div>
   );
 }
+
+const formatDateBookings = (data: IUserDataTableProps[]) => {
+  return data.map((booking) => {
+    return {
+      ...booking,
+      start_at: formatDateWithTime(booking.start_at.toString()),
+      end_at: formatDateWithTime(booking.end_at.toString()),
+    };
+  });
+};
