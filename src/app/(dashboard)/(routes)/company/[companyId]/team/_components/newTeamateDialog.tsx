@@ -44,6 +44,8 @@ export function NewTeamateDialog() {
     },
   });
 
+  // todo test email & bouton modif role teamate & improve security for invite email (new table with secureToken for example)
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (!userIsAdmin) return;
     setIsLoadingAddTeamate(true);
@@ -70,7 +72,7 @@ export function NewTeamateDialog() {
           disabled={isLoadingAddTeamate || !userIsAdmin}
         >
           <Plus className="mr-2 h-5 w-5" />
-          Créer un collaborateur
+          Inviter un collaborateur
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[550px]">

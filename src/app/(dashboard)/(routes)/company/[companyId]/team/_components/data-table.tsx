@@ -125,7 +125,7 @@ export function DataTable<TData, TValue>({
           className="max-w-sm"
         />
         <div className="mt-3 flex items-center lg:m-0">
-          <NewTeamateDialog isOpen />
+          <NewTeamateDialog />
           <Button
             disabled={
               isLoadingDeleteTeamate ||
