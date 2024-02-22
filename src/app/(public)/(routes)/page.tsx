@@ -1,3 +1,7 @@
-export default function App() {
-  return <div>Hello world</div>;
+export default async function App() {
+  return (
+    <div className="flex">
+      <p>Hello world</p>
+    </div>
+  );
 }

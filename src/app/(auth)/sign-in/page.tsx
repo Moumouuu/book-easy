@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import UserAuthForm from "./_components/form/form-auth-user";
+import UserAuthForm from "./_components/forms/form-auth-user";
 
 export const metadata: Metadata = {
   title: "BookEasy | Autentification ",

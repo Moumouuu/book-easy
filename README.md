@@ -1,12 +1,13 @@
-# Book Easy
+# BookEasy - Reservation Management App
 ## Dependencies
 - Shadcn
 - Next Auth
-- React Query
+- SWR
 - Zod
 - Prisma
-- React Ho Form
+- React Hook Form
 - Zustand
-- axios
-- react icons
-- react hot toast
+- Axios
+- React icons
+- React hot toast
+- Faker

@@ -2,17 +2,106 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
 }
 
 model User {
-  id       String   @id @default(uuid())
-  email    String   @unique
-  name     String?
-  password String?
+    id                     String   @id @default(uuid())
+    email                  String   @unique
+    firstName              String?
+    lastName               String?
+    password               String?
+    recover_password_token String   @default(uuid())
+    phone_number           String?
+    createdAt              DateTime @default(now())
+    updatedAt              DateTime @updatedAt
+
+    // Define the relation to Book model
+    books         Book[]
+    // Define the relation to Company model
+    companies     UserCompanyRole[]
+    premiumUserId String?
+    SecureToken   SecureToken[]
+}
+
+model SecureToken {
+    id         String          @id @default(uuid())
+    created_at DateTime        @default(now())
+    user       User?           @relation(fields: [userId], references: [id])
+    userId     String?
+    type       SecureTokenType
+    isActive   Boolean         @default(true)
+}
+
+enum SecureTokenType {
+    RECOVER_PASSWORD
+    EMAIL_CONFIRMATION
+    INVITATION
+}
+
+model Book {
+    id         String    @id @default(uuid())
+    start_at   DateTime
+    end_at     DateTime?
+    created_at DateTime  @default(now())
+    updated_at DateTime  @updatedAt
+    price      Float     @default(0)
+
+    // Define the relation to User model
+    created_by  User    @relation(fields: [createdById], references: [id])
+    createdById String
+    // Define the relation to Company model
+    company     Company @relation(fields: [companyId], references: [id])
+    companyId   String
+}
+
+model Company {
+    id                    String   @id @default(uuid())
+    name                  String
+    description           String?
+    number_days_to_return Int      @default(1)
+    created_at            DateTime @default(now())
+    updated_at            DateTime @updatedAt
+
+    // Define the relation to UserCompanyRole model
+    userRoles UserCompanyRole[]
+    Book      Book[]
+}
+
+model UserCompanyRole {
+    id         String   @id @default(uuid())
+    role       Role
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+
+    // Define the relation to User model
+    user      User    @relation(fields: [userId], references: [id])
+    userId    String
+    // Define the relation to Company model
+    company   Company @relation(fields: [companyId], references: [id])
+    companyId String
+
+    @@unique([userId, companyId])
+}
+
+model PremiumUser {
+    id         String   @id @default(uuid())
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+
+    // Define the relation to User model
+    userId String
+
+    // TODO : Define the relation to Payment model
+}
+
+enum Role {
+    VIEWER
+    USER
+    ADMIN
 }
