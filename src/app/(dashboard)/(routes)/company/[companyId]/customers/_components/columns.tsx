@@ -125,17 +125,10 @@ export const columns: ColumnDef<IUserDataTableProps>[] = [
 ];
 
 export function RedirectButton({ id }: { id: string }) {
-  const router = useRouter();
-  const { companyId } = useCompany();
-  const baseUrl = `/company/${companyId}/bookings?userId=${id}`;
-
+  // todo
   return (
-    <DropdownMenuItem
-      onClick={() => {
-        router.push(`${baseUrl}/${id}`);
-      }}
-    >
-      Voir les réservations
+    <DropdownMenuItem disabled onClick={() => {}}>
+      Voir la fiche client
     </DropdownMenuItem>
   );
 }
