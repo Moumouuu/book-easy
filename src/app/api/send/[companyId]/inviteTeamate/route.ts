@@ -1,6 +1,8 @@
 import getCompany from "@/actions/company/getCompany";
 import getUser from "@/actions/user/getUser";
 import InviteTeamateMail from "@/components/email-templates/inviteTeamateMail";
+import prismadb from "@/lib/prismadb";
+import { $Enums } from "@prisma/client";
 import { NextRequest } from "next/server";
 import { Resend } from "resend";
 import { z } from "zod";
@@ -34,20 +36,27 @@ export async function POST(request: NextRequest, { params }: IGet) {
   if (!isValidEmail.success)
     return new Response("Invalid email", { status: 400 });
 
+  // create secure token
+  const secureToken = await prismadb.secureToken.create({
+    data: {
+      type: $Enums.SecureTokenType.INVITATION,
+    },
+  });
+
   // Send email
   const data = await resend.emails.send({
     from: "Acme <onboarding@resend.dev>",
-    // todo test email
     // todo replace with real email address
-    // to : [email],
+    //to: [email],
     to: ["delivered@resend.dev"],
     subject: "Validation de votre compte",
     react: InviteTeamateMail({
       receiverEmail: email,
-      currentEmail: currentUser.email,
-      currentId: currentUser.id,
+      currentName: `${currentUser.firstName} ${currentUser.lastName}`,
       companyName: company.name,
       companyId: company.id,
+      senderEmail: currentUser.email,
+      secureToken: secureToken.id,
     }) as React.ReactElement,
   });
 

@@ -16,6 +16,8 @@ export interface IUserDataTableProps {
   price: number;
   start_at: Date;
   end_at: Date;
+  formated_start_at?: string;
+  formated_end_at?: string;
 }
 
 export default function BookingsPage() {
@@ -45,8 +47,8 @@ const formatDateBookings = (data: IUserDataTableProps[]) => {
   return data.map((booking) => {
     return {
       ...booking,
-      start_at: formatDateWithTime(booking.start_at.toString()),
-      end_at: formatDateWithTime(booking.end_at?.toString()),
+      formated_start_at: formatDateWithTime(booking.start_at.toString()),
+      formated_end_at: formatDateWithTime(booking.end_at?.toString()),
     };
   });
 };

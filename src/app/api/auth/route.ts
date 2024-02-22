@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import { NextRequest, NextResponse } from "next/server";
 
 import prismadb from "@/lib/prismadb";
+import { $Enums } from "@prisma/client";
 
 interface RequestData {
   email: string;
@@ -11,6 +12,7 @@ interface RequestData {
   phoneNumber: string;
   fromInvite: {
     email: string;
+    senderEmail: string;
     token: string;
     company: string;
   };
@@ -44,18 +46,55 @@ export async function POST(req: NextRequest) {
   }
 
   if (fromInvite.email) {
-    // check if token is valid
-    await prismadb.user.findUniqueOrThrow({
+    // secureToken isActive & type is INVITATION & created_at is not expired
+    await prismadb.secureToken.findUniqueOrThrow({
+      where: {
+        id: fromInvite.token,
+        AND: {
+          created_at: {
+            // 20 minutes
+            gte: new Date(Date.now() - 20 * 60 * 1000),
+          },
+          isActive: true,
+          type: $Enums.SecureTokenType.INVITATION,
+        },
+      },
+    });
+
+    // update secureToken isActive to true
+    await prismadb.secureToken.update({
       where: {
         id: fromInvite.token,
       },
+      data: {
+        isActive: false,
+      },
     });
-    // check if user is already in company
+
+    // check if user who receive the invite is not already in the company
+    const userAlreadyInCompany = await prismadb.userCompanyRole.findFirst({
+      where: {
+        user: {
+          email: fromInvite.email,
+        },
+      },
+    });
+
+    if (userAlreadyInCompany)
+      return new NextResponse("User already in company", { status: 400 });
+
+    // check if sender user is in company and is admin
     await prismadb.company.findFirstOrThrow({
       where: {
+        id: fromInvite.company,
         userRoles: {
           some: {
-            userId: fromInvite.token,
+            user: {
+              email: fromInvite.senderEmail,
+            },
+            AND: {
+              role: $Enums.Role.ADMIN,
+            },
           },
         },
       },

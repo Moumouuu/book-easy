@@ -62,8 +62,8 @@ export const DeleteBookMail = ({
               />
             </Section>
             <Heading className="mx-0 my-[30px] p-0 text-center text-[24px] font-normal text-black">
-              Rejoignez <strong>{companyName}</strong> sur{" "}
-              <strong>{appTitle}</strong>
+              Annulation de votre réservation chez{" "}
+              <strong> {companyName}</strong>
             </Heading>
             <Text className="text-[14px] leading-[24px] text-black">
               Bonjour {username},

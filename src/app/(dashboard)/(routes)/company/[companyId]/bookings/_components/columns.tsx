@@ -69,7 +69,7 @@ export const columns: ColumnDef<IUserDataTableProps>[] = [
     },
   },
   {
-    accessorKey: "start_at",
+    accessorKey: "formated_start_at",
     header: ({ column }) => {
       return (
         <Button
@@ -83,7 +83,7 @@ export const columns: ColumnDef<IUserDataTableProps>[] = [
     },
   },
   {
-    accessorKey: "end_at",
+    accessorKey: "formated_end_at",
     header: ({ column }) => {
       return (
         <Button
@@ -157,6 +157,10 @@ export function SheetUpdateBook({ book }: { book: IUserDataTableProps }) {
     setIsLoading(true);
 
     try {
+      // delete the formated dates
+      delete newBook?.formated_end_at;
+      delete newBook?.formated_start_at;
+
       // Update bookings
       await axios.put(`/api/company/${companyId}/bookings`, {
         data: { newBook },
@@ -183,7 +187,7 @@ export function SheetUpdateBook({ book }: { book: IUserDataTableProps }) {
   };
 
   const formattedStart_at = book.start_at.toString().slice(0, 16);
-  const formattedEnd_at = book.end_at.toString().slice(0, 16);
+  const formattedEnd_at = book.end_at?.toString().slice(0, 16);
 
   return (
     <DialogContent className="sm:max-w-[425px]">

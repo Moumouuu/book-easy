@@ -31,6 +31,7 @@ export async function GET(request: Request, { params }: IGet) {
 export async function DELETE(request: Request, { params }: IGet) {
   const { companyId } = params;
   const bookIds = await request.json();
+  console.log(bookIds);
 
   // get & verif user have access to it
   const company = await getCompany(companyId);

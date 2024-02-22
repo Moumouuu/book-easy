@@ -19,23 +19,25 @@ import { Tailwind } from "@react-email/tailwind";
 
 interface InviteTeamateMailProps {
   receiverEmail: string;
-  currentId: string;
-  currentEmail: string;
+  currentName: string;
   companyName: string;
   companyId: string;
+  secureToken: string;
+  senderEmail: string;
 }
 
 const baseUrl = process.env.BOOKEASY_URL;
 
 export const InviteTeamateMail = ({
-  currentEmail,
+  currentName,
   receiverEmail,
-  currentId,
   companyName,
   companyId,
+  senderEmail,
+  secureToken,
 }: InviteTeamateMailProps) => {
   const previewText = `Rejoignez ${appTitle}`;
-  const reservationLink = `${baseUrl}/sign-in/invitation?email=${receiverEmail}&token=${currentId}&company=${companyId}`;
+  const reservationLink = `${baseUrl}/sign-in/?email=${receiverEmail}&senderEmail=${senderEmail}&token=${secureToken}&company=${companyId}`;
 
   return (
     <Html>
@@ -54,7 +56,8 @@ export const InviteTeamateMail = ({
               />
             </Section>
             <Heading className="mx-0 my-[30px] p-0 text-center text-[24px] font-normal text-black">
-              {currentEmail} vous invite à rejoindre {companyName} !
+              {currentName} vous invite à rejoindre{" "}
+              <strong>{companyName}</strong> !
             </Heading>
             <Section>
               <Row>
@@ -83,7 +86,7 @@ export const InviteTeamateMail = ({
                 className="rounded bg-[#000000] px-5 py-3 text-center text-[12px] font-semibold text-white no-underline"
                 href={reservationLink}
               >
-                Valider l&apos;invitation
+                Valider l&apos;invitation en créant un compte
               </Button>
             </Section>
             <Text className="text-[14px] leading-[24px] text-black">

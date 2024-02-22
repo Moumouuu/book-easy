@@ -17,11 +17,17 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import useIsAdmin from "@/hooks/useIsAdmin";
 import { useCompany } from "@/store/dashboard";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { Plus } from "lucide-react";
+import { Info, Plus } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -53,6 +59,10 @@ export function NewTeamateDialog() {
       await axios.post(`/api/send/${companyId}/inviteTeamate`, {
         email: values.email,
       });
+      toast("Un email a été envoyé à l'adresse indiquée", {
+        description:
+          "Le collaborateur pourra rejoindre l'équipe en cliquant sur le lien envoyé par email",
+      });
     } catch (error) {
       console.error("An error occurred while adding a customer:", error);
       toast("Une erreur est survenue lors de l'envoie de l'email", {
@@ -61,6 +71,7 @@ export function NewTeamateDialog() {
       });
     } finally {
       setIsLoadingAddTeamate(false);
+      form.reset();
     }
   }
 
@@ -77,13 +88,25 @@ export function NewTeamateDialog() {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[550px]">
         <DialogHeader>
-          <DialogTitle>Inviter un collaborateur</DialogTitle>
-          <DialogDescription>
-            Ajoutez un nouvel utilisateur à votre équipe pour accéder à toutes
-            les fonctionnalités de l&apos;application, à l&apos;exception de la
-            modification des paramètres de l&apos;application ou de la
-            suppression des données.
-          </DialogDescription>
+          <DialogTitle className="flex items-center">
+            Inviter un collaborateur
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Info className="ml-2 h-5 w-5" />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="max-w-[350px]">
+                    Ajoutez un nouvel utilisateur à votre équipe pour accéder à
+                    toutes les fonctionnalités de l&apos;application, à
+                    l&apos;exception de la modification des paramètres de
+                    l&apos;application ou de la suppression des données.
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </DialogTitle>
+          <DialogDescription></DialogDescription>
         </DialogHeader>
 
         <Form {...form}>

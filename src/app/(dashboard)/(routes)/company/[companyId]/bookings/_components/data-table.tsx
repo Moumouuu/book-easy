@@ -89,12 +89,8 @@ export function DataTable<TData, TValue>({
 
     const bookIds = getDataFromSelectedRow();
     try {
-      // Delete bookings
-      await axios.delete(`/api/company/${companyId}/bookings`, {
-        data: bookIds,
-      });
-
       // Send email to inform the client that their booking has been deleted
+      // & delete reservations
       await axios.post(`/api/send/${companyId}/deleteBooks`, {
         data: bookIds,
       });

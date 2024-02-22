@@ -19,7 +19,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
@@ -30,9 +29,13 @@ export default function UserAuthForm() {
   const userEmailFromInvite = searchParams.get("email");
   const userTokenFromInvite = searchParams.get("token");
   const userCompanyFromInvite = searchParams.get("company");
+  const userSenderEmailFromInvite = searchParams.get("senderEmail");
 
   const isUserFromInvite =
-    userEmailFromInvite && userTokenFromInvite && userCompanyFromInvite;
+    userEmailFromInvite &&
+    userTokenFromInvite &&
+    userCompanyFromInvite &&
+    userSenderEmailFromInvite;
 
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -130,6 +133,7 @@ export default function UserAuthForm() {
         email: userEmailFromInvite,
         token: userTokenFromInvite,
         company: userCompanyFromInvite,
+        senderEmail: userSenderEmailFromInvite,
       },
     };
     await axios.post("/api/auth", requestData);
@@ -360,7 +364,9 @@ export default function UserAuthForm() {
                 isLoading={isLoading}
                 className={"mt-4 w-full"}
               >
-                Inscription
+                {isUserFromInvite
+                  ? "Finaliser votre invitation"
+                  : "Inscription"}
               </Button>
             </form>
           </CardContent>

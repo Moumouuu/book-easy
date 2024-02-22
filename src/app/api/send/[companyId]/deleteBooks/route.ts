@@ -30,8 +30,9 @@ export async function POST(request: NextRequest, { params }: IPost) {
   // Get books
   const books = await prismadb.book.findMany({
     where: {
+      companyId: companyId,
       id: {
-        in: bookIds,
+        in: bookIds.data,
       },
     },
     select: {
@@ -57,7 +58,6 @@ export async function POST(request: NextRequest, { params }: IPost) {
   }
 
   const deletedBooks = [];
-
   // Send email and delete books
   for (const book of books) {
     const reservationLink = `${process.env.BOOKEASY_URL}/book/${book.id}`;
@@ -75,14 +75,14 @@ export async function POST(request: NextRequest, { params }: IPost) {
         end_at: book.end_at?.toString(),
       }) as React.ReactElement,
     });
-
     deletedBooks.push(deletedBook);
   }
 
+  // Delete books
   await prismadb.book.deleteMany({
     where: {
       id: {
-        in: bookIds,
+        in: bookIds.data,
       },
     },
   });
