@@ -38,6 +38,7 @@ import { useCompany } from "@/store/dashboard";
 import { useSWRConfig } from "swr";
 import useUser from "@/hooks/useUser";
 import { toast } from "sonner";
+import useIsAdmin from "@/hooks/useIsAdmin";
 
 export const Columns: ColumnDef<IUserDataTableProps>[] = [
   {
@@ -157,6 +158,8 @@ export const Columns: ColumnDef<IUserDataTableProps>[] = [
 
 export function DialogContainer({ teamate }: { teamate: any }) {
   const user = useUser();
+  const userIsAdmin = useIsAdmin();
+
   return (
     <Dialog>
       <DropdownMenu>
@@ -177,7 +180,9 @@ export function DialogContainer({ teamate }: { teamate: any }) {
           <DialogTrigger asChild>
             <DropdownMenuItem
               disabled={
-                teamate.role === RoleEnum.ADMIN && user.user.id === teamate.id
+                (teamate.role === RoleEnum.ADMIN &&
+                  user.user.id === teamate.id) ||
+                !userIsAdmin
               }
               onClick={() => navigator.clipboard.writeText(teamate.email)}
             >

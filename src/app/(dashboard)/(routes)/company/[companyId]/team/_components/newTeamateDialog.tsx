@@ -75,6 +75,8 @@ export function NewTeamateDialog() {
     }
   }
 
+  if (!userIsAdmin) return null;
+
   return (
     <Dialog>
       <DialogTrigger asChild>
