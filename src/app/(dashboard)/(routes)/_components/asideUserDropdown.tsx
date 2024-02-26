@@ -1,17 +1,10 @@
 import {
-  Cloud,
   CreditCard,
   Github,
-  Keyboard,
   LifeBuoy,
   LogOut,
-  Mail,
-  MessageSquare,
-  Plus,
-  PlusCircle,
   Settings,
   User,
-  UserPlus,
   Users,
 } from "lucide-react";
 
@@ -26,9 +19,8 @@ import {
   DropdownMenuSub,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import AsideUser from "./asideUser";
 import { signOut } from "next-auth/react";
-import { ThemeToggle } from "@/components/theme-toggle";
+import AsideUser from "./asideUser";
 
 export function AsideUserDropdown() {
   return (
@@ -55,23 +47,6 @@ export function AsideUserDropdown() {
             <span>Paramètre</span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <Users className="mr-2 h-4 w-4" />
-            <span>Équipe</span>
-          </DropdownMenuItem>
-          <DropdownMenuSub></DropdownMenuSub>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <Github className="mr-2 h-4 w-4" />
-          <span>GitHub</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem>
-          <LifeBuoy className="mr-2 h-4 w-4" />
-          <span>Support</span>
-        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => signOut()}>
           <LogOut className="mr-2 h-4 w-4" />

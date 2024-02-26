@@ -41,6 +41,7 @@ export async function POST(request: NextRequest, { params }: IPost) {
       end_at: true,
       created_by: {
         select: {
+          email: true,
           firstName: true,
           lastName: true,
         },
@@ -62,10 +63,11 @@ export async function POST(request: NextRequest, { params }: IPost) {
   for (const book of books) {
     const reservationLink = `${process.env.BOOKEASY_URL}/book/${book.id}`;
     const username = `${book.created_by.firstName} ${book.created_by.lastName}`;
+    const email = book.created_by.email;
 
     const deletedBook = await resend.emails.send({
-      from: "Acme <onboarding@resend.dev>",
-      to: ["delivered@resend.dev"],
+      from: "Acme <onboarding@bookeazy.fr>",
+      to: [email, "robinpluviaux@gmail.com"],
       subject: "Votre réservation a été supprimée !",
       react: DeleteBookMail({
         companyName: book.company.name,

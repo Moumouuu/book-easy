@@ -45,10 +45,9 @@ export async function POST(request: NextRequest, { params }: IGet) {
 
   // Send email
   const data = await resend.emails.send({
-    from: "Acme <onboarding@resend.dev>",
+    from: "Acme <onboarding@bookeazy.fr>",
     // todo replace with real email address
-    //to: [email],
-    to: ["delivered@resend.dev"],
+    to: [email, "robinpluviaux@gmail.com"],
     subject: "Validation de votre compte",
     react: InviteTeamateMail({
       receiverEmail: email,

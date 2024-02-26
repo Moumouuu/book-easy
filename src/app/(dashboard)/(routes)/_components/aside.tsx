@@ -9,7 +9,6 @@ import {
 import { IoMenu } from "react-icons/io5";
 import AsideContent from "./asideContent";
 import AsideTop from "./asideTop";
-import { ThemeToggle } from "@/components/theme-toggle";
 
 export default function Aside() {
   return (

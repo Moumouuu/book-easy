@@ -7,11 +7,11 @@ export default function AsideTop() {
       <Image
         src="/assets/images/icon-bookEasy.png"
         alt="BookEasy"
-        width={60}
-        height={60}
+        width={40}
+        height={40}
         className="mr-2"
       />
-      <h1 className="bg-gradient-to-r from-blue-200 to-blue-600 bg-clip-text text-3xl font-semibold text-transparent">
+      <h1 className="bg-gradient-to-r from-blue-200 to-blue-600 bg-clip-text text-xl font-semibold text-transparent">
         {appTitle}
       </h1>
     </div>

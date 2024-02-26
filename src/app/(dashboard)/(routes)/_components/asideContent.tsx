@@ -10,7 +10,10 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { AsideUserDropdown } from "./asideUserDropdown";
 import { useCompany } from "@/store/dashboard";
-import { ThemeToggle } from "@/components/theme-toggle";
+import PremiumButton from "@/components/premiumButton";
+import { Button } from "@/components/ui/button";
+import { X } from "lucide-react";
+import { useState } from "react";
 
 interface IAsideItem {
   label: string;
@@ -19,39 +22,43 @@ interface IAsideItem {
 }
 
 export default function AsideContent() {
+  const [defaultMoreInfoPopUpIsOpen, setDefaultMoreInfoPopUpIsOpen] =
+    useState<boolean>(true);
   const { companyId } = useCompany();
   const defaultPath = `/company/${companyId}`;
   const currentPath = usePathname();
 
+  const ICON_SIZE = 20;
+
   const asideItems: IAsideItem[] = [
     {
       label: "Calendar",
-      icon: <IoCalendarNumberSharp className="mr-3" size={25} />,
+      icon: <IoCalendarNumberSharp className="mr-3" size={ICON_SIZE} />,
       href: defaultPath,
     },
     {
       label: "Performance",
-      icon: <AiFillDashboard className="mr-3" size={25} />,
+      icon: <AiFillDashboard className="mr-3" size={ICON_SIZE} />,
       href: `${defaultPath}/performance`,
     },
     {
       label: "Clients",
-      icon: <FaAddressBook className="mr-3" size={25} />,
+      icon: <FaAddressBook className="mr-3" size={ICON_SIZE} />,
       href: `${defaultPath}/customers`,
     },
     {
       label: "Équipes",
-      icon: <FaPeopleGroup className="mr-3" size={25} />,
+      icon: <FaPeopleGroup className="mr-3" size={ICON_SIZE} />,
       href: `${defaultPath}/team`,
     },
     {
       label: "Réservations",
-      icon: <FaRegCalendarPlus className="mr-3" size={25} />,
+      icon: <FaRegCalendarPlus className="mr-3" size={ICON_SIZE} />,
       href: `${defaultPath}/bookings`,
     },
     {
       label: "Paramètres",
-      icon: <IoSettings className="mr-3" size={25} />,
+      icon: <IoSettings className="mr-3" size={ICON_SIZE} />,
       href: `${defaultPath}/settings`,
     },
   ];
@@ -65,17 +72,41 @@ export default function AsideContent() {
             href={item.href}
             className={cn(
               currentPath === item.href
-                ? "bg-primary/20 text-primary"
-                : "text-gray-600",
-              "hover:bg-primary/20 hover:text-primary ease my-1 flex items-center rounded-lg px-3 py-4 duration-100",
+                ? "bg-primary/25 text-primary"
+                : "text-gray-500",
+              "hover:bg-primary/15 hover:text-primary ease my-1 flex items-center rounded-lg px-3 py-2  duration-100",
             )}
           >
             {item.icon}
-            <span className="text-lg font-medium">{item.label}</span>
+            <span className="text-md font-medium">{item.label}</span>
           </Link>
         ))}
       </div>
-      <AsideUserDropdown />
+      <div>
+        {defaultMoreInfoPopUpIsOpen && (
+          <div className="bg-primary-foreground relative mb-3 rounded border p-4 ">
+            <X
+              onClick={() => setDefaultMoreInfoPopUpIsOpen(false)}
+              className="absolute right-2 top-2 cursor-pointer"
+              size={20}
+            />
+            <p className="text-sm">
+              Accéder à des fonctionnalités avancées pour{" "}
+              <span className="text-primary font-bold">
+                booster votre activité
+              </span>{" "}
+              et des métriques pour suivre votre performance.
+            </p>
+            <div className="mt-3">
+              <PremiumButton size="sm" />
+              <Button size={"sm"} className="mt-2" variant={"secondary"}>
+                En savoir plus
+              </Button>
+            </div>
+          </div>
+        )}
+        <AsideUserDropdown />
+      </div>
     </div>
   );
 }

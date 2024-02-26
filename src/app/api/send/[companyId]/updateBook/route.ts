@@ -43,6 +43,7 @@ export async function POST(request: NextRequest, { params }: IGet) {
       },
       created_by: {
         select: {
+          email: true,
           firstName: true,
           lastName: true,
         },
@@ -50,15 +51,15 @@ export async function POST(request: NextRequest, { params }: IGet) {
     },
   });
 
-  const { firstName, lastName } = book.created_by;
+  const { firstName, lastName, email } = book.created_by;
   const username = `${firstName} ${lastName}`;
   const companyName = book.company.name;
   const reservationLink = `${process.env.BOOKEASY_URL}/book/${id}`;
 
   // Send email
   const data = await resend.emails.send({
-    from: "Acme <onboarding@resend.dev>",
-    to: ["delivered@resend.dev"],
+    from: "Acme <onboarding@bookeazy.fr>",
+    to: [email, "robinpluviaux@gmail.com"],
     subject: "Votre réservation a été modifiée !",
     react: UpdateBookMail({
       companyName,

@@ -1,7 +1,6 @@
 import { Metadata } from "next";
 import Aside from "./(routes)/_components/aside";
 import CompanyProvider from "@/providers/company-provider";
-import UserSection from "./(routes)/company/[companyId]/performance/_components/userSection";
 
 export const metadata: Metadata = {
   title: "BookEasy - DashBoard",
@@ -18,10 +17,7 @@ export default async function DashboardLayout({
     <body className="flex flex-col lg:flex-row">
       <Aside />
       <CompanyProvider>
-        <div className="flex w-full flex-col">
-          <UserSection />
-          {children}
-        </div>
+        <div className="flex w-full flex-col">{children}</div>
       </CompanyProvider>
     </body>
   );
