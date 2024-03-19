@@ -3,18 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 import {
-  ColumnDef,
-  ColumnFiltersState,
-  flexRender,
-  VisibilityState,
-  getCoreRowModel,
-  SortingState,
-  useReactTable,
-  getPaginationRowModel,
-  getFilteredRowModel,
-  getSortedRowModel,
-} from "@tanstack/react-table";
-import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
@@ -28,12 +16,24 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useState } from "react";
 import useIsAdmin from "@/hooks/useIsAdmin";
-import axios from "axios";
 import { useCompany } from "@/store/dashboard";
-import { useSWRConfig } from "swr";
+import {
+  ColumnDef,
+  ColumnFiltersState,
+  SortingState,
+  VisibilityState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import axios from "axios";
+import { useState } from "react";
 import { toast } from "sonner";
+import { useSWRConfig } from "swr";
 import { NewTeamateDialog } from "./newTeamateDialog";
 
 interface DataTableProps<TData, TValue> {
@@ -125,7 +125,7 @@ export function DataTable<TData, TValue>({
           className="max-w-sm"
         />
         <div className="mt-3 flex items-center lg:m-0">
-          <NewTeamateDialog />
+          <NewTeamateDialog numberOfTeamates={data.length} />
           <Button
             disabled={
               isLoadingDeleteTeamate ||
@@ -181,7 +181,7 @@ export function DataTable<TData, TValue>({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext(),
+                            header.getContext()
                           )}
                     </TableHead>
                   );
@@ -200,7 +200,7 @@ export function DataTable<TData, TValue>({
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext(),
+                        cell.getContext()
                       )}
                     </TableCell>
                   ))}

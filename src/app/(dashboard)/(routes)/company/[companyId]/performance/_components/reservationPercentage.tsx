@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { useCompany } from "@/store/dashboard";
 import { Card, DonutChart, List, ListItem } from "@tremor/react";
 import useSWR from "swr";
+import { PerformanceAreaSkeleton } from "./skeletons/performanceAreaSkeleton";
 
 interface ReservationPart {
   name: string;
@@ -25,10 +26,10 @@ export default function ReservationPercentage() {
     isLoading,
   } = useSWR(
     `/api/company/${companyId}/performance/reservations/percentage`,
-    defaultFetcherGet,
+    defaultFetcherGet
   );
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <PerformanceAreaSkeleton />;
 
   if (error)
     return (

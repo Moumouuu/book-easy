@@ -47,14 +47,14 @@ enum SecureTokenType {
 model Book {
     id         String    @id @default(uuid())
     start_at   DateTime
-    end_at     DateTime?
+    end_at     DateTime
     created_at DateTime  @default(now())
     updated_at DateTime  @updatedAt
     price      Float     @default(0)
 
     // Define the relation to User model
-    created_by  User    @relation(fields: [createdById], references: [id])
-    createdById String
+    created_by  User?    @relation(fields: [createdById], references: [id])
+    createdById String?
     // Define the relation to Company model
     company     Company @relation(fields: [companyId], references: [id])
     companyId   String
@@ -93,11 +93,8 @@ model PremiumUser {
     id         String   @id @default(uuid())
     created_at DateTime @default(now())
     updated_at DateTime @updatedAt
-
-    // Define the relation to User model
-    userId String
-
-    // TODO : Define the relation to Payment model
+    stripeCustomerId String?
+    userId String @unique
 }
 
 enum Role {

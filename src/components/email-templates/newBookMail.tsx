@@ -1,9 +1,10 @@
+import { formatDate } from "@/lib/utils";
 import { appTitle } from "@/utils";
 import {
   Body,
   Button,
-  Container,
   Column,
+  Container,
   Head,
   Heading,
   Hr,
@@ -16,29 +17,29 @@ import {
   Text,
 } from "@react-email/components";
 import { Tailwind } from "@react-email/tailwind";
-import * as React from "react";
 import { format, parseISO } from "date-fns";
+import { utcToZonedTime } from "date-fns-tz";
 import { fr } from "date-fns/locale";
-import { formatDate } from "@/lib/utils";
 
-interface BookeasyDeleteBookUserEmailProps {
+interface BookeasyUpdateBookUserEmailProps {
   companyName?: string;
+  username?: string;
   reservationLink?: string;
+  price?: number;
   start_at?: string;
   end_at?: string;
-  username?: string;
 }
-
 
 const baseUrl = process.env.NEXT_PUBLIC_BOOKEASY_URL;
 
-export const DeleteBookMail = ({
+export const NewBookMail = ({
   companyName,
-  reservationLink,
   username,
+  reservationLink,
+  price,
   end_at,
   start_at,
-}: BookeasyDeleteBookUserEmailProps) => {
+}: BookeasyUpdateBookUserEmailProps) => {
   const previewText = `Rejoignez ${appTitle}`;
 
   return (
@@ -58,23 +59,32 @@ export const DeleteBookMail = ({
               />
             </Section>
             <Heading className="mx-0 my-[30px] p-0 text-center text-[24px] font-normal text-black">
-              Annulation de votre réservation chez{" "}
-              <strong> {companyName}</strong>
+              Rejoignez <strong>{companyName}</strong> sur{" "}
+              <strong>{appTitle}</strong>
             </Heading>
             <Text className="text-[14px] leading-[24px] text-black">
               Bonjour {username},
             </Text>
             <Text className="text-[14px] leading-[24px] text-black">
-              Votre réservation a été supprimée. Vous trouverez ci-dessous les
-              détails de votre réservation.
+              Nous sommes ravis de vous annoncer que votre réservation a bien
+              été enregistrée. Vous pouvez dès à présent consulter les détails
+              de votre réservation. Vous trouverez ci-dessous un récapitulatif
+              de votre réservation.
+            </Text>
+            <Text>
+              {price && `Le montant de votre réservation est de ${price}€.`}
             </Text>
             <Text>
               {start_at &&
-                `Votre réservation commençait le ${formatDate(new Date(start_at))}.`}
+                `Votre réservation commence le ${formatDate(
+                  new Date(start_at),
+                )}.`}
             </Text>
             <Text>
               {end_at &&
-                `Votre réservation se terminait le ${formatDate(new Date(end_at))}.`}
+                `Votre réservation se termine le ${formatDate(
+                  new Date(end_at)
+                )}.`}
             </Text>
             <Section>
               <Row>
@@ -130,4 +140,4 @@ export const DeleteBookMail = ({
   );
 };
 
-export default DeleteBookMail;
+export default NewBookMail;

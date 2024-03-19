@@ -1,3 +1,4 @@
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import bcrypt from "bcrypt";
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -8,6 +9,7 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
+  adapter: PrismaAdapter(prisma),
   pages: {
     signIn: "/sign-in",
     signOut: "/",
@@ -36,7 +38,7 @@ export const authOptions: NextAuthOptions = {
 
         const isCorrectPassword = await bcrypt.compare(
           credentials.password,
-          user.password,
+          user.password
         );
 
         if (!isCorrectPassword) {
@@ -52,19 +54,4 @@ export const authOptions: NextAuthOptions = {
   ],
   debug: process.env.NODE_ENV === "development",
   secret: process.env.NEXTAUTH_SECRET,
-  callbacks: {
-    async signIn({ user, account, profile, email, credentials }) {
-      console.log("fire signin Callback");
-      return true;
-    },
-    async session({ session, token }) {
-      return session;
-    },
-    async jwt({ token, user }) {
-      if (user) {
-        token.user = user;
-      }
-      return token;
-    },
-  },
 };

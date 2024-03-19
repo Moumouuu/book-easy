@@ -12,6 +12,8 @@ export async function getBookings(companyId: string) {
       end_at: true,
       created_by: {
         select: {
+          firstName: true,
+          lastName: true,
           email: true,
         },
       },

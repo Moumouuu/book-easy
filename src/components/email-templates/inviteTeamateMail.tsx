@@ -26,7 +26,7 @@ interface InviteTeamateMailProps {
   senderEmail: string;
 }
 
-const baseUrl = process.env.BOOKEASY_URL;
+const baseUrl = process.env.NEXT_PUBLIC_BOOKEASY_URL;
 
 export const InviteTeamateMail = ({
   currentName,

@@ -23,7 +23,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { maximumFreeFeatures } from "@/constants";
 import useIsAdmin from "@/hooks/useIsAdmin";
+import useIsPremium from "@/hooks/useIsPremium";
 import { useCompany } from "@/store/dashboard";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
@@ -37,11 +39,21 @@ const formSchema = z.object({
   email: z.string().email(),
 });
 
-export function NewTeamateDialog() {
+export function NewTeamateDialog({
+  numberOfTeamates,
+}: {
+  numberOfTeamates: number;
+}) {
+  const isPremium = useIsPremium();
+  const freeTierReached =
+    !isPremium && numberOfTeamates >= maximumFreeFeatures.numberOfEmployees;
+
   const userIsAdmin = useIsAdmin();
   const { companyId } = useCompany();
   const [isLoadingAddTeamate, setIsLoadingAddTeamate] =
     useState<boolean>(false);
+
+  console.log(numberOfTeamates);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -49,8 +61,6 @@ export function NewTeamateDialog() {
       email: "",
     },
   });
-
-  // todo test email & bouton modif role teamate & improve security for invite email (new table with secureToken for example)
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (!userIsAdmin) return;
@@ -108,8 +118,15 @@ export function NewTeamateDialog() {
               </Tooltip>
             </TooltipProvider>
           </DialogTitle>
-          <DialogDescription></DialogDescription>
         </DialogHeader>
+
+        {freeTierReached && (
+          <DialogDescription className="font-bold text-red-600">
+            Vous avez atteint le nombre maximum d&apos;utilisateurs pour le plan
+            gratuit. Pour ajouter plus d&apos;utilisateurs, veuillez passer à un
+            plan premium.
+          </DialogDescription>
+        )}
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -138,7 +155,7 @@ export function NewTeamateDialog() {
             />
             <Button
               isLoading={isLoadingAddTeamate}
-              disabled={isLoadingAddTeamate || !userIsAdmin}
+              disabled={isLoadingAddTeamate || !userIsAdmin || freeTierReached}
               type="submit"
             >
               <Plus className="mr-1 h-5 w-5" />

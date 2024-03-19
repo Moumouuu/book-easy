@@ -1,6 +1,6 @@
 import getCompany from "@/actions/company/getCompany";
 import getUser from "@/actions/user/getUser";
-import { UpdateBookMail } from "@/components/email-templates/updateBookMail";
+import NewBookMail from "@/components/email-templates/newBookMail";
 import prismadb from "@/lib/prismadb";
 import { NextRequest } from "next/server";
 import { Resend } from "resend";
@@ -14,8 +14,7 @@ interface IGet {
 }
 
 export async function POST(request: NextRequest, { params }: IGet) {
-  const { data: bookData } = await request.json();
-  const { id, price, start_at, end_at } = bookData;
+  const { id, price, start_at, end_at, customerEmail } = await request.json();
   const { companyId } = params;
 
   // Get company and current user
@@ -51,17 +50,24 @@ export async function POST(request: NextRequest, { params }: IGet) {
     },
   });
 
-  const { firstName, lastName, email } = book.created_by;
-  const username = `${firstName} ${lastName}`;
+  let firstName, lastName, email, username;
+
+  if (book.created_by) {
+    firstName = book.created_by.firstName;
+    lastName = book.created_by.lastName;
+    email = book.created_by.email;
+    username = `${firstName} ${lastName}`;
+  }
+
   const companyName = book.company.name;
   const reservationLink = `${process.env.NEXT_PUBLIC_BOOKEASY_URL}/book/${id}`;
 
   // Send email
   const data = await resend.emails.send({
     from: "Acme <onboarding@bookeazy.fr>",
-    to: [email, "robinpluviaux@gmail.com"],
-    subject: "Votre réservation a été modifiée !",
-    react: UpdateBookMail({
+    to: [email ?? customerEmail, "robinpluviaux@gmail.com"],
+    subject: "Votre confimation de réservation",
+    react: NewBookMail({
       companyName,
       reservationLink,
       username,

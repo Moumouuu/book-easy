@@ -8,8 +8,8 @@ export async function GET() {
       status: 404,
     });
 
-  const isPremium = await prismadb.premiumUser.findFirst({
-    where: { userId: user.id },
+  const isPremium = await prismadb.premiumUser.findUniqueOrThrow({
+    where: { userId: user.email },
   });
 
   return new Response(JSON.stringify(isPremium ? true : false), {

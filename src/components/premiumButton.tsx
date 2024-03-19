@@ -1,26 +1,33 @@
 "use client";
+import useIsPremium from "@/hooks/useIsPremium";
+import useStripeSubscribe from "@/hooks/useStripe";
 import { GiPartyPopper } from "react-icons/gi";
 import { Button } from "./ui/button";
-import useIsPremium from "@/hooks/useIsPremium";
 
 interface IPremiumButton {
   size?: "sm" | "lg";
 }
 
 export default function PremiumButton({ size = "lg" }: IPremiumButton) {
-  // TODO check if user is premium
   const { isPremium } = useIsPremium();
+  const { subscribeToStripe, loading } = useStripeSubscribe();
 
   if (isPremium) {
     return (
-      <Button variant="default">
+      <Button variant="default" disabled>
         <GiPartyPopper className="mr-2" size={20} />
-        Gérer mon abonnement
+        Vous êtes premium
       </Button>
     );
   }
   return (
-    <Button size={size} variant="premium">
+    <Button
+      size={size}
+      variant="premium"
+      onClick={subscribeToStripe}
+      isLoading={loading}
+      disabled={loading}
+    >
       <GiPartyPopper className="mr-2" size={20} />
       Passer premium
     </Button>

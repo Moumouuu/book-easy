@@ -13,7 +13,6 @@ interface IGet {
 
 export async function GET(request: Request, { params }: IGet) {
   const { companyId } = params;
-  console.log(companyId);
 
   if (!companyId) return new Response("companyId is required", { status: 400 });
 

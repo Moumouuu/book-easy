@@ -19,6 +19,7 @@ import { Tailwind } from "@react-email/tailwind";
 import * as React from "react";
 import { format, parseISO } from "date-fns";
 import { fr } from "date-fns/locale";
+import { formatDate } from "@/lib/utils";
 
 interface BookeasyUpdateBookUserEmailProps {
   companyName?: string;
@@ -29,13 +30,8 @@ interface BookeasyUpdateBookUserEmailProps {
   end_at?: string;
 }
 
-const formatDate = (date: Date): string => {
-  return format(parseISO(date.toISOString()), "EEEE d MMMM 'à' HH'h'mm", {
-    locale: fr,
-  });
-};
 
-const baseUrl = process.env.BOOKEASY_URL;
+const baseUrl = process.env.NEXT_PUBLIC_BOOKEASY_URL;
 
 export const UpdateBookMail = ({
   companyName,
