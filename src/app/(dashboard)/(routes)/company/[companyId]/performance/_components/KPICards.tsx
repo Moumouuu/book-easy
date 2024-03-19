@@ -1,15 +1,16 @@
 "use client";
+import DefaultError from "@/components/defaultError";
 import { defaultFetcherGet } from "@/lib/fetcher";
 import { cn } from "@/lib/utils";
 import { useCompany } from "@/store/dashboard";
 import { Card } from "@tremor/react";
 import useSWR from "swr";
 import { PerformanceKpiSkeleton } from "./skeletons/performanceKPISkeleton";
-import DefaultError from "@/components/defaultError";
 
 interface ICompanyStats {
   label: string;
   value: number;
+  previousValue: number;
   percentageChange: number;
   changeType: "positive" | "negative" | "neutral";
   suffix?: string;
@@ -28,7 +29,7 @@ export default function KPICards({ period }: IProps) {
     isLoading,
   } = useSWR(
     `/api/company/${companyId}/performance/kpi?period=${period}`,
-    defaultFetcherGet,
+    defaultFetcherGet
   );
 
   if (isLoading) {
@@ -58,7 +59,7 @@ export default function KPICards({ period }: IProps) {
                   companyStat.changeType === "positive"
                     ? "bg-emerald-100 text-emerald-800 ring-emerald-600/10 dark:bg-emerald-400/10 dark:text-emerald-500 dark:ring-emerald-400/20"
                     : "bg-red-100 text-red-800 ring-red-600/10 dark:bg-red-400/10 dark:text-red-500 dark:ring-red-400/20",
-                  "rounded-tremor-small text-tremor-label inline-flex items-center px-2 py-1 font-medium ring-1 ring-inset",
+                  "rounded-tremor-small text-tremor-label inline-flex items-center px-2 py-1 font-medium ring-1 ring-inset"
                 )}
               >
                 {companyStat.percentageChange}%{" "}
@@ -68,6 +69,12 @@ export default function KPICards({ period }: IProps) {
             <p className="text-tremor-metric text-tremor-content-strong dark:text-dark-tremor-content-strong font-semibold">
               {companyStat.value} {companyStat?.suffix}
             </p>
+            {companyStat.previousValue && (
+              <p className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">
+                Période précédente : {companyStat.previousValue}
+                {companyStat?.suffix}
+              </p>
+            )}
           </Card>
         ))}
       </div>

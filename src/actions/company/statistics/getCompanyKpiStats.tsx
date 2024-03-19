@@ -1,11 +1,11 @@
-import prismadb from "@/lib/prismadb";
 import { PeriodEnum } from "@/enum/period";
+import prismadb from "@/lib/prismadb";
 import getCompany from "../getCompany";
-import { Book } from "@prisma/client";
 
 interface ReservationMetrics {
   label: string;
   value: number;
+  previousValue: number;
   percentageChange: string;
   changeType: string;
   suffix?: string;
@@ -23,7 +23,7 @@ const getChangeType = (change: number): string => {
 
 export const setStartAndEndDates = (
   startOffset: number,
-  endOffset: number,
+  endOffset: number
 ): { start: Date; end: Date } => {
   const start = new Date();
   start.setHours(0, 0, 0, 0);
@@ -37,7 +37,7 @@ export const setStartAndEndDates = (
 };
 
 const getDateRangeForPeriod = (
-  period: PeriodEnum,
+  period: PeriodEnum
 ): { startDate: Date; endDate: Date } => {
   let startDate: Date, endDate: Date;
 
@@ -66,7 +66,7 @@ const getDateRangeForPeriod = (
 const getCountForPeriod = async (
   companyId: string,
   startDate: Date,
-  endDate: Date,
+  endDate: Date
 ): Promise<number> => {
   return await prismadb.book.count({
     where: {
@@ -79,7 +79,7 @@ const getCountForPeriod = async (
 const getAggregateForPeriod = async (
   companyId: string,
   startDate: Date,
-  endDate: Date,
+  endDate: Date
 ): Promise<number> => {
   const result = await prismadb.book.aggregate({
     where: {
@@ -94,7 +94,7 @@ const getAggregateForPeriod = async (
 const getNumbersNewCustomersForPeriod = async (
   companyId: string,
   startDate: Date,
-  endDate: Date,
+  endDate: Date
 ): Promise<any> => {
   // a new customer is a customer that has made a reservation for the first time in the period
   const reservations = await prismadb.book.findMany({
@@ -113,12 +113,12 @@ const getNumbersNewCustomersForPeriod = async (
       acc[reservation.createdById] = (acc[reservation.createdById] || 0) + 1;
       return acc;
     },
-    {},
+    {}
   );
 
   // count the number of customers that have made only one reservation
   const newCustomersCount = Object.values(reservationCountsByCustomer).filter(
-    (count) => count === 1,
+    (count) => count === 1
   ).length;
 
   return newCustomersCount;
@@ -126,7 +126,7 @@ const getNumbersNewCustomersForPeriod = async (
 
 export default async function getCompanyKpiStats(
   companyId: string,
-  period: string,
+  period: string
 ): Promise<MetricsResult> {
   const company = await getCompany(companyId);
   if (!company) {
@@ -137,7 +137,7 @@ export default async function getCompanyKpiStats(
   const numberOfReservationForPeriod = await getCountForPeriod(
     companyId,
     startDate,
-    endDate,
+    endDate
   );
 
   const previousStartDate = new Date(startDate);
@@ -147,7 +147,7 @@ export default async function getCompanyKpiStats(
   const numberOfReservationForPreviousPeriod = await getCountForPeriod(
     companyId,
     previousStartDate,
-    previousEndDate,
+    previousEndDate
   );
 
   const percentageChange =
@@ -158,12 +158,12 @@ export default async function getCompanyKpiStats(
   const totalPriceForPeriod = await getAggregateForPeriod(
     companyId,
     startDate,
-    endDate,
+    endDate
   );
   const totalPriceForPreviousPeriod = await getAggregateForPeriod(
     companyId,
     previousStartDate,
-    previousEndDate,
+    previousEndDate
   );
   const percentageChangeInTotalPrice =
     ((totalPriceForPeriod - totalPriceForPreviousPeriod) /
@@ -173,12 +173,12 @@ export default async function getCompanyKpiStats(
   const newCustomers = await getNumbersNewCustomersForPeriod(
     companyId,
     startDate,
-    endDate,
+    endDate
   );
   const previousNewCustomers = await getNumbersNewCustomersForPeriod(
     companyId,
     previousStartDate,
-    previousEndDate,
+    previousEndDate
   );
   const percentageChangeInNewCustomers =
     ((newCustomers - previousNewCustomers) /
@@ -190,12 +190,14 @@ export default async function getCompanyKpiStats(
       {
         label: "Nombre de réservations",
         value: numberOfReservationForPeriod,
+        previousValue: numberOfReservationForPreviousPeriod,
         percentageChange: percentageChange.toFixed(2),
         changeType: getChangeType(percentageChange),
       },
       {
         label: "Chiffre d'affaires",
         value: totalPriceForPeriod,
+        previousValue: totalPriceForPreviousPeriod,
         percentageChange: percentageChangeInTotalPrice.toFixed(2),
         changeType: getChangeType(percentageChangeInTotalPrice),
         suffix: "€",
@@ -203,6 +205,7 @@ export default async function getCompanyKpiStats(
       {
         label: "Nouveaux clients",
         value: newCustomers,
+        previousValue: previousNewCustomers,
         percentageChange: percentageChangeInNewCustomers.toFixed(2),
         changeType: getChangeType(percentageChangeInNewCustomers),
       },
