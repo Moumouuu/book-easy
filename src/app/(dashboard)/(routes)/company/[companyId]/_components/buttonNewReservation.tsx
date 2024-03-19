@@ -62,7 +62,11 @@ export function ButtonNewReservation() {
       }
 
       if (customerEmail) {
-        // todo : send an email to the customer to create an account
+        // send an email to the customer to create an account and link the reservation
+        await axios.post(`/api/send/${companyId}/createAccount`, {
+          customerEmail,
+          reservationId: response.data.id,
+        });
       }
 
       mutate(`/api/company/${companyId}/calendar/bookings`);
@@ -86,7 +90,7 @@ export function ButtonNewReservation() {
       end_at: new Date(),
       price: 0,
     });
-  }
+  };
 
   return (
     <Dialog>

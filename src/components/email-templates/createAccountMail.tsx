@@ -17,27 +17,29 @@ import {
 } from "@react-email/components";
 import { Tailwind } from "@react-email/tailwind";
 
-interface InviteTeamateMailProps {
+interface CreateAccountMailProps {
   receiverEmail: string;
   currentName: string;
   companyName: string;
   companyId: string;
   secureToken: string;
   senderEmail: string;
+  reservationId: string;
 }
 
 const baseUrl = process.env.NEXT_PUBLIC_BOOKEASY_URL;
 
-export const InviteTeamateMail = ({
+export const CreateAccountMail = ({
   currentName,
   receiverEmail,
   companyName,
   companyId,
   senderEmail,
   secureToken,
-}: InviteTeamateMailProps) => {
+  reservationId,
+}: CreateAccountMailProps) => {
   const previewText = `Rejoignez ${appTitle}`;
-  const reservationLink = `${baseUrl}/sign-in/?email=${receiverEmail}&senderEmail=${senderEmail}&token=${secureToken}&company=${companyId}`;
+  const reservationLink = `${baseUrl}/sign-in/?email=${receiverEmail}&senderEmail=${senderEmail}&token=${secureToken}&company=${companyId}&reservationId=${reservationId}`;
 
   return (
     <Html>
@@ -82,9 +84,6 @@ export const InviteTeamateMail = ({
               </Row>
             </Section>
             <Section className="mb-[32px] mt-[32px] text-center">
-              <Text className="font-bold text-[16px]">
-                Vous avez 20 minutes pour valider l&apos;invitation !
-              </Text>
               <Button
                 className="rounded bg-[#000000] px-5 py-3 text-center text-[12px] font-semibold text-white no-underline"
                 href={reservationLink}
@@ -116,4 +115,4 @@ export const InviteTeamateMail = ({
   );
 };
 
-export default InviteTeamateMail;
+export default CreateAccountMail;

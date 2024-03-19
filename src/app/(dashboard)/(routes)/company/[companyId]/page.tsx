@@ -15,10 +15,7 @@ import useSWR from "swr";
 import { ButtonNewReservation } from "./_components/buttonNewReservation";
 import { SheetUpdateBook } from "./bookings/_components/columns";
 
-// todo : bug when modify a reservation and the date is not the same
 // todo : bug calendrier avec les dates UTC et les réservations
-// todo : bug dans lemail il y a 1H de plus que dans l'input
-
 export interface IReservationType {
   id: string;
   start_at: Date;

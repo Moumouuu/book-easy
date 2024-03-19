@@ -144,7 +144,7 @@ export async function POST(req: NextRequest) {
     return new NextResponse("Error creating user", { status: 500 });
   }
 
-  return new NextResponse("User created", {
+  return new NextResponse(JSON.stringify(newUser), {
     status: 200,
   });
 }

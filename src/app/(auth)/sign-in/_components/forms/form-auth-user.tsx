@@ -30,6 +30,8 @@ export default function UserAuthForm() {
   const userTokenFromInvite = searchParams.get("token");
   const userCompanyFromInvite = searchParams.get("company");
   const userSenderEmailFromInvite = searchParams.get("senderEmail");
+  // it's use when user is invited to a company from reservation -> but need to register first
+  const reservationId = searchParams.get("reservationId");
 
   const isUserFromInvite =
     userEmailFromInvite &&
@@ -78,7 +80,7 @@ export default function UserAuthForm() {
       {
         message: "Les mots de passe ne correspondent pas. Veuillez réessayer.",
         path: ["confirmPassword"],
-      },
+      }
     );
 
   type FormValuesLogin = z.infer<typeof schemaLogin>;
@@ -115,8 +117,13 @@ export default function UserAuthForm() {
   const onSubmitRegister = async (data: FormValuesRegister) => {
     setIsLoading(true);
     try {
-      await createUserAccount(data);
+      const user = await createUserAccount(data);
+      // if user is invited to a company from reservation -> link reservation to user
+      if (isUserFromInvite && reservationId) {
+        await linkReservationToUser(user.data.id);
+      }
       await signInUser(data);
+
       redirectToDestination();
     } catch (error) {
       console.error("[REGISTER_ERROR]", error);
@@ -136,7 +143,15 @@ export default function UserAuthForm() {
         senderEmail: userSenderEmailFromInvite,
       },
     };
-    await axios.post("/api/auth", requestData);
+    return await axios.post("/api/auth", requestData);
+  };
+
+  const linkReservationToUser = async (customerId: string) => {
+    const requestData = {
+      reservationId,
+      customerId,
+    };
+    await axios.post("/api/reservation/linkToUser", requestData);
   };
 
   type FormValues = FormValuesLogin | FormValuesRegister;
@@ -161,9 +176,12 @@ export default function UserAuthForm() {
   };
 
   const redirectToDestination = () => {
-    const destination = isUserFromInvite
+    let destination = isUserFromInvite
       ? `/company/${userCompanyFromInvite}`
       : "/";
+    if (reservationId) {
+      destination = `/reservation/${reservationId}`;
+    }
     router.push(destination);
   };
 
