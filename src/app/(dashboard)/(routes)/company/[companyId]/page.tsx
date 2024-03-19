@@ -17,8 +17,6 @@ import useSWR from "swr";
 import { ButtonNewReservation } from "./_components/buttonNewReservation";
 import { SheetUpdateBook } from "./bookings/_components/columns";
 
-// todo : bug calendrier avec les dates UTC et les réservations
-// todo : KPI stats, donné la valeur de la periode précédente
 export interface IReservationType {
   id: string;
   start_at: Date;
@@ -40,6 +38,7 @@ export default function Calendar() {
   } = useSWR(`/api/company/${companyId}/calendar/bookings`, defaultFetcherGet);
   const { isPremium } = useCompanyIsPremium();
   const [currentDate, setCurrentDate] = useState(new Date());
+  const startOfCurrentWeek = startOfWeek(currentDate);
 
   const navigateToPreviousWeek = () => {
     setCurrentDate((prevDate) => addDays(prevDate, -7));
@@ -66,7 +65,6 @@ export default function Calendar() {
     reservations.filter(
       (reservation: IReservationType) => reservation.created_by?.email
     ).length >= maximumFreeFeatures && !isPremium;
-
 
   return (
     <div className="w-full h-[90%] px-4 py-8">
@@ -111,7 +109,7 @@ export default function Calendar() {
           (day, index: number) => (
             <div key={day} className="flex-1 text-center font-bold">
               {/* Render the date and the number of the date */}
-              {day} {format(addDays(currentDate, index), "dd/MM")}
+              {day} {format(addDays(startOfCurrentWeek, index + 1), "dd/MM")}
             </div>
           )
         )}
@@ -143,8 +141,14 @@ const ReservationCard: React.FC<Props> = ({ reservations, date }) => {
       {reservations
         .filter(
           (reservation: IReservationType) =>
-            format(new Date(reservation.start_at), "yyyy-MM-dd") ===
-            format(date, "yyyy-MM-dd")
+            format(
+              utcToZonedTime(new Date(reservation.start_at), "UTC"),
+              "yyyy-MM-dd"
+            ) ===
+            format(
+              utcToZonedTime(addDays(new Date(date), 2), "UTC"),
+              "yyyy-MM-dd"
+            )
         )
         .sort(
           (a, b) =>
@@ -169,14 +173,8 @@ const ReservationCard: React.FC<Props> = ({ reservations, date }) => {
                   )}
                 </p>
                 <p className="font-semibold">
-                  {reservation.created_by?.firstName ? (
-                    <>
-                      {reservation.created_by?.firstName}{" "}
-                      {reservation.created_by?.lastName}
-                    </>
-                  ) : (
-                    reservation.created_by?.email
-                  )}
+                  {reservation.created_by?.firstName}{" "}
+                  {reservation.created_by?.lastName}
                 </p>
                 <p>{reservation.price}€</p>
               </div>

@@ -8,7 +8,7 @@ export async function GET() {
       status: 404,
     });
 
-  const isPremium = await prismadb.premiumUser.findUniqueOrThrow({
+  const isPremium = await prismadb.premiumUser.findUnique({
     where: { userId: user.email },
   });
 

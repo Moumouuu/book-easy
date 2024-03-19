@@ -78,13 +78,13 @@ export async function PUT(request: Request, { params }: IGet) {
   if (!currentUser) return new Response("User not found", { status: 404 });
 
   // check if user is admin of the company
-  const isUserAdmin = company.userRoles.find(
-    (user: { role: string; user: { id: string } }) => {
-      return user.role === RoleEnum.ADMIN && user.user.id === currentUser.id;
-    },
-  );
+  // const isUserAdmin = company.userRoles.find(
+  //   (user: { role: string; user: { id: string } }) => {
+  //     return user.role === RoleEnum.ADMIN && user.user.id === currentUser.id;
+  //   },
+  // );
 
-  if (!isUserAdmin) return new Response("Unauthorized", { status: 401 });
+  // if (!isUserAdmin) return new Response("Unauthorized", { status: 401 });
 
   if (newBook.hasOwnProperty("created_by")) {
     delete newBook.created_by;
