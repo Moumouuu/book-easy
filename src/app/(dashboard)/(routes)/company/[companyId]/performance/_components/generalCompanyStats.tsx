@@ -7,7 +7,6 @@ import { MaximumFreeFeaturesEnum } from "@/enum/maximumFreeFeatures";
 import useCompanyIsPremium from "@/hooks/useCompanyIsPremium";
 import { defaultFetcherGet } from "@/lib/fetcher";
 import { useCompany } from "@/store/dashboard";
-import { useState } from "react"; // Import useState hook
 import useSWR from "swr";
 import { PerformanceKpiSkeleton } from "./skeletons/performanceKPISkeleton";
 
@@ -24,7 +23,6 @@ export default function GeneralCompanyStats() {
     defaultFetcherGet
   );
   const { isPremium } = useCompanyIsPremium();
-  const [showNumber, setShowNumber] = useState(!isPremium); // Initialize showNumber state based on isPremium
 
   if (error) {
     return (
@@ -63,7 +61,7 @@ export default function GeneralCompanyStats() {
                 }
               >
                 {item.value}{" "}
-                {showNumber && ` / ${maximumFreeFeatures[item.key]}`}
+                {!isPremium && ` / ${maximumFreeFeatures[item.key]}`}
               </span>
               {!isPremium && (
                 <Progress
