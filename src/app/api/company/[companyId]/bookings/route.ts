@@ -18,7 +18,7 @@ export async function GET(request: Request, { params }: IGet) {
   const company = await getCompany(companyId);
   if (!company) return new Response("Company not found", { status: 404 });
 
-  const user = getUser();
+  const user = await getUser();
   if (!user) return new Response("User not found", { status: 404 });
 
   const customersInCompany = await getBookings(companyId);

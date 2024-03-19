@@ -3,6 +3,8 @@ import DatatableSkeleton from "@/components/datatable/datatableSkeleton";
 import DefaultError from "@/components/defaultError";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { maximumFreeFeatures } from "@/constants";
+import useCompanyIsPremium from "@/hooks/useCompanyIsPremium";
 import { defaultFetcherGet } from "@/lib/fetcher";
 import { capitalizeFirstLetter } from "@/lib/utils";
 import { useCompany } from "@/store/dashboard";
@@ -16,6 +18,7 @@ import { ButtonNewReservation } from "./_components/buttonNewReservation";
 import { SheetUpdateBook } from "./bookings/_components/columns";
 
 // todo : bug calendrier avec les dates UTC et les réservations
+// todo : KPI stats, donné la valeur de la periode précédente
 export interface IReservationType {
   id: string;
   start_at: Date;
@@ -35,6 +38,7 @@ export default function Calendar() {
     isLoading,
     error,
   } = useSWR(`/api/company/${companyId}/calendar/bookings`, defaultFetcherGet);
+  const { isPremium } = useCompanyIsPremium();
   const [currentDate, setCurrentDate] = useState(new Date());
 
   const navigateToPreviousWeek = () => {
@@ -54,6 +58,15 @@ export default function Calendar() {
     return (
       <DefaultError title="Une erreur est survenue" message={error.message} />
     );
+
+  const limitReservationReached =
+    reservations.length >= maximumFreeFeatures.numberOfOrders && !isPremium;
+
+  const limitCustomerReached =
+    reservations.filter(
+      (reservation: IReservationType) => reservation.created_by?.email
+    ).length >= maximumFreeFeatures && !isPremium;
+
 
   return (
     <div className="w-full h-[90%] px-4 py-8">
@@ -85,7 +98,12 @@ export default function Calendar() {
             })
           )}
         </h2>
-        <ButtonNewReservation />
+        {/* Render the button to create a new reservation */}
+        {limitCustomerReached || limitReservationReached ? (
+          <Button disabled>Quota atteint</Button>
+        ) : (
+          <ButtonNewReservation />
+        )}
       </div>
       <div className="flex p-2">
         {/* Render days of the week */}
@@ -119,7 +137,7 @@ interface Props {
   date: Date;
 }
 
-export const ReservationCard: React.FC<Props> = ({ reservations, date }) => {
+const ReservationCard: React.FC<Props> = ({ reservations, date }) => {
   return (
     <>
       {reservations

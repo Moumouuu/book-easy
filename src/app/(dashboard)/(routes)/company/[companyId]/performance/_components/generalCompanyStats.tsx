@@ -4,7 +4,7 @@ import PremiumButton from "@/components/premiumButton";
 import { Progress } from "@/components/ui/progress";
 import { maximumFreeFeatures } from "@/constants";
 import { MaximumFreeFeaturesEnum } from "@/enum/maximumFreeFeatures";
-import useIsPremium from "@/hooks/useIsPremium";
+import useCompanyIsPremium from "@/hooks/useCompanyIsPremium";
 import { defaultFetcherGet } from "@/lib/fetcher";
 import { useCompany } from "@/store/dashboard";
 import { useState } from "react"; // Import useState hook
@@ -23,7 +23,7 @@ export default function GeneralCompanyStats() {
     `/api/company/${companyId}/performance/general`,
     defaultFetcherGet
   );
-  const isPremium = useIsPremium();
+  const { isPremium } = useCompanyIsPremium();
   const [showNumber, setShowNumber] = useState(!isPremium); // Initialize showNumber state based on isPremium
 
   if (error) {
@@ -45,16 +45,16 @@ export default function GeneralCompanyStats() {
       <div className="rounded border p-3">
         <div className="mb-3 flex flex-col items-start justify-between lg:flex-row lg:items-center">
           <span className="text-tremor-metric text-tremor-content-strong dark:text-dark-tremor-content-strong my-3 ml-3 font-semibold">
-            Vous êtes sur le plan {isPremium ? "Premium" : "Gratuit"}
+            Votre entreprise est {isPremium ? "Premium" : "Gratuit"}
           </span>
-          <PremiumButton />
+          {!isPremium && <PremiumButton />}
         </div>
 
         <div className="flex flex-col lg:flex-row">
           {data.map((item: IItems) => (
             <div
               key={item.key}
-              className="dark:bg-dark-tremor-background-muted text-tremor-default text-tremor-content dark:text-dark-tremor-content m-2 m-2 flex flex-1 flex-col rounded border p-3 font-medium"
+              className="dark:bg-dark-tremor-background-muted text-tremor-default text-tremor-content dark:text-dark-tremor-content  m-2 flex flex-1 flex-col rounded border p-3 font-medium"
             >
               <p>{item.label}</p>
               <span

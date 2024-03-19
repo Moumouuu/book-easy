@@ -26,7 +26,7 @@ export function SoonReservationCard() {
   const { companyId } = useCompany();
   const { data, error, isLoading } = useSWR(
     `/api/company/${companyId}/performance/reservations/soon`,
-    defaultFetcherGet,
+    defaultFetcherGet
   );
 
   if (isLoading) return <DatatableSkeleton />;
@@ -40,7 +40,7 @@ export function SoonReservationCard() {
     (acc: number, reservation: SoonReservations) => {
       return acc + reservation.price;
     },
-    0,
+    0
   );
 
   return (

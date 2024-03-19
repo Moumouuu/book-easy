@@ -1,5 +1,4 @@
 import getCompany from "@/actions/company/getCompany";
-import { getCustomers } from "@/actions/company/getCustomers";
 import { getTeamUsers } from "@/actions/company/getTeamUsers";
 import getUser from "@/actions/user/getUser";
 import { RoleEnum } from "@/enum/roles";
@@ -19,7 +18,7 @@ export async function GET(request: Request, { params }: IGet) {
   const company = await getCompany(companyId);
   if (!company) return new Response("Company not found", { status: 404 });
 
-  const user = getUser();
+  const user = await getUser();
   if (!user) return new Response("User not found", { status: 404 });
 
   const customersInCompany = await getTeamUsers(companyId);
@@ -49,7 +48,7 @@ export async function PUT(request: Request, { params }: IGet) {
   const isUserAdmin = company.userRoles.find(
     (user: { role: string; user: { id: string } }) => {
       return user.role === RoleEnum.ADMIN && user.user.id === currentUser.id;
-    },
+    }
   );
 
   if (!isUserAdmin) return new Response("Unauthorized", { status: 401 });
@@ -85,7 +84,7 @@ export async function DELETE(request: Request, { params }: IGet) {
   const isUserAdmin = company.userRoles.find(
     (user: { role: string; user: { id: string } }) => {
       return user.role === RoleEnum.ADMIN && user.user.id === currentUser.id;
-    },
+    }
   );
 
   if (!isUserAdmin) return new Response("Unauthorized", { status: 401 });

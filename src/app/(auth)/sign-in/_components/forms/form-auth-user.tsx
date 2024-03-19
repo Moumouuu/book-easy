@@ -136,6 +136,7 @@ export default function UserAuthForm() {
   const createUserAccount = async (data: FormValuesRegister) => {
     const requestData = {
       ...data,
+      reservationId,
       fromInvite: {
         email: userEmailFromInvite,
         token: userTokenFromInvite,

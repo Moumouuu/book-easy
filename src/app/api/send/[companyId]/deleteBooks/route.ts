@@ -58,26 +58,30 @@ export async function POST(request: NextRequest, { params }: IPost) {
     return new Response("No books found", { status: 404 });
   }
 
-  const deletedBooks = [];
   // Send email and delete books
   for (const book of books) {
     const reservationLink = `${process.env.NEXT_PUBLIC_BOOKEASY_URL}/book/${book.id}`;
-    const username = `${book.created_by.firstName} ${book.created_by.lastName}`;
-    const email = book.created_by.email;
 
-    const deletedBook = await resend.emails.send({
-      from: "Acme <onboarding@bookeazy.fr>",
-      to: [email, "robinpluviaux@gmail.com"],
-      subject: "Votre réservation a été supprimée !",
-      react: DeleteBookMail({
-        companyName: book.company.name,
-        reservationLink,
-        username,
-        start_at: book.start_at.toString(),
-        end_at: book.end_at?.toString(),
-      }) as React.ReactElement,
-    });
-    deletedBooks.push(deletedBook);
+    let username, email;
+    if (book.created_by?.firstName && book.created_by?.lastName) {
+      username = `${book.created_by.firstName} ${book.created_by.lastName}`;
+      email = book.created_by.email;
+    }
+
+    if (email) {
+      await resend.emails.send({
+        from: "Acme <onboarding@bookeazy.fr>",
+        to: [email, "robinpluviaux@gmail.com"],
+        subject: "Votre réservation a été supprimée !",
+        react: DeleteBookMail({
+          companyName: book.company.name,
+          reservationLink,
+          username,
+          start_at: book.start_at.toString(),
+          end_at: book.end_at?.toString(),
+        }) as React.ReactElement,
+      });
+    }
   }
 
   // Delete books
@@ -89,5 +93,5 @@ export async function POST(request: NextRequest, { params }: IPost) {
     },
   });
 
-  return Response.json(deletedBooks);
+  return Response.json({ message: "Books deleted" });
 }

@@ -9,6 +9,7 @@ interface RequestData {
   password: string;
   firstname: string;
   lastname: string;
+  reservationId?: string;
   phoneNumber: string;
   fromInvite: {
     email: string;
@@ -26,6 +27,7 @@ export async function POST(req: NextRequest) {
     lastname,
     phoneNumber,
     fromInvite,
+    reservationId,
   }: RequestData = await req.json();
 
   if (!email || !password) {
@@ -45,7 +47,9 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  if (fromInvite.email) {
+
+  // user come from invite company and not from reservation invite
+  if (fromInvite.email && !reservationId) {
     // secureToken isActive & type is INVITATION & created_at is not expired
     await prismadb.secureToken.findUniqueOrThrow({
       where: {
@@ -119,7 +123,7 @@ export async function POST(req: NextRequest) {
   });
 
   // create userRole if fromInvite and add user to company
-  if (fromInvite.email && newUser) {
+  if (fromInvite.email && newUser && !reservationId) {
     const userRole = await prismadb.userCompanyRole.create({
       data: {
         role: "USER",

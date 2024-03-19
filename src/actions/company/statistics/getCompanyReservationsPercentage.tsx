@@ -1,5 +1,4 @@
 import prismadb from "@/lib/prismadb";
-import { Book } from "@prisma/client";
 
 interface ReservationPart {
   name: string;
@@ -15,7 +14,7 @@ interface Part {
 }
 
 export default async function getCompanyReservationsPercentage(
-  companyId: string,
+  companyId: string
 ): Promise<ReservationPart[]> {
   const parts: Part[] = [
     {
@@ -47,6 +46,7 @@ export default async function getCompanyReservationsPercentage(
 
   // Count the number of reservations made by each customer
   const reservationCountsByCustomer = books.reduce((acc: any, reservation) => {
+    if (reservation.createdById === null) return acc; // Skip if the reservation has no creator (should not happen but just in case
     acc[reservation.createdById] = (acc[reservation.createdById] || 0) + 1;
     return acc;
   }, {});
@@ -58,11 +58,11 @@ export default async function getCompanyReservationsPercentage(
 
     if (max === Infinity) {
       amount = Object.values(reservationCountsByCustomer).filter(
-        (count: any) => count >= min,
+        (count: any) => count >= min
       ).length;
     } else {
       amount = Object.values(reservationCountsByCustomer).filter(
-        (count: any) => count >= min && count <= max,
+        (count: any) => count >= min && count <= max
       ).length;
     }
 

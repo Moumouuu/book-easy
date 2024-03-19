@@ -51,25 +51,33 @@ export async function POST(request: NextRequest, { params }: IGet) {
     },
   });
 
-  const { firstName, lastName, email } = book.created_by;
+  let firstName, lastName, email;
+  if (book.created_by) {
+    firstName = book.created_by.firstName;
+    lastName = book.created_by.lastName;
+    email = book.created_by.email;
+  }
   const username = `${firstName} ${lastName}`;
   const companyName = book.company.name;
   const reservationLink = `${process.env.NEXT_PUBLIC_BOOKEASY_URL}/book/${id}`;
 
-  // Send email
-  const data = await resend.emails.send({
-    from: "Acme <onboarding@bookeazy.fr>",
-    to: [email, "robinpluviaux@gmail.com"],
-    subject: "Votre réservation a été modifiée !",
-    react: UpdateBookMail({
-      companyName,
-      reservationLink,
-      username,
-      price,
-      start_at,
-      end_at,
-    }) as React.ReactElement,
-  });
+  // in case it's a book come from a user that is not register to the app
+  if (email) {
+    // Send email
+    await resend.emails.send({
+      from: "Acme <onboarding@bookeazy.fr>",
+      to: [email, "robinpluviaux@gmail.com"],
+      subject: "Votre réservation a été modifiée !",
+      react: UpdateBookMail({
+        companyName,
+        reservationLink,
+        username,
+        price,
+        start_at,
+        end_at,
+      }) as React.ReactElement,
+    });
+  }
 
-  return Response.json(data);
+  return Response.json({ message: "Book updated" });
 }
