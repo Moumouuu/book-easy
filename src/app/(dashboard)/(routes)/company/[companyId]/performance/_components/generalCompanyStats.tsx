@@ -43,7 +43,7 @@ export default function GeneralCompanyStats() {
       <div className="rounded border p-3">
         <div className="mb-3 flex flex-col items-start justify-between lg:flex-row lg:items-center">
           <span className="text-tremor-metric text-tremor-content-strong dark:text-dark-tremor-content-strong my-3 ml-3 font-semibold">
-            Votre entreprise est {isPremium ? "Premium" : "Gratuit"}
+            Votre entreprise utilise les fonctionnalitées {isPremium ? "premium" : "gratuites"}
           </span>
           {!isPremium && <PremiumButton />}
         </div>

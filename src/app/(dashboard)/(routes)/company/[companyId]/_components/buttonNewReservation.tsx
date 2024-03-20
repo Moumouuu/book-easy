@@ -69,6 +69,10 @@ export function ButtonNewReservation() {
         });
       }
 
+      toast("Réservation créée", {
+        description: "La réservation a été créée avec succès",
+      });
+
       mutate(`/api/company/${companyId}/calendar/bookings`);
     } catch (error) {
       console.error(error);
@@ -215,6 +219,7 @@ export function ComboboxUser({
   if (setCustomerEmail) {
     return (
       <Input
+        type="email"
         onChange={(e) => setCustomerEmail(e.target.value)}
         placeholder="Entrez l'adresse email du client"
       />

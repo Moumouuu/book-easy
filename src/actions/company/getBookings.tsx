@@ -15,6 +15,7 @@ export async function getBookings(companyId: string) {
           firstName: true,
           lastName: true,
           email: true,
+          phone_number: true,
         },
       },
     },

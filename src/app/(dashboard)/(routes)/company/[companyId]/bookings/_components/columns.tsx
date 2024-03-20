@@ -29,8 +29,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import axios from "axios";
 import { useState } from "react";
-import { useSWRConfig } from "swr";
 import { toast } from "sonner";
+import { useSWRConfig } from "swr";
 export const columns: ColumnDef<IUserDataTableProps>[] = [
   {
     id: "select",
@@ -173,8 +173,14 @@ export function SheetUpdateBook({ book }: { book: IUserDataTableProps }) {
         });
       }
 
+      toast("La réservation a bien été modifiée", {
+        description:
+          "Un email a été envoyé au client si vous avez coché la case",
+      });
+
       // Invalidate SWR cache
       mutate(`/api/company/${companyId}/bookings`);
+      mutate(`/api/company/${companyId}/calendar/bookings`);
     } catch (error) {
       console.error("An error occurred while submitting:", error);
       toast("Une erreur est survenue", {

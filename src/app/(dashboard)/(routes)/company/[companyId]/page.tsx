@@ -11,7 +11,14 @@ import { useCompany } from "@/store/dashboard";
 import { addDays, format, startOfWeek } from "date-fns";
 import { utcToZonedTime } from "date-fns-tz";
 import fr from "date-fns/locale/fr";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  BadgeEuro,
+  CalendarClock,
+  Phone,
+  User,
+} from "lucide-react";
 import { useState } from "react";
 import useSWR from "swr";
 import { ButtonNewReservation } from "./_components/buttonNewReservation";
@@ -26,8 +33,12 @@ export interface IReservationType {
     email: string;
     firstName: string | null;
     lastName: string | null;
+    phone_number: string | null;
   };
 }
+// todo : faire le process de création d'entreprise
+
+// todo : faire une fiche client
 
 export default function Calendar() {
   const { companyId } = useCompany();
@@ -114,12 +125,12 @@ export default function Calendar() {
           )
         )}
       </div>
-      <div className="flex flex-wrap h-full overflow-y-scroll ">
+      <div className="flex flex-wrap h-full  ">
         {/* Render dates of the week */}
         {Array.from({ length: 7 }, (_, index) => {
           const date = addDays(startOfWeek(currentDate), index);
           return (
-            <div key={date.getTime()} className="flex-1 border p-2 h-full">
+            <div key={date.getTime()} className="flex-1 border p-2 ">
               {/* Render reservation cards for each day */}
               <ReservationCard reservations={reservations} date={date} />
             </div>
@@ -159,9 +170,10 @@ const ReservationCard: React.FC<Props> = ({ reservations, date }) => {
             <DialogTrigger asChild>
               <div
                 key={reservation.id}
-                className="bg-primary hover:bg-primary/70 transition duration-200 p-2 my-2 rounded cursor-pointer"
+                className="bg-primary hover:bg-primary/70 transition duration-200 p-2 my-3 rounded cursor-pointer"
               >
-                <p>
+                <p className="flex items-center my-2">
+                  <CalendarClock className="mr-1" size={20} />
                   {format(
                     utcToZonedTime(new Date(reservation.start_at), "UTC"),
                     "HH:mm"
@@ -172,11 +184,28 @@ const ReservationCard: React.FC<Props> = ({ reservations, date }) => {
                     "HH:mm"
                   )}
                 </p>
-                <p className="font-semibold">
-                  {reservation.created_by?.firstName}{" "}
-                  {reservation.created_by?.lastName}
-                </p>
-                <p>{reservation.price}€</p>
+                {reservation.created_by?.firstName ? (
+                  <p className="font-semibold mb-2 flex items-center font-lg">
+                    <User className="mr-1" size={20} />
+                    {reservation.created_by?.firstName}
+                  </p>
+                ) : (
+                  <p className="font-semibold mb-2 flex items-center font-lg">
+                    Client sans compte
+                  </p>
+                )}
+                {reservation.created_by?.phone_number && (
+                  <p className="flex items-center mb-2">
+                    <Phone className="mr-1" size={20} />
+                    {reservation.created_by?.phone_number}
+                  </p>
+                )}
+                {!!reservation.price && (
+                  <p className="flex items-center mb-2">
+                    <BadgeEuro className="mr-1" size={20} />
+                    {reservation.price}€
+                  </p>
+                )}
               </div>
             </DialogTrigger>
             <SheetUpdateBook book={reservation} />

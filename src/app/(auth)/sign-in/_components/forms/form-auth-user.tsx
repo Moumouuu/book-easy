@@ -105,7 +105,14 @@ export default function UserAuthForm() {
   const onSubmitLogin = async (data: FormValuesLogin) => {
     setIsLoading(true);
     try {
+      // sign in user
       await signInUser(data);
+      // if user is invited to a company from reservation -> link reservation to user
+      if (isUserFromInvite && reservationId) {
+        const user = await axios.get("/api/auth/me");
+        await linkReservationToUser(user.data.id);
+      }
+      redirectToDestination();
     } catch (error) {
       console.error("[LOGIN_ERROR]", error);
       displayErrorMessage(error);
@@ -164,9 +171,7 @@ export default function UserAuthForm() {
         email: data.email,
         password: data.password,
       });
-      if (response?.ok) {
-        redirectToDestination();
-      } else {
+      if (!response?.ok) {
         console.log(response?.error);
         displayErrorMessage(response?.error);
       }
@@ -225,6 +230,7 @@ export default function UserAuthForm() {
                 <Input
                   id="email"
                   type="email"
+                  defaultValue={isUserFromInvite ? userEmailFromInvite : ""}
                   placeholder="johndoe@gmail.com"
                   {...register("email")}
                 />
