@@ -69,7 +69,7 @@ export default function KPICards({ period }: IProps) {
             <p className="text-tremor-metric text-tremor-content-strong dark:text-dark-tremor-content-strong font-semibold">
               {companyStat.value} {companyStat?.suffix}
             </p>
-            {companyStat.previousValue && (
+            {!!companyStat.previousValue && (
               <p className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">
                 Période précédente : {companyStat.previousValue}
                 {companyStat?.suffix}
