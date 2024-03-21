@@ -173,12 +173,12 @@ const ReservationCard: React.FC<Props> = ({ reservations, date }) => {
                 <p className="flex items-center my-2">
                   <CalendarClock className="mr-1" size={20} />
                   {format(
-                    utcToZonedTime(new Date(reservation.start_at), "UTC"),
+                    utcToZonedTime(new Date(reservation.start_at), "Europe/Paris"),
                     "HH:mm"
                   )}{" "}
                   -{" "}
                   {format(
-                    utcToZonedTime(new Date(reservation.end_at), "UTC"),
+                    utcToZonedTime(new Date(reservation.end_at), "Europe/Paris"),
                     "HH:mm"
                   )}
                 </p>

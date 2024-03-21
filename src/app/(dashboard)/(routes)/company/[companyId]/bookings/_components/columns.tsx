@@ -28,6 +28,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import axios from "axios";
+import { format } from "date-fns-tz";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useSWRConfig } from "swr";
@@ -192,8 +193,15 @@ export function SheetUpdateBook({ book }: { book: IUserDataTableProps }) {
     }
   };
 
-  const formattedStart_at = book.start_at.toString().slice(0, 16);
-  const formattedEnd_at = book.end_at?.toString().slice(0, 16);
+  const formattedEnd_at = format(new Date(book.end_at), "yyyy-MM-dd'T'HH:mm", {
+    timeZone: "Europe/Paris",
+  });
+
+  const formattedStart_at = format(
+    new Date(book.start_at),
+    "yyyy-MM-dd'T'HH:mm",
+    { timeZone: "Europe/Paris" }
+  );
 
   return (
     <DialogContent className="sm:max-w-[425px]">
