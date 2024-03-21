@@ -28,6 +28,7 @@ export interface IReservationType {
   id: string;
   start_at: Date;
   end_at: Date;
+  created_by_email_temp: string | null;
   price: number;
   created_by: {
     email: string;
@@ -36,9 +37,6 @@ export interface IReservationType {
     phone_number: string | null;
   };
 }
-// todo : faire le process de création d'entreprise
-
-// todo : faire une fiche client
 
 export default function Calendar() {
   const { companyId } = useCompany();
@@ -191,7 +189,7 @@ const ReservationCard: React.FC<Props> = ({ reservations, date }) => {
                   </p>
                 ) : (
                   <p className="font-semibold mb-2 flex items-center font-lg">
-                    Client sans compte
+                    {reservation.created_by_email_temp}
                   </p>
                 )}
                 {reservation.created_by?.phone_number && (

@@ -1,5 +1,9 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// todo : faire le process de création d'entreprise
+// todo : page setting pour entreprise
+// todo : page setting pour user
+// todo :page mes réservations pr user
+
+// todo : dans le calendrier la data de début est 1h en avance
 
 generator client {
     provider = "prisma-client-js"
@@ -55,6 +59,8 @@ model Book {
     // Define the relation to User model
     created_by  User?    @relation(fields: [createdById], references: [id])
     createdById String?
+    // used when user created a book withou have account (from company email)
+    created_by_email_temp String?
     // Define the relation to Company model
     company     Company @relation(fields: [companyId], references: [id])
     companyId   String

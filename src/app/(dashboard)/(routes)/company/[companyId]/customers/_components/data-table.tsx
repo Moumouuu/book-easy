@@ -1,19 +1,18 @@
 "use client";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  flexRender,
-  VisibilityState,
-  getCoreRowModel,
-  SortingState,
-  useReactTable,
-  getPaginationRowModel,
-  getFilteredRowModel,
-  getSortedRowModel,
-} from "@tanstack/react-table";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -28,12 +27,24 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useState } from "react";
-import axios from "axios";
-import { useCompany } from "@/store/dashboard";
-import { useSWRConfig } from "swr";
 import useIsAdmin from "@/hooks/useIsAdmin";
+import { useCompany } from "@/store/dashboard";
+import {
+  ColumnDef,
+  ColumnFiltersState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  SortingState,
+  useReactTable,
+  VisibilityState,
+} from "@tanstack/react-table";
+import axios from "axios";
+import { useState } from "react";
 import { toast } from "sonner";
+import { useSWRConfig } from "swr";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -77,7 +88,7 @@ export function DataTable<TData, TValue>({
     const customersDatatableIds = Object.keys(rowSelection).map(
       (id: string) => {
         return parseInt(id);
-      },
+      }
     );
     const customersIds = customersDatatableIds.map((id: number) => {
       return data[id].id;
@@ -100,6 +111,9 @@ export function DataTable<TData, TValue>({
       // Tell all SWRs with this key to revalidate
       mutate(`/api/company/${companyId}/customers`);
 
+      toast("Supprimé avec succès", {
+        description: "Le ou les clients ont été supprimé.",
+      });
       // Remove the selected rows
       setRowSelection({});
     } catch (error) {
@@ -125,21 +139,50 @@ export function DataTable<TData, TValue>({
           className="max-w-sm"
         />
         <div className="mt-3 lg:m-0">
-          <Button
-            disabled={
-              isLoading ||
-              !userIsAdmin ||
-              Object.entries(rowSelection).length === 0
-            }
-            isLoading={isLoading}
-            className="mr-2"
-            variant={"destructive"}
-            onClick={onClickDeleteCustomers}
-          >
-            {userIsAdmin
-              ? "Supprimer le client"
-              : "Autorisation requise pour supprimer un client"}
-          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger>
+              <Button
+                disabled={
+                  isLoading ||
+                  !userIsAdmin ||
+                  Object.entries(rowSelection).length === 0
+                }
+                isLoading={isLoading}
+                className="mr-2"
+                variant={"destructive"}
+              >
+                {userIsAdmin
+                  ? "Supprimer le client"
+                  : "Autorisation requise pour supprimer un client"}
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>
+                  Êtes-vous sûr de vouloir supprimer ce client ?
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  Cette action est irréversible. Vous ne pourrez pas annuler
+                  cette action. Voulez-vous continuer ?
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Annuler</AlertDialogCancel>
+                <AlertDialogAction
+                  disabled={
+                    isLoading ||
+                    !userIsAdmin ||
+                    Object.entries(rowSelection).length === 0
+                  }
+                  isLoading={isLoading}
+                  className="bg-red-600 hover:bg-red-700"
+                  onClick={onClickDeleteCustomers}
+                >
+                  Supprimer
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -181,7 +224,7 @@ export function DataTable<TData, TValue>({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext(),
+                            header.getContext()
                           )}
                     </TableHead>
                   );
@@ -200,7 +243,7 @@ export function DataTable<TData, TValue>({
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext(),
+                        cell.getContext()
                       )}
                     </TableCell>
                   ))}

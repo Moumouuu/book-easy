@@ -1,4 +1,15 @@
 "use client";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -99,6 +110,10 @@ export function DataTable<TData, TValue>({
 
       // Tell all SWRs with this key to revalidate
       mutate(`/api/company/${companyId}/team`);
+      toast("Collaborateur supprimé avec succès", {
+        description:
+          "Le collaborateur a été supprimé avec succès. Cette action est irréversible.",
+      });
 
       // Remove the selected rows
       setRowSelection({});
@@ -126,21 +141,53 @@ export function DataTable<TData, TValue>({
         />
         <div className="mt-3 flex items-center lg:m-0">
           <NewTeamateDialog numberOfTeamates={data.length} />
-          <Button
-            disabled={
-              isLoadingDeleteTeamate ||
-              !userIsAdmin ||
-              Object.entries(rowSelection).length === 0
-            }
-            isLoading={isLoadingDeleteTeamate}
-            className="mx-2"
-            variant={"destructive"}
-            onClick={onClickDeleteTeamate}
-          >
-            {userIsAdmin
-              ? "Supprimer le collaborateur"
-              : "Autorisation requise pour supprimer un collaborateur"}
-          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger>
+              <Button
+                disabled={
+                  isLoadingDeleteTeamate ||
+                  !userIsAdmin ||
+                  Object.entries(rowSelection).length === 0
+                }
+                isLoading={isLoadingDeleteTeamate}
+                className="mx-2"
+                variant={"destructive"}
+              >
+                {userIsAdmin
+                  ? "Supprimer le collaborateur"
+                  : "Autorisation requise pour supprimer un collaborateur"}
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>
+                  Êtes vous sûr de vouloir supprimer ce collaborateur ?
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  Cette action est irréversible. Vous ne pourrez pas annuler
+                  cette action. Voulez-vous continuer ?
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Annuler</AlertDialogCancel>
+                <AlertDialogAction
+                  className="bg-red-600 hover:bg-red-700"
+                  disabled={
+                    isLoadingDeleteTeamate ||
+                    !userIsAdmin ||
+                    Object.entries(rowSelection).length === 0
+                  }
+                  isLoading={isLoadingDeleteTeamate}
+                  onClick={onClickDeleteTeamate}
+                >
+                  {userIsAdmin
+                    ? "Supprimer"
+                    : "Autorisation requise pour supprimer un collaborateur"}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="ml-auto">

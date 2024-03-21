@@ -10,6 +10,7 @@ export async function getBookings(companyId: string) {
       price: true,
       start_at: true,
       end_at: true,
+      created_by_email_temp: true,
       created_by: {
         select: {
           firstName: true,
@@ -18,6 +19,9 @@ export async function getBookings(companyId: string) {
           phone_number: true,
         },
       },
+    },
+    orderBy: {
+      created_at: "desc",
     },
   });
 

@@ -47,6 +47,7 @@ export function ButtonNewReservation() {
           ...reservation,
           customerId: customerId,
           sendEmail: isSendEmail,
+          customerEmail,
         }
       );
 

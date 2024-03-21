@@ -55,7 +55,7 @@ export const columns: ColumnDef<IUserDataTableProps>[] = [
     ),
   },
   {
-    accessorKey: "created_by.email",
+    accessorKey: "created_by_email_temp",
     header: ({ column }) => {
       return (
         <Button
