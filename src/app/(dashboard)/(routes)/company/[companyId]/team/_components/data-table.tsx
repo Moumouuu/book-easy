@@ -177,7 +177,6 @@ export function DataTable<TData, TValue>({
                     !userIsAdmin ||
                     Object.entries(rowSelection).length === 0
                   }
-                  isLoading={isLoadingDeleteTeamate}
                   onClick={onClickDeleteTeamate}
                 >
                   {userIsAdmin

@@ -67,7 +67,7 @@ export async function GET(req: Request, { params }: IGet) {
     },
     {
       label: "Prix moyen",
-      value: averagePrice,
+      value: averagePrice.toFixed(2),
       suffix: "€",
     },
     {

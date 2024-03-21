@@ -174,7 +174,6 @@ export function DataTable<TData, TValue>({
                     !userIsAdmin ||
                     Object.entries(rowSelection).length === 0
                   }
-                  isLoading={isLoading}
                   className="bg-red-600 hover:bg-red-700"
                   onClick={onClickDeleteCustomers}
                 >

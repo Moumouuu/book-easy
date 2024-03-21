@@ -1,9 +1,8 @@
 // todo : faire le process de création d'entreprise
+
 // todo : page setting pour entreprise
 // todo : page setting pour user
 // todo :page mes réservations pr user
-
-// todo : dans le calendrier la data de début est 1h en avance
 
 generator client {
     provider = "prisma-client-js"
