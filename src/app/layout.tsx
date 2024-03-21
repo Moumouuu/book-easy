@@ -1,13 +1,10 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import { ThemeProvider } from "@/providers/theme-provider";
-import AuthProvider from "@/providers/auth-provider";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
 import { Toaster } from "@/components/ui/sonner";
-
-const inter = Inter({ subsets: ["latin"] });
+import { authOptions } from "@/lib/auth";
+import AuthProvider from "@/providers/auth-provider";
+import { ThemeProvider } from "@/providers/theme-provider";
+import type { Metadata } from "next";
+import { getServerSession } from "next-auth";
+import "./globals.css";
 
 export const metadata: Metadata = {
   title:
@@ -24,7 +21,7 @@ export default async function RootLayout({
   const session = await getServerSession(authOptions);
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="fr" suppressHydrationWarning>
       <head />
       <body>
         <ThemeProvider
