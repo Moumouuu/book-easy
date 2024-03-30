@@ -1,5 +1,6 @@
 "use client";
 
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import Link from "next/link";
 import * as React from "react";
 
@@ -13,118 +14,173 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
+import { Menu } from "lucide-react";
 import Image from "next/image";
+import GetStartedButton from "./getStartedButton";
 
-const components: { title: string; href: string; description: string }[] = [
+const features: { title: string; description: string }[] = [
   {
-    title: "Alert Dialog",
-    href: "/docs/primitives/alert-dialog",
+    title: "Calendrier",
     description:
-      "A modal dialog that interrupts the user with important content and expects a response.",
+      "Un calendrier pour gérer les réservations, les disponibilités et les événements.",
   },
   {
-    title: "Hover Card",
-    href: "/docs/primitives/hover-card",
+    title: "Performances",
     description:
-      "For sighted users to preview content available behind a link.",
+      "Analysez les performances de votre entreprise, les réservations et les clients.",
   },
   {
-    title: "Progress",
-    href: "/docs/primitives/progress",
+    title: "Clients",
     description:
-      "Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.",
+      "Gérez les informations de vos clients, leurs réservations et leurs préférences.",
   },
   {
-    title: "Scroll-area",
-    href: "/docs/primitives/scroll-area",
-    description: "Visually or semantically separates content.",
+    title: "Équipes",
+    description: "Gérez les équipes, les rôles et les permissions.",
   },
   {
-    title: "Tabs",
-    href: "/docs/primitives/tabs",
-    description:
-      "A set of layered sections of content—known as tab panels—that are displayed one at a time.",
-  },
-  {
-    title: "Tooltip",
-    href: "/docs/primitives/tooltip",
-    description:
-      "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
+    title: "Réservations ",
+    description: "Gérez les réservations, les détails et les annulations.",
   },
 ];
 
 export function Header() {
   return (
-    <div className="flex justify-center items-center p-4">
-      <NavigationMenu>
-        <NavigationMenuList>
-          <NavigationMenuItem>
-            <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                <li className="row-span-3">
-                  <NavigationMenuLink asChild>
-                    <a
-                      className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                      href="/"
-                    >
-                      <Image
-                        src="/assets/images/icon-bookEasy.png"
-                        alt="logo"
-                        width={48}
-                        height={48}
-                      />
-                      <div className="mb-2 mt-4 text-lg font-medium">
-                        shadcn/ui
-                      </div>
-                      <p className="text-sm leading-tight text-muted-foreground">
-                        Beautifully designed components that you can copy and
-                        paste into your apps. Accessible. Customizable. Open
-                        Source.
-                      </p>
-                    </a>
-                  </NavigationMenuLink>
-                </li>
-                <ListItem href="/docs" title="Introduction">
-                  Re-usable components built using Radix UI and Tailwind CSS.
-                </ListItem>
-                <ListItem href="/docs/installation" title="Installation">
-                  How to install dependencies and structure your app.
-                </ListItem>
-                <ListItem href="/docs/primitives/typography" title="Typography">
-                  Styles for headings, paragraphs, lists...etc
-                </ListItem>
-              </ul>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <NavigationMenuTrigger>Components</NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-                {components.map((component) => (
-                  <ListItem
-                    key={component.title}
-                    title={component.title}
-                    href={component.href}
-                  >
-                    {component.description}
-                  </ListItem>
-                ))}
-              </ul>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <Link href="/docs" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Documentation
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-        </NavigationMenuList>
-      </NavigationMenu>
+    <div className="flex justify-between lg:justify-center items-center p-4">
+      <Navigation />
+      <div className="lg:mx-3">
+        <GetStartedButton />
+      </div>
     </div>
   );
 }
+
+interface item {
+  title: string;
+  description: string;
+  href?: string;
+}
+const items: item[] = [
+  {
+    title: "Documentation",
+    description:
+      "Toutes les informations pour commencer à utiliser l'application.",
+    href: "/docs",
+  },
+  {
+    title: "Installation self-hosted",
+    description: "Comment installer l'application, en self-hosting.",
+    href: "/docs/getting-started/self-hosted",
+  },
+  {
+    title: "Installation en ligne",
+    description: "Comment utiliser l'application en ligne.",
+    href: "/docs/getting-started",
+  },
+];
+
+const Navigation = () => {
+  return (
+    <>
+      <div className="block lg:hidden">
+        <Sheet>
+          <SheetTrigger>
+            <Menu size={24} />
+          </SheetTrigger>
+          <SheetContent side={"left"}>
+            <div className="h-full overflow-y-auto p-3">
+              {items.map((item) => (
+                <div key={item.title} className="flex flex-col my-5">
+                  <Link href={"/"}>
+                    <span className="text-md font-semibold">{item.title}</span>
+                    <br />
+                    <span className="text-muted-foreground text-sm font-medium">
+                      {item.description}
+                    </span>
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </SheetContent>
+        </Sheet>
+      </div>
+      <div className="hidden lg:block">
+        <NavigationMenu>
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <NavigationMenuTrigger>Commencer</NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+                  <li className="row-span-3">
+                    <NavigationMenuLink asChild>
+                      <a
+                        className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
+                        href="/"
+                      >
+                        <Image
+                          src="/assets/images/icon-bookEasy.png"
+                          alt="logo"
+                          width={48}
+                          height={48}
+                        />
+                        <div className="mb-2 mt-4 text-lg font-medium">
+                          BookEazy
+                        </div>
+                        <p className="text-sm leading-tight text-muted-foreground">
+                          Application web de gestion de réservation, de clients
+                          et qui permet d&apos;analyser les performances.
+                        </p>
+                      </a>
+                    </NavigationMenuLink>
+                  </li>
+                  <ListItem href="/docs" title="Documentations">
+                    Toutes les informations pour commencer à utiliser
+                    l&apos;application.
+                  </ListItem>
+                  <ListItem
+                    href="/docs/getting-started/self-hosted"
+                    title="Installation self-hosted"
+                  >
+                    Comment installer l&apos;application, en self-hosting.
+                  </ListItem>
+                  <ListItem
+                    href="/docs/getting-started"
+                    title="Installation en ligne"
+                  >
+                    Comment utiliser l&apos;application en ligne.
+                  </ListItem>
+                </ul>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuTrigger>Fonctionnalités</NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+                  {features.map((feature) => (
+                    <ListItem
+                      key={feature.title}
+                      title={feature.title}
+                      href={"/"}
+                    >
+                      {feature.description}
+                    </ListItem>
+                  ))}
+                </ul>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Link href="/docs" legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  Documentation
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
+      </div>
+    </>
+  );
+};
 
 const ListItem = React.forwardRef<
   React.ElementRef<"a">,

@@ -44,6 +44,7 @@ async function main() {
         start_at: faker.date.past(),
         end_at: faker.date.soon(),
         price: faker.number.int({ min: 0, max: 200 }),
+        created_by_email_temp: faker.internet.email(),
         // Generate more fake data for other fields as needed
         created_by: {
           connect: {

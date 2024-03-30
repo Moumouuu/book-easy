@@ -169,7 +169,7 @@ const CustomerSheetContent = ({
     );
 
   return (
-    <SheetContent className="sm:max-w-[300px]  md:max-w-none md:w-1/3">
+    <SheetContent className="sm:max-w-[300px] md:max-w-none md:w-1/3">
       <SheetHeader>
         <div className="flex flex-col md:flex-row items-center my-3">
           <Image
@@ -235,6 +235,9 @@ const CustomerSheetContent = ({
           </div>
         </div>
       </SheetHeader>
+      <div className="flex w-full justify-end mt-5">
+        <Button disabled>Voir les réservations</Button>
+      </div>
     </SheetContent>
   );
 };
