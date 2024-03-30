@@ -16,6 +16,9 @@ export default async function getUser() {
     select: {
       id: true,
       email: true,
+      lastName: true,
+      firstName: true,
+      
       _count: {
         select: {
           companies: true,
