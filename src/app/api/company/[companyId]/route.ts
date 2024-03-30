@@ -37,3 +37,4 @@ export async function GET(request: Request, { params }: IGet) {
 
   return new Response(JSON.stringify(company), { status: 200 });
 }
+

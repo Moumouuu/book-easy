@@ -5,6 +5,7 @@ export const checkSubscription = async () => {
   const data = await getServerSession();
   const userEmail = data?.user?.email;
 
+
   if (!userEmail) {
     return false;
   }
@@ -15,13 +16,14 @@ export const checkSubscription = async () => {
     },
   });
 
+
   if (!user?.id) {
     return false;
   }
 
   const userSubscription = await prismadb.premiumUser.findUnique({
     where: {
-      userId: user.id,
+      userId: userEmail,
     },
   });
 

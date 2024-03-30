@@ -13,6 +13,15 @@ export default async function getUser() {
     where: {
       email: currentUser?.user?.email,
     },
+    select: {
+      id: true,
+      email: true,
+      _count: {
+        select: {
+          companies: true,
+        },
+      },
+    },
   });
 
   // if not user in database that means user is logged in with google
