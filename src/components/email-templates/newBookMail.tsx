@@ -3,7 +3,6 @@ import { appTitle } from "@/utils";
 import {
   Body,
   Button,
-  Column,
   Container,
   Head,
   Heading,
@@ -12,14 +11,10 @@ import {
   Img,
   Link,
   Preview,
-  Row,
   Section,
   Text,
 } from "@react-email/components";
 import { Tailwind } from "@react-email/tailwind";
-import { format, parseISO } from "date-fns";
-import { utcToZonedTime } from "date-fns-tz";
-import { fr } from "date-fns/locale";
 
 interface BookeasyUpdateBookUserEmailProps {
   companyName?: string;
@@ -54,7 +49,7 @@ export const NewBookMail = ({
                 src={`${baseUrl}/assets/images/icon-bookEasy.png`}
                 width="40"
                 height="37"
-                alt="bookeasy logo"
+                alt="bookeazy logo"
                 className="mx-auto my-0"
               />
             </Section>
@@ -71,13 +66,11 @@ export const NewBookMail = ({
               de votre réservation. Vous trouverez ci-dessous un récapitulatif
               de votre réservation.
             </Text>
-            <Text>
-              {price && `Le montant de votre réservation est de ${price}€.`}
-            </Text>
+            <Text>{`Le montant de votre réservation est de ${price}€.`}</Text>
             <Text>
               {start_at &&
                 `Votre réservation commence le ${formatDate(
-                  new Date(start_at),
+                  new Date(start_at)
                 )}.`}
             </Text>
             <Text>
@@ -86,28 +79,6 @@ export const NewBookMail = ({
                   new Date(end_at)
                 )}.`}
             </Text>
-            <Section>
-              <Row>
-                <Column align="right">
-                  <Img
-                    className="rounded-full"
-                    src={
-                      "https://api.dicebear.com/7.x/lorelei/svg?backgroundColor=b6e3f4,c0aede,d1d4f9"
-                    }
-                    width="64"
-                    height="64"
-                  />
-                </Column>
-                <Column align="left">
-                  <Img
-                    className="rounded-full"
-                    src={`${baseUrl}/assets/images/icon-bookEasy.png`}
-                    width="64"
-                    height="64"
-                  />
-                </Column>
-              </Row>
-            </Section>
             <Section className="mb-[32px] mt-[32px] text-center">
               <Button
                 className="rounded bg-[#000000] px-5 py-3 text-center text-[12px] font-semibold text-white no-underline"

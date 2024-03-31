@@ -76,28 +76,6 @@ export const DeleteBookMail = ({
                   new Date(end_at)
                 )}.`}
             </Text>
-            <Section>
-              <Row>
-                <Column align="right">
-                  <Img
-                    className="rounded-full"
-                    src={
-                      "https://api.dicebear.com/7.x/lorelei/svg?backgroundColor=b6e3f4,c0aede,d1d4f9"
-                    }
-                    width="64"
-                    height="64"
-                  />
-                </Column>
-                <Column align="left">
-                  <Img
-                    className="rounded-full"
-                    src={`${baseUrl}/assets/images/icon-bookEasy.png`}
-                    width="64"
-                    height="64"
-                  />
-                </Column>
-              </Row>
-            </Section>
             <Section className="mb-[32px] mt-[32px] text-center">
               <Button
                 className="rounded bg-[#000000] px-5 py-3 text-center text-[12px] font-semibold text-white no-underline"
