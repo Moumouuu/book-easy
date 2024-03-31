@@ -7,13 +7,13 @@ import { IoCalendarNumberSharp, IoSettings } from "react-icons/io5";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { cn } from "@/lib/utils";
-import { AsideUserDropdown } from "./asideUserDropdown";
-import { useCompany } from "@/store/dashboard";
 import PremiumButton from "@/components/premiumButton";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { useCompany } from "@/store/dashboard";
 import { X } from "lucide-react";
 import { useState } from "react";
+import { AsideUserDropdown } from "./asideUserDropdown";
 
 interface IAsideItem {
   label: string;
@@ -64,7 +64,7 @@ export default function AsideContent() {
   ];
 
   return (
-    <div className="mt-5 flex h-[90%] flex-col justify-between">
+    <div className="mt-5 flex h-[80%] flex-col justify-between">
       <div className="flex flex-col">
         {asideItems.map((item: IAsideItem) => (
           <Link
@@ -74,7 +74,7 @@ export default function AsideContent() {
               currentPath === item.href
                 ? "bg-primary/25 text-primary"
                 : "text-gray-500",
-              "hover:bg-primary/15 hover:text-primary ease my-1 flex items-center rounded-lg px-3 py-2  duration-100",
+              "hover:bg-primary/15 hover:text-primary ease my-1 flex items-center rounded-lg px-3 py-2  duration-100"
             )}
           >
             {item.icon}

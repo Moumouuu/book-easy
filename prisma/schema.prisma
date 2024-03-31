@@ -1,7 +1,8 @@
 // todo : page setting pour entreprise
 // todo : page setting pour user
 // todo :page mes réservations pr user
-
+// todo : btn sur page accueil pr aller direct sur son entreprise
+// todo blur KPI si pas premium 
 generator client {
     provider = "prisma-client-js"
 }
