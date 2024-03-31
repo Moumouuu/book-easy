@@ -12,7 +12,6 @@ export default function useIsPremium() {
 
   // Only set premium if data exists and it's different from the current value
   if (data && data !== isPremium) {
-    console.log("Updating premium status:", data);
     setPremium(data as boolean);
   }
 

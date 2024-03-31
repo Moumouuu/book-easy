@@ -42,3 +42,25 @@ export async function POST(request: Request) {
 
   return new Response(JSON.stringify(company), { status: 201 });
 }
+
+
+export async function GET (request: Request) {
+  const currentUser = await getUser();
+
+  if (!currentUser)
+    return new Response("You must be logged in to access this resource!", {
+      status: 401,
+    });
+
+  const companies = await prismadb.company.findMany({
+    where: {
+      userRoles: {
+        some: {
+          userId: currentUser.id,
+        },
+      },
+    },
+  });
+
+  return new Response(JSON.stringify(companies), { status: 200 });
+}

@@ -1,12 +1,11 @@
 "use client";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { User } from "@prisma/client";
-import { UserSectionSkeleton } from "../company/[companyId]/performance/_components/skeletons/userSectionSkeleton";
-import useUser from "@/hooks/useUser";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { RoleEnum } from "@/enum/roles";
-import { ThemeToggle } from "@/components/theme-toggle";
 import useIsAdmin from "@/hooks/useIsAdmin";
+import useUser from "@/hooks/useUser";
+import { User } from "@prisma/client";
+import { UserSectionSkeleton } from "../company/[companyId]/performance/_components/skeletons/userSectionSkeleton";
 
 interface UserSession {
   user: User | null;

@@ -36,7 +36,6 @@ export default function GetStartedButton() {
   const handleRoute = () => {
     if (!user) router.push("/sign-in");
     toggleOpen();
-    console.log("handleRoute");
   };
 
   const toggleOpen = () => {
@@ -72,7 +71,6 @@ export function DialogCreateCompany({
     error: errorSubscribe,
   } = useSWR("/api/premium", defaultFetcherGet);
 
-  console.log(me, isSubscribe);
 
   const isAuthorized = isSubscribe || (me && me._count.companies === 0);
 
