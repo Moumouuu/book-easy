@@ -35,6 +35,7 @@ export default function SettingsPage() {
     name: z.string().min(3),
     description: z.string().optional(),
     numberDaysToReturn: z.string(),
+    address: z.string(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -42,7 +43,8 @@ export default function SettingsPage() {
     defaultValues: {
       name: company?.name ?? "",
       description: company?.description ?? "",
-      numberDaysToReturn: company?.numberDaysToReturn ?? 1,
+      numberDaysToReturn: company?.numberDaysToReturn ?? "1",
+      address: company?.address ?? "",
     },
   });
 
@@ -115,6 +117,24 @@ export default function SettingsPage() {
                 </FormControl>
                 <FormDescription>
                   Ceci est la description de votre entreprise.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="address"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Adresse <span className="text-red-500">*</span>
+                </FormLabel>
+                <FormControl>
+                  <Input placeholder="123 rue parla" {...field} />
+                </FormControl>
+                <FormDescription>
+                  Ceci est l&apos;adresse de votre entreprise.
                 </FormDescription>
                 <FormMessage />
               </FormItem>

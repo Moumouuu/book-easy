@@ -1,5 +1,6 @@
-// todo :page mes réservations pr user
 // todo blur KPI si pas premium
+// todo allow user to see company and take reservation
+// todo allow user to see all comapny
 
 generator client {
     provider = "prisma-client-js"
@@ -69,6 +70,7 @@ model Company {
     number_days_to_return Int      @default(1)
     created_at            DateTime @default(now())
     updated_at            DateTime @updatedAt
+    address               String
 
     // Define the relation to UserCompanyRole model
     userRoles UserCompanyRole[]

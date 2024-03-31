@@ -77,6 +77,7 @@ export async function PUT(request: Request, { params }: IGet) {
       name: body.name,
       description: body.description,
       number_days_to_return: Number(body.numberDaysToReturn),
+      address: body.address,
     },
   });
 

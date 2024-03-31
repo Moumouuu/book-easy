@@ -76,6 +76,7 @@ export function DialogCreateCompany({
   const formSchema = z.object({
     name: z.string().min(3).max(50),
     description: z.string().optional(),
+    address: z.string(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -83,6 +84,7 @@ export function DialogCreateCompany({
     defaultValues: {
       name: "",
       description: "",
+      address: "",
     },
   });
 
@@ -92,6 +94,7 @@ export function DialogCreateCompany({
       const res = await axios.post("/api/company", {
         name: values.name,
         description: values.description,
+        address: values.address,
       });
       if (res.status === 201) {
         router.push(`/company/${res.data.id}`);
@@ -146,12 +149,30 @@ export function DialogCreateCompany({
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description </FormLabel>
+                  <FormLabel>Description</FormLabel>
                   <FormControl>
                     <Input placeholder="Soin du visage à domicile" {...field} />
                   </FormControl>
                   <FormDescription>
                     Ceci est votre description d&apos;entreprise.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="address"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Adresse <span className="text-red-500">*</span>{" "}
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="123 rue parla" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    Ceci est votre adresse d&apos;entreprise.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

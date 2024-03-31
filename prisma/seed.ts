@@ -1,5 +1,5 @@
-import { PrismaClient } from "@prisma/client";
 import { faker } from "@faker-js/faker";
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -13,6 +13,7 @@ async function main() {
     const company = await prisma.company.create({
       data: {
         name: faker.company.name(),
+        address: faker.address.streetAddress(),
       },
     });
     existingCompanies.push(company);
