@@ -64,7 +64,7 @@ export default function AsideContent() {
   ];
 
   return (
-    <div className="mt-5 flex h-[80%] flex-col justify-between">
+    <div className="mt-5 flex h-[90%] flex-col justify-between">
       <div className="flex flex-col">
         {asideItems.map((item: IAsideItem) => (
           <Link

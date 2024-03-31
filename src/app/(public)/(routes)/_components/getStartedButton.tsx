@@ -44,7 +44,7 @@ export default function GetStartedButton() {
 
   return (
     <>
-      <ButtonHovered onClick={handleRoute}>Commencer</ButtonHovered>
+      <ButtonHovered onClick={handleRoute}>Créer une entreprise</ButtonHovered>
       <DialogCreateCompany open={open} toggleOpen={toggleOpen} />
     </>
   );
@@ -71,12 +71,11 @@ export function DialogCreateCompany({
     error: errorSubscribe,
   } = useSWR("/api/premium", defaultFetcherGet);
 
-
   const isAuthorized = isSubscribe || (me && me._count.companies === 0);
 
   const formSchema = z.object({
     name: z.string().min(3).max(50),
-    description: z.string().optional(),
+    description: z.string().max(30).optional(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({

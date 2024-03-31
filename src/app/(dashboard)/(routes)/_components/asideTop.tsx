@@ -13,7 +13,7 @@ export default function AsideTop() {
   );
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col ">
       <div className="flex items-center">
         <Image
           src="/assets/images/icon-bookEasy.png"

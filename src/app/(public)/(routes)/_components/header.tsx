@@ -4,6 +4,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import Link from "next/link";
 import * as React from "react";
 
+import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -13,9 +14,13 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import { defaultFetcherGet } from "@/lib/fetcher";
 import { cn } from "@/lib/utils";
 import { Menu } from "lucide-react";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import useSWR from "swr";
 import GetStartedButton from "./getStartedButton";
 
 const features: { title: string; description: string }[] = [
@@ -45,11 +50,26 @@ const features: { title: string; description: string }[] = [
 ];
 
 export function Header() {
+  const { data: user } = useSession();
+  const router = useRouter();
+  const { data: companies } = useSWR("/api/company", defaultFetcherGet);
+
+  async function handleRoute() {
+    if (!user) router.push("/sign-in");
+    // redirect to the first dashboard of the company
+    if (companies) {
+      router.push(`/company/${companies[0].id}`);
+    }
+  }
+
   return (
-    <div className="flex justify-between lg:justify-center items-center p-4">
+    <div className="flex justify-between lg:justify-around items-center p-4">
       <Navigation />
-      <div className="lg:mx-3">
+      <div className="lg:mx-3 flex">
         <GetStartedButton />
+        <Button onClick={handleRoute} className="mx-2" variant={"premium"}>
+          Accéder au dashboard
+        </Button>
       </div>
     </div>
   );
@@ -104,7 +124,13 @@ const Navigation = () => {
           </SheetContent>
         </Sheet>
       </div>
-      <div className="hidden lg:block">
+      <div className="hidden lg:flex">
+        <Image
+          src="/assets/images/icon-bookEasy.png"
+          alt="logo"
+          width={48}
+          height={48}
+        />
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>

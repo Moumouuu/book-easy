@@ -7,7 +7,7 @@ export default async function PublicLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div>
+    <div className="overflow-x-hidden">
       <Header />
       {children}
       <Footer />

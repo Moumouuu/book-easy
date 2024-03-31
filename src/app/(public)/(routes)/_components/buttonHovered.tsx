@@ -16,7 +16,6 @@ export function ButtonHovered({
         as="button"
         className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2"
       >
-        <AceternityLogo />
         <span>{children}</span>
       </HoverBorderGradient>
     </div>
