@@ -26,12 +26,9 @@ export default function AsideTop() {
           <h1 className="bg-gradient-to-r from-blue-200 to-blue-600 bg-clip-text text-xl font-semibold text-transparent">
             {appTitle}
           </h1>
-          <span className="font-medium text-sm">{company?.name}</span>
+          <span className="font-medium text-sm text-left">{company?.name}</span>
         </div>
       </div>
-      <span className="text-muted-foreground text-sm mt-2">
-        {company?.description}
-      </span>
     </div>
   );
 }

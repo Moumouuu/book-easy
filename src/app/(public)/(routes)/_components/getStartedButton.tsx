@@ -75,7 +75,7 @@ export function DialogCreateCompany({
 
   const formSchema = z.object({
     name: z.string().min(3).max(50),
-    description: z.string().max(30).optional(),
+    description: z.string().optional(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
