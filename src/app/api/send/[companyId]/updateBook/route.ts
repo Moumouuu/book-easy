@@ -59,7 +59,7 @@ export async function POST(request: NextRequest, { params }: IGet) {
   }
   const username = `${firstName} ${lastName}`;
   const companyName = book.company.name;
-  const reservationLink = `${process.env.NEXT_PUBLIC_BOOKEASY_URL}/book/${id}`;
+  const reservationLink = `${process.env.NEXT_PUBLIC_BOOKEASY_URL}/user/books`;
 
   // in case it's a book come from a user that is not register to the app
   if (email) {

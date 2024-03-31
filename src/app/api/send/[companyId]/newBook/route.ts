@@ -60,7 +60,7 @@ export async function POST(request: NextRequest, { params }: IGet) {
   }
 
   const companyName = book.company.name;
-  const reservationLink = `${process.env.NEXT_PUBLIC_BOOKEASY_URL}/book/${id}`;
+  const reservationLink = `${process.env.NEXT_PUBLIC_BOOKEASY_URL}/user/books`;
 
   // Send email
   const data = await resend.emails.send({

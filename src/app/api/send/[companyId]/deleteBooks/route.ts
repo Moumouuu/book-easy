@@ -60,7 +60,7 @@ export async function POST(request: NextRequest, { params }: IPost) {
 
   // Send email and delete books
   for (const book of books) {
-    const reservationLink = `${process.env.NEXT_PUBLIC_BOOKEASY_URL}/book/${book.id}`;
+    const reservationLink = `${process.env.NEXT_PUBLIC_BOOKEASY_URL}/user/books`;
 
     let username, email;
     if (book.created_by?.firstName && book.created_by?.lastName) {

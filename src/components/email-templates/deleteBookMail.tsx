@@ -1,9 +1,10 @@
+import { formatDate } from "@/lib/utils";
 import { appTitle } from "@/utils";
 import {
   Body,
   Button,
-  Container,
   Column,
+  Container,
   Head,
   Heading,
   Hr,
@@ -16,10 +17,6 @@ import {
   Text,
 } from "@react-email/components";
 import { Tailwind } from "@react-email/tailwind";
-import * as React from "react";
-import { format, parseISO } from "date-fns";
-import { fr } from "date-fns/locale";
-import { formatDate } from "@/lib/utils";
 
 interface BookeasyDeleteBookUserEmailProps {
   companyName?: string;
@@ -28,7 +25,6 @@ interface BookeasyDeleteBookUserEmailProps {
   end_at?: string;
   username?: string;
 }
-
 
 const baseUrl = process.env.NEXT_PUBLIC_BOOKEASY_URL;
 
@@ -70,11 +66,15 @@ export const DeleteBookMail = ({
             </Text>
             <Text>
               {start_at &&
-                `Votre réservation commençait le ${formatDate(new Date(start_at))}.`}
+                `Votre réservation commençait le ${formatDate(
+                  new Date(start_at)
+                )}.`}
             </Text>
             <Text>
               {end_at &&
-                `Votre réservation se terminait le ${formatDate(new Date(end_at))}.`}
+                `Votre réservation se terminait le ${formatDate(
+                  new Date(end_at)
+                )}.`}
             </Text>
             <Section>
               <Row>
