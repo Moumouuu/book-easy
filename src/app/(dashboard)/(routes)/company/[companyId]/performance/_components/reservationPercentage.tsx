@@ -1,10 +1,12 @@
 // 'use client';
 import DefaultError from "@/components/defaultError";
+import useIsPremium from "@/hooks/useIsPremium";
 import { defaultFetcherGet } from "@/lib/fetcher";
 import { cn } from "@/lib/utils";
 import { useCompany } from "@/store/dashboard";
 import { Card, DonutChart, List, ListItem } from "@tremor/react";
 import useSWR from "swr";
+import { KPINotSubscribe } from "./salesCard";
 import { PerformanceAreaSkeleton } from "./skeletons/performanceAreaSkeleton";
 
 interface ReservationPart {
@@ -20,6 +22,7 @@ const currencyFormatter = (number: number) => {
 
 export default function ReservationPercentage() {
   const { companyId } = useCompany();
+  const isSubscribed = useIsPremium();
   const {
     data: partReservations,
     error,
@@ -41,8 +44,14 @@ export default function ReservationPercentage() {
   });
 
   return (
-    <>
-      <Card className="m-3 sm:mx-auto sm:max-w-lg">
+    <div className="relative w-full m-3">
+      {!isSubscribed.isPremium && (
+        <KPINotSubscribe
+          title="Abonnez-vous pour voir cette section"
+          message="Obtenez des informations plus détaillées sur la répartition des réservations. (20% de vos clients réservent plus de 3x)"
+        />
+      )}
+      <Card className={cn(!isSubscribed.isPremium && "blur")}>
         <h3 className="text-tremor-default text-tremor-content-strong dark:text-dark-tremor-content-strong font-medium">
           Répartition des réservations
         </h3>
@@ -83,6 +92,6 @@ export default function ReservationPercentage() {
           ))}
         </List>
       </Card>
-    </>
+    </div>
   );
 }

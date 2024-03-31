@@ -5,7 +5,7 @@ import prismadb from "@/lib/prismadb";
 import { stripe } from "@/lib/stripe";
 import { absoluteUrl } from "@/lib/utils";
 
-const settingsUrl = absoluteUrl("settings");
+const settingsUrl = absoluteUrl("user/setting");
 
 export async function GET() {
   try {
@@ -57,9 +57,9 @@ export async function GET() {
             product_data: {
               name: "Bookeazy Premium",
               description:
-                "Unlimited reservations, customers, data analytics & access all features.",
+                "Des réservations, des clients des coéquipiers en illimités ! Ainsi qu'un accès à des statistiques avancées. Et un accès prioritaire au support." ,
             },
-            unit_amount: 7990,
+            unit_amount: 4990,
           },
           quantity: 1,
         },

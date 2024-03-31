@@ -125,12 +125,14 @@ const Navigation = () => {
         </Sheet>
       </div>
       <div className="hidden lg:flex">
-        <Image
-          src="/assets/images/icon-bookEasy.png"
-          alt="logo"
-          width={48}
-          height={48}
-        />
+        <Link href="/">
+          <Image
+            src="/assets/images/icon-bookEasy.png"
+            alt="logo"
+            width={48}
+            height={48}
+          />
+        </Link>
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>

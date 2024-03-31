@@ -1,11 +1,14 @@
 // 'use client';
+import DefaultError from "@/components/defaultError";
+import useIsPremium from "@/hooks/useIsPremium";
 import { defaultFetcherGet } from "@/lib/fetcher";
+import { cn } from "@/lib/utils";
+import { useCompany } from "@/store/dashboard";
 import { BarChart, Card, Divider, Switch } from "@tremor/react";
 import { useState } from "react";
 import useSWR from "swr";
 import { PerformanceAreaSkeleton } from "./skeletons/performanceAreaSkeleton";
-import { useCompany } from "@/store/dashboard";
-import DefaultError from "@/components/defaultError";
+import PremiumButton from "@/components/premiumButton";
 
 export function valueFormatter(number: number) {
   const formatter = new Intl.NumberFormat("en-US", {
@@ -19,11 +22,12 @@ export function valueFormatter(number: number) {
   return formatter.format(number);
 }
 export default function SalesCard() {
+  const isSubscribed = useIsPremium();
   const { companyId } = useCompany();
   const [showComparison, setShowComparison] = useState(false);
   const { data, error, isLoading } = useSWR(
     `/api/company/${companyId}/performance/sales`,
-    defaultFetcherGet,
+    defaultFetcherGet
   );
 
   if (isLoading) {
@@ -40,8 +44,14 @@ export default function SalesCard() {
   }
 
   return (
-    <>
-      <Card className="m-3 sm:mx-auto sm:max-w-lg">
+    <div className="relative w-full m-3">
+      {!isSubscribed.isPremium && (
+        <KPINotSubscribe
+          title="Abonnez-vous pour voir cette section"
+          message="Obtenez des informations plus détaillées sur vos ventes grâce à des comparaisons mensuelles et annuelles."
+        />
+      )}
+      <Card className={cn(!isSubscribed.isPremium && "blur")}>
         <h3 className="text-tremor-content-strong dark:text-dark-tremor-content-strong  mr-1 font-semibold">
           Aperçu des ventes
         </h3>
@@ -85,6 +95,30 @@ export default function SalesCard() {
           </label>
         </div>
       </Card>
-    </>
+    </div>
+  );
+}
+
+export function KPINotSubscribe({
+  title,
+  message,
+}: {
+  title: string;
+  message: string;
+}) {
+  return (
+    <div className="z-10 absolute h-full">
+      <div className="h-full w-full">
+        <div className="text-center h-full flex items-center justify-center flex-col">
+          <h3 className="text-tremor-content-strong dark:text-dark-tremor-content-strong text-2xl font-semibold">
+            {title}
+          </h3>
+          <p className="text-tremor-default text-muted-foreground mt-2 mb-4">
+            {message}
+          </p>
+          <PremiumButton />
+        </div>
+      </div>
+    </div>
   );
 }

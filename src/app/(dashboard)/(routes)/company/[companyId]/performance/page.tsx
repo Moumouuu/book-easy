@@ -22,8 +22,8 @@ export default function Performance() {
         <FutureReservationsCard />
       </div>
       <div className="my-5 flex flex-col justify-center rounded border p-4 lg:flex-row">
-        <SoonReservationCard />
         <ReservationPercentage />
+        <SoonReservationCard />
       </div>
     </div>
   );

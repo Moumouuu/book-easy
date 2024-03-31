@@ -140,13 +140,13 @@ export default function SettingsUserPage() {
           />
           <h2 className="text-xl font-medium my-6 underline">Paiement</h2>
           <p className="text-gray-500">
-            {isSubscribed ? (
+            {isSubscribed.isPremium ? (
               "Vous avez payer pour notre service."
             ) : (
-              <>
+              <div className="flex flex-col">
                 <span>Vous n&apos;avez pas payer pour notre service.</span>
                 <PremiumButton />
-              </>
+              </div>
             )}
           </p>
 
