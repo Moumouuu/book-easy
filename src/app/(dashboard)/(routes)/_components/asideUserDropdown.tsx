@@ -31,7 +31,6 @@ export function AsideUserDropdown() {
     error,
   } = useSWR("/api/company", defaultFetcherGet);
 
-
   if (isLoading) {
     return null;
   }
@@ -59,19 +58,21 @@ export function AsideUserDropdown() {
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
                 {companies?.map((company: { id: string; name: string }) => (
-                  <DropdownMenuItem key={company.id}>
-                    <Link href={`/company/${company.id}`}>
+                  <Link key={company.id} href={`/company/${company.id}`}>
+                    <DropdownMenuItem>
                       <span>{company.name}</span>
-                    </Link>
-                  </DropdownMenuItem>
+                    </DropdownMenuItem>
+                  </Link>
                 ))}
               </DropdownMenuSubContent>
             </DropdownMenuPortal>
           </DropdownMenuSub>
-          <DropdownMenuItem>
-            <Settings className="mr-2 h-4 w-4" />
-            <span>Paramètre du compte</span>
-          </DropdownMenuItem>
+          <Link href="/user/setting">
+            <DropdownMenuItem>
+              <Settings className="mr-2 h-4 w-4" />
+              <span>Paramètre du compte</span>
+            </DropdownMenuItem>
+          </Link>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => signOut()}>

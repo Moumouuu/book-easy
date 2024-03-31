@@ -47,7 +47,6 @@ export async function POST(req: NextRequest) {
     });
   }
 
-
   // user come from invite company and not from reservation invite
   if (fromInvite.email && !reservationId) {
     // secureToken isActive & type is INVITATION & created_at is not expired
@@ -149,6 +148,39 @@ export async function POST(req: NextRequest) {
   }
 
   return new NextResponse(JSON.stringify(newUser), {
+    status: 200,
+  });
+}
+
+export async function PUT(request: NextRequest) {
+  const { firstName, lastName, phone_number, id } = await request.json();
+
+  if (!firstName || !lastName || !phone_number) {
+    return new NextResponse("Missing fields", { status: 400 });
+  }
+
+  const user = await prismadb.user.findUnique({
+    where: {
+      id: id,
+    },
+  });
+
+  if (!user) {
+    return new NextResponse("User not found", { status: 404 });
+  }
+
+  const updatedUser = await prismadb.user.update({
+    where: {
+      id: id,
+    },
+    data: {
+      firstName: firstName,
+      lastName: lastName,
+      phone_number: phone_number,
+    },
+  });
+
+  return new NextResponse(JSON.stringify(updatedUser), {
     status: 200,
   });
 }

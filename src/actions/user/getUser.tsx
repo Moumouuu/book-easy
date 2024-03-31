@@ -18,7 +18,8 @@ export default async function getUser() {
       email: true,
       lastName: true,
       firstName: true,
-      
+      phone_number: true,
+
       _count: {
         select: {
           companies: true,

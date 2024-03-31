@@ -44,7 +44,7 @@ export default function GetStartedButton() {
 
   return (
     <>
-      <ButtonHovered onClick={handleRoute}>Créer une entreprise</ButtonHovered>
+      <ButtonHovered onClick={handleRoute}>Commencer</ButtonHovered>
       <DialogCreateCompany open={open} toggleOpen={toggleOpen} />
     </>
   );
