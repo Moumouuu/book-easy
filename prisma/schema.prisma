@@ -32,7 +32,7 @@ model User {
 model SecureToken {
     id         String          @id @default(uuid())
     created_at DateTime        @default(now())
-    user       User?           @relation(fields: [userId], references: [id])
+    user       User?           @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId     String?
     type       SecureTokenType
     isActive   Boolean         @default(true)
@@ -53,12 +53,12 @@ model Book {
     price      Float     @default(0)
 
     // Define the relation to User model
-    created_by  User?    @relation(fields: [createdById], references: [id])
+    created_by  User?    @relation(fields: [createdById], references: [id], onDelete: Cascade)
     createdById String?
     // used when user created a book withou have account (from company email)
     created_by_email_temp String?
     // Define the relation to Company model
-    company     Company @relation(fields: [companyId], references: [id])
+    company     Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
     companyId   String
 }
 
@@ -83,7 +83,7 @@ model UserCompanyRole {
     updated_at DateTime @updatedAt
 
     // Define the relation to User model
-    user      User    @relation(fields: [userId], references: [id])
+    user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId    String
     // Define the relation to Company model
     company   Company @relation(fields: [companyId], references: [id])

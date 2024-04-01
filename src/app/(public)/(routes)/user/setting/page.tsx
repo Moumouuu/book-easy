@@ -1,6 +1,17 @@
 "use client";
 
 import PremiumButton from "@/components/premiumButton";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -17,7 +28,8 @@ import useIsPremium from "@/hooks/useIsPremium";
 import { defaultFetcherGet } from "@/lib/fetcher";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import useSWR, { useSWRConfig } from "swr";
@@ -46,7 +58,6 @@ export default function SettingsUserPage() {
     },
   });
 
-  console.log(data?.firstName);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
@@ -145,16 +156,77 @@ export default function SettingsUserPage() {
             ) : (
               <div className="flex flex-col">
                 <span>Vous n&apos;avez pas payer pour notre service.</span>
-                <PremiumButton />
+                <div className="my-2">
+                  <PremiumButton />
+                </div>
               </div>
             )}
           </p>
 
-          <Button isLoading={loading} disabled={loading} type="submit">
+          <AlertDialogDeleteAccount />
+
+          <Button
+            className="mx-2"
+            isLoading={loading}
+            disabled={loading}
+            type="submit"
+          >
             Modifier l&apos;utilisateur
           </Button>
         </form>
       </Form>
     </div>
+  );
+}
+
+export function AlertDialogDeleteAccount() {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const router = useRouter();
+
+  const deleteAccount = async () => {
+    console.log("delete account");
+
+    try {
+      setIsLoading(true);
+      const res = await axios.delete(`/api/auth/`);
+      if (res.status === 200) {
+        toast("Votre compte a été supprimé avec succès", {
+          description: "Vous allez être redirigé vers la page d'accueil",
+        });
+        router.push("/");
+      }
+    } catch (error) {
+      console.error(error);
+      toast("Une erreur est survenue", {
+        description: "Veuillez réessayer plus tard",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button variant="destructive">Supprime le compte</Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>
+            Supprimer votre compte et vos données
+          </AlertDialogTitle>
+          <AlertDialogDescription>
+            Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est
+            irréversible.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Annuler</AlertDialogCancel>
+          <AlertDialogAction disabled={isLoading} onClick={deleteAccount}>
+            Supprimer
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }

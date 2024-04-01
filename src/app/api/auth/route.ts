@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import { NextRequest, NextResponse } from "next/server";
 
+import getUser from "@/actions/user/getUser";
 import prismadb from "@/lib/prismadb";
 import { $Enums } from "@prisma/client";
 
@@ -181,6 +182,40 @@ export async function PUT(request: NextRequest) {
   });
 
   return new NextResponse(JSON.stringify(updatedUser), {
+    status: 200,
+  });
+}
+
+export async function DELETE() {
+  const currentUser = await getUser();
+
+  if (!currentUser) {
+    return new NextResponse("User not found", { status: 404 });
+  }
+
+  const { id } = currentUser;
+
+  if (!id) {
+    return new NextResponse("Missing id", { status: 400 });
+  }
+
+  const user = await prismadb.user.findUnique({
+    where: {
+      id: id,
+    },
+  });
+
+  if (!user) {
+    return new NextResponse("User not found", { status: 404 });
+  }
+
+  await prismadb.user.delete({
+    where: {
+      id: id,
+    },
+  });
+
+  return new NextResponse("User deleted", {
     status: 200,
   });
 }
