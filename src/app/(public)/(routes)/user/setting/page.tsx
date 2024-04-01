@@ -28,13 +28,13 @@ import useIsPremium from "@/hooks/useIsPremium";
 import { defaultFetcherGet } from "@/lib/fetcher";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
+import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import useSWR, { useSWRConfig } from "swr";
 import { z } from "zod";
-import { signOut } from "next-auth/react";
 
 export default function SettingsUserPage() {
   const [loading, setLoading] = useState<boolean>(false);
@@ -58,7 +58,6 @@ export default function SettingsUserPage() {
       phone_number: data?.phone_number,
     },
   });
-
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
@@ -180,7 +179,7 @@ export default function SettingsUserPage() {
   );
 }
 
-export function AlertDialogDeleteAccount() {
+function AlertDialogDeleteAccount() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
