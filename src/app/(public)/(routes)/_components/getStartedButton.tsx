@@ -34,7 +34,7 @@ export default function GetStartedButton() {
   const [open, setOpen] = useState<boolean>(false);
 
   const handleRoute = () => {
-    if (!user) router.push("/sign-in");
+    if (!user?.user) router.push("/sign-in");
     toggleOpen();
   };
 

@@ -55,7 +55,7 @@ export function Header() {
   const { data: companies } = useSWR("/api/company", defaultFetcherGet);
 
   async function handleRoute() {
-    if (!user) router.push("/sign-in");
+    if (!user?.user) router.push("/sign-in");
     // redirect to the first dashboard of the company
     if (companies) {
       router.push(`/company/${companies[0].id}`);

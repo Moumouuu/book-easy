@@ -34,6 +34,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import useSWR, { useSWRConfig } from "swr";
 import { z } from "zod";
+import { signOut } from "next-auth/react";
 
 export default function SettingsUserPage() {
   const [loading, setLoading] = useState<boolean>(false);
@@ -193,6 +194,7 @@ export function AlertDialogDeleteAccount() {
         toast("Votre compte a été supprimé avec succès", {
           description: "Vous allez être redirigé vers la page d'accueil",
         });
+        signOut();
         router.push("/");
       }
     } catch (error) {
