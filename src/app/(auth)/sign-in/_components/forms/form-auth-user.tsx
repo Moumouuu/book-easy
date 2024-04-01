@@ -186,7 +186,7 @@ export default function UserAuthForm() {
       ? `/company/${userCompanyFromInvite}`
       : "/";
     if (reservationId) {
-      destination = `/reservation/${reservationId}`;
+      destination = `/user/books`;
     }
     router.push(destination);
   };
